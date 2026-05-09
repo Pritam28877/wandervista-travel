@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customize Your Trip - WanderVista</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+  <!-- ===== HEADER ===== -->
+  <header class="header scrolled" id="header">
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <div class="logo-icon"><i class="fas fa-mountain-sun"></i></div>
+        <span class="logo-text" style="color: var(--gray-800);">WanderVista</span>
+      </a>
+      <nav class="nav">
+        <ul class="nav-menu" id="navMenu">
+          <li><a href="packages.html" class="nav-link" style="color: var(--gray-800);">Destinations</a></li>
+          <li><a href="packages.html" class="nav-link" style="color: var(--gray-800);">Packages</a></li>
+          <li><a href="about.html" class="nav-link" style="color: var(--gray-800);">About Us</a></li>
+          <li><a href="contact.html" class="nav-link" style="color: var(--gray-800);">Contact</a></li>
+        </ul>
+        <div class="header-actions">
+          <a href="tel:18001234567" class="header-phone" style="color: var(--gray-800);"><i class="fas fa-phone"></i> 1800-123-4567</a>
+        </div>
+        <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ===== PAGE HEADER ===== -->
+  <section class="page-header">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="index.html">Home</a>
+        <span class="separator"><i class="fas fa-chevron-right"></i></span>
+        <a href="package-detail.html">Lahaul Spiti Chandrataal</a>
+        <span class="separator"><i class="fas fa-chevron-right"></i></span>
+        <span>Customize</span>
+      </div>
+      <h1>Customize Your Trip</h1>
+      <p>Add or remove features to make this trip truly yours</p>
+    </div>
+  </section>
+
+  <!-- ===== CUSTOMIZER ===== -->
+  <div class="container">
+    <div class="customizer-layout">
+      <!-- LEFT: Add-ons & Options -->
+      <main>
+        <!-- Accommodation Upgrades -->
+        <div class="addon-category">
+          <h3><i class="fas fa-hotel"></i> Accommodation Upgrades</h3>
+          <p style="color: var(--gray-500); font-size: 0.9rem; margin-bottom: var(--space-4);">Upgrade your stay for added comfort and luxury</p>
+
+          <label class="addon-option">
+            <input type="checkbox" data-price="4500" data-name="Deluxe Room Upgrade">
+            <img class="addon-option-img" src="https://images.unsplash.com/photo-1618773928121-c32242e63f39?w=150&q=80" alt="Deluxe Room">
+            <div class="addon-option-info">
+              <h5>Deluxe Room Upgrade</h5>
+              <p>Upgrade from standard to deluxe rooms at all hotel stays with mountain views</p>
+            </div>
+            <div class="addon-option-price">
+              <div class="price">+ ₹4,500</div>
+              <div class="per">per person</div>
+            </div>
+          </label>
+
+          <label class="addon-option">
+            <input type="checkbox" data-price="8000" data-name="Premium Swiss Tent at Chandratal">
+            <img class="addon-option-img" src="https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=150&q=80" alt="Premium Tent">
+            <div class="addon-option-info">
+              <h5>Premium Swiss Tent at Chandratal</h5>
+              <p>Luxury insulated tents with proper beds, heater, and attached washroom</p>
+            </div>
+            <div class="addon-option-price">
+              <div class="price">+ ₹8,000</div>
+              <div class="per">per person</div>
+            </div>
+          </label>
+
+          <label class="addon-option">
+            <input type="checkbox" data-price="12000" data-name="Single Room (No Sharing)">
+            <img class="addon-option-img" src="https://images.unsplash.com/photo-1590490360182-c33d57733427?w=150&q=80" alt="Single Room">
+            <div class="addon-option-info">
+              <h5>Single Room (No Sharing)</h5>
+              <p>Private single occupancy room throughout the trip. Perfect for solo travelers.</p>
+            </div>
+            <div class="addon-option-price">
+              <div class="price">+ ₹12,000</div>
+              <div class="per">per person</div>
+            </div>
+          </label>
+        </div>
+
+        <!-- Activities & Experiences -->
+        <div class="addon-category">
+          <h3><i class="fas fa-person-hiking"></i> Activities & Experiences</h3>
+          <p style="color: var(--gray-500); font-size: 0.9rem; margin-bottom: var(--space-4);">Add thrilling activities to enhance your adventure</p>
+
+          <label class="addon-option">
+            <input type="checkbox" data-price="2500" data-name="River Rafting at Manali">
+            <img class="addon-option-img" src="https://images.unsplash.com/photo-1530866495561-507c83e3e3d0?w=150&q=80" alt="Rafting">
+            <div class="addon-option-info">
+              <h5>River Rafting on Beas River (Manali)</h5>
+              <p>14 km stretch of Grade II-III rapids. Includes safety gear and trained instructors.</p>
+            </div>
+            <div class="addon-option-price">
+              <div class="price">+ ₹2,500</div>
+              <div class="per">per person</div>
+            </div>
+          </label>
+
+          <label class="addon-option">
+            <input type="checkbox" data-price="3500" data-name="Paragliding at Solang Valley">
+            <img class="addon-option-img" src="https://images.unsplash.com/photo-1503265192943-9d7f5a5bf838?w=150&q=80" alt="Paragliding">
+            <div class="addon-option-info">
+              <h5>Paragliding at Solang Valley</h5>
+              <p>Tandem paragliding flight with GoPro video. 15-20 min flight over the valley.</p>
+            </div>
+            <div class="addon-option-price">
+              <div class="price">+ ₹3,500</div>
+              <div class="per">per person</div>
+            </div>
+          </label>
+
+          <label class="addon-option">
+            <input type="checkbox" data-price="1500" data-name="Stargazing Session at Chandratal">
+            <img class="addon-option-img" src="https://images.unsplash.com/photo-1519681393784-d120267933ba?w=150&q=80" alt="Stargazing">
+            <div class="addon-option-info">
+              <h5>Guided Stargazing Session at Chandratal</h5>
+              <p>Expert-led astronomy session with telescope. Spot constellations and Milky Way.</p>
+            </div>
+            <div class="addon-option-price">
+              <div class="price">+ ₹1,500</div>
+              <div class="per">per person</div>
+            </div>
+          </label>
+
+          <label class="addon-option">
+            <input type="checkbox" data-price="2000" data-name="Yak Safari at Kibber">
+            <img class="addon-option-img" src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=150&q=80" alt="Yak Safari">
+            <div class="addon-option-info">
+              <h5>Yak Safari at Kibber Village</h5>
+              <p>Unique yak ride through the highest village. Includes hot chai & photo session.</p>
+            </div>
+            <div class="addon-option-price">
+              <div class="price">+ ₹2,000</div>
+              <div class="per">per person</div>
+            </div>
+          </label>
+        </div>
+
+        <!-- Meal Upgrades -->
+        <div class="addon-category">
+          <h3><i class="fas fa-utensils"></i> Meal Preferences</h3>
+          <p style="color: var(--gray-500); font-size: 0.9rem; margin-bottom: var(--space-4);">Standard meals are included. Choose special preferences below.</p>
+
+          <label class="addon-option">
+            <input type="checkbox" data-price="0" data-name="Jain Meal Preference">
+            <div class="addon-option-info" style="margin-left: var(--space-2);">
+              <h5>Jain Meal Preference</h5>
+              <p>No onion, no garlic meals arranged throughout the trip</p>
+            </div>
+            <div class="addon-option-price">
+              <div class="price" style="color: var(--accent);">Free</div>
+              <div class="per">no extra cost</div>
+            </div>
+          </label>
+
+          <label class="addon-option">
+            <input type="checkbox" data-price="1800" data-name="BBQ & Bonfire Night">
+            <div class="addon-option-info" style="margin-left: var(--space-2);">
+              <h5>Special BBQ & Bonfire Night (Manali)</h5>
+              <p>Live BBQ, bonfire with music, snacks, and unlimited hot chocolate</p>
+            </div>
+            <div class="addon-option-price">
+              <div class="price">+ ₹1,800</div>
+              <div class="per">per person</div>
+            </div>
+          </label>
+        </div>
+
+        <!-- Transport Upgrades -->
+        <div class="addon-category">
+          <h3><i class="fas fa-car-side"></i> Transport & Transfers</h3>
+          <p style="color: var(--gray-500); font-size: 0.9rem; margin-bottom: var(--space-4);">Upgrade your ride or add airport transfers</p>
+
+          <label class="addon-option">
+            <input type="checkbox" data-price="6000" data-name="Private 4x4 SUV Upgrade">
+            <div class="addon-option-info" style="margin-left: var(--space-2);">
+              <h5>Private 4x4 SUV (Instead of Shared Vehicle)</h5>
+              <p>Toyota Fortuner or equivalent. Ideal for couples or small families wanting privacy.</p>
+            </div>
+            <div class="addon-option-price">
+              <div class="price">+ ₹6,000</div>
+              <div class="per">per person</div>
+            </div>
+          </label>
+
+          <label class="addon-option">
+            <input type="checkbox" data-price="3000" data-name="Airport Pickup & Drop (Delhi)">
+            <div class="addon-option-info" style="margin-left: var(--space-2);">
+              <h5>Delhi Airport Pickup & Drop</h5>
+              <p>AC sedan from Delhi airport to Chandigarh bus station (both ways)</p>
+            </div>
+            <div class="addon-option-price">
+              <div class="price">+ ₹3,000</div>
+              <div class="per">per person</div>
+            </div>
+          </label>
+        </div>
+
+        <!-- Photography & Memories -->
+        <div class="addon-category">
+          <h3><i class="fas fa-camera-retro"></i> Photography & Memories</h3>
+
+          <label class="addon-option">
+            <input type="checkbox" data-price="5000" data-name="Professional Photo Package">
+            <div class="addon-option-info" style="margin-left: var(--space-2);">
+              <h5>Professional Photography Package</h5>
+              <p>Dedicated photographer for Day 7-9 (Key Monastery, Chandratal). 100+ edited photos + 1 reel.</p>
+            </div>
+            <div class="addon-option-price">
+              <div class="price">+ ₹5,000</div>
+              <div class="per">per group</div>
+            </div>
+          </label>
+
+          <label class="addon-option">
+            <input type="checkbox" data-price="1200" data-name="Drone Video Souvenir">
+            <div class="addon-option-info" style="margin-left: var(--space-2);">
+              <h5>Drone Video Souvenir</h5>
+              <p>3-minute edited drone video of Chandratal Lake with music. Digital delivery.</p>
+            </div>
+            <div class="addon-option-price">
+              <div class="price">+ ₹1,200</div>
+              <div class="per">per group</div>
+            </div>
+          </label>
+        </div>
+
+        <!-- Travel Insurance Upgrade -->
+        <div class="addon-category">
+          <h3><i class="fas fa-shield-halved"></i> Insurance & Safety</h3>
+
+          <label class="addon-option">
+            <input type="checkbox" data-price="1500" data-name="Premium Insurance (Age 70+)">
+            <div class="addon-option-info" style="margin-left: var(--space-2);">
+              <h5>Premium Travel Insurance (Covers Age 70+)</h5>
+              <p>Extended coverage for senior travelers. Includes medical evacuation and higher cover limits.</p>
+            </div>
+            <div class="addon-option-price">
+              <div class="price">+ ₹1,500</div>
+              <div class="per">per person</div>
+            </div>
+          </label>
+
+          <label class="addon-option">
+            <input type="checkbox" data-price="800" data-name="Trip Cancellation Protection">
+            <div class="addon-option-info" style="margin-left: var(--space-2);">
+              <h5>Trip Cancellation Protection</h5>
+              <p>Get 90% refund for cancellations up to 7 days before departure (any reason).</p>
+            </div>
+            <div class="addon-option-price">
+              <div class="price">+ ₹800</div>
+              <div class="per">per person</div>
+            </div>
+          </label>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; margin-top: var(--space-8);">
+          <a href="package-detail.html" class="btn btn-outline btn-lg"><i class="fas fa-arrow-left"></i> Back to Package</a>
+          <a href="booking.html" class="btn btn-primary btn-lg">Proceed to Booking <i class="fas fa-arrow-right"></i></a>
+        </div>
+      </main>
+
+      <!-- RIGHT: Summary Sidebar -->
+      <aside class="customizer-summary">
+        <div class="booking-card">
+          <div class="booking-card-header">
+            <div class="price-from">Your Trip Total</div>
+            <div class="price" id="totalPrice">₹1,30,000</div>
+            <div class="price-note">2 adults &bull; twin sharing</div>
+          </div>
+
+          <div class="booking-card-body">
+            <h4 style="font-family: var(--font-body); font-size: 0.9rem; margin-bottom: var(--space-3);">Base Package</h4>
+            <div class="summary-line">
+              <span>Lahaul Spiti (2 Adults)</span>
+              <span style="font-weight: 600;">₹1,30,000</span>
+            </div>
+
+            <hr style="border: none; border-top: 1px dashed var(--gray-200); margin: var(--space-3) 0;">
+
+            <h4 style="font-family: var(--font-body); font-size: 0.9rem; margin-bottom: var(--space-3); display: flex; align-items: center; justify-content: space-between;">
+              Selected Add-ons
+              <span style="font-size: 0.8rem; color: var(--gray-400); font-weight: 400;" id="addonCount">0 items</span>
+            </h4>
+
+            <div id="selectedAddons">
+              <p style="font-size: 0.85rem; color: var(--gray-400); text-align: center; padding: var(--space-4) 0;">No add-ons selected yet</p>
+            </div>
+
+            <hr style="border: none; border-top: 2px solid var(--gray-200); margin: var(--space-4) 0;">
+
+            <div class="summary-line" style="font-weight: 700; font-size: 1.05rem;">
+              <span>Grand Total</span>
+              <span style="color: var(--primary);" id="grandTotal">₹1,30,000</span>
+            </div>
+
+            <div class="summary-line" style="font-size: 0.8rem; color: var(--gray-400);">
+              <span>GST (5%)</span>
+              <span id="gstAmount">+ ₹6,500</span>
+            </div>
+          </div>
+
+          <div class="booking-card-actions">
+            <a href="booking.html" class="btn btn-primary"><i class="fas fa-bolt"></i> Book with Add-ons</a>
+            <button class="btn btn-outline" onclick="clearAllAddons()"><i class="fas fa-rotate-left"></i> Reset Selections</button>
+          </div>
+        </div>
+
+        <div style="margin-top: var(--space-4); padding: var(--space-4); background: #fffbeb; border-radius: var(--radius-md); border-left: 3px solid var(--warning);">
+          <p style="font-size: 0.8rem; color: var(--gray-700);"><i class="fas fa-info-circle" style="color: var(--warning);"></i> <strong>Tip:</strong> Add-ons are subject to availability. Your tour manager will confirm all add-ons 48 hours before departure.</p>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer" style="margin-top: var(--space-16);">
+    <div class="container">
+      <div class="footer-bottom" style="border-top: none;">
+        <p>&copy; 2024 - 2026 WanderVista Travel Pvt Ltd.</p>
+        <div class="footer-badges">
+          <div class="footer-badge"><i class="fas fa-lock"></i> Secure</div>
+          <div class="footer-badge"><i class="fas fa-certificate"></i> IATA</div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script>
+    // Trip Customizer Logic
+    const BASE_PRICE = 130000;
+    let selectedAddons = [];
+
+    document.querySelectorAll('.addon-option input[type="checkbox"]').forEach(cb => {
+      cb.addEventListener('change', function() {
+        const option = this.closest('.addon-option');
+        const name = this.dataset.name;
+        const price = parseInt(this.dataset.price);
+
+        if (this.checked) {
+          option.classList.add('selected');
+          selectedAddons.push({ name, price });
+        } else {
+          option.classList.remove('selected');
+          selectedAddons = selectedAddons.filter(a => a.name !== name);
+        }
+        updateSummary();
+      });
+    });
+
+    function updateSummary() {
+      const container = document.getElementById('selectedAddons');
+      const countEl = document.getElementById('addonCount');
+      const totalEl = document.getElementById('totalPrice');
+      const grandEl = document.getElementById('grandTotal');
+      const gstEl = document.getElementById('gstAmount');
+
+      if (selectedAddons.length === 0) {
+        container.innerHTML = '<p style="font-size: 0.85rem; color: var(--gray-400); text-align: center; padding: var(--space-4) 0;">No add-ons selected yet</p>';
+        countEl.textContent = '0 items';
+      } else {
+        container.innerHTML = selectedAddons.map(a => `
+          <div class="summary-line addon">
+            <span>${a.name}</span>
+            <span>${a.price === 0 ? 'Free' : '₹' + a.price.toLocaleString('en-IN')}<button class="remove-addon" onclick="removeAddon('${a.name}')">&times;</button></span>
+          </div>
+        `).join('');
+        countEl.textContent = selectedAddons.length + ' item' + (selectedAddons.length > 1 ? 's' : '');
+      }
+
+      const addonTotal = selectedAddons.reduce((sum, a) => sum + a.price, 0);
+      const grand = BASE_PRICE + addonTotal;
+      const gst = Math.round(grand * 0.05);
+
+      totalEl.textContent = '₹' + grand.toLocaleString('en-IN');
+      grandEl.textContent = '₹' + grand.toLocaleString('en-IN');
+      gstEl.textContent = '+ ₹' + gst.toLocaleString('en-IN');
+    }
+
+    function removeAddon(name) {
+      const cb = document.querySelector(`input[data-name="${name}"]`);
+      if (cb) { cb.checked = false; cb.closest('.addon-option').classList.remove('selected'); }
+      selectedAddons = selectedAddons.filter(a => a.name !== name);
+      updateSummary();
+    }
+
+    function clearAllAddons() {
+      document.querySelectorAll('.addon-option input:checked').forEach(cb => {
+        cb.checked = false;
+        cb.closest('.addon-option').classList.remove('selected');
+      });
+      selectedAddons = [];
+      updateSummary();
+    }
+  </script>
+</body>
+</html>
