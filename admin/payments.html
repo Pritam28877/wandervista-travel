@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payments - WanderVista Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../css/admin.css">
+  <style>
+    /* Payment method badges */
+    .pay-method {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 10px;
+      border-radius: var(--radius-full);
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+    .pay-method.card   { background: rgba(37,99,235,0.1);   color: var(--info); }
+    .pay-method.upi    { background: rgba(139,92,246,0.1);  color: #8b5cf6; }
+    .pay-method.net    { background: rgba(5,150,105,0.1);   color: var(--accent); }
+    .pay-method.emi    { background: rgba(234,88,12,0.1);   color: var(--secondary); }
+
+    /* Stat sub-label */
+    .stat-sublabel {
+      font-size: 0.78rem;
+      color: var(--gray-400);
+      margin-top: 2px;
+    }
+
+    /* Pagination */
+    .admin-pagination {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--space-4) var(--space-6);
+      border-top: 1px solid var(--gray-100);
+      background: var(--gray-50);
+      flex-wrap: wrap;
+      gap: var(--space-3);
+    }
+    .admin-pagination-info {
+      font-size: 0.85rem;
+      color: var(--gray-500);
+    }
+    .pagination-btns {
+      display: flex;
+      gap: var(--space-1);
+    }
+    .page-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--gray-200);
+      background: var(--white);
+      color: var(--gray-600);
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--transition-fast);
+    }
+    .page-btn:hover { background: var(--gray-100); }
+    .page-btn.active { background: var(--primary); color: var(--white); border-color: var(--primary); }
+    .page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    /* Modal overlay */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 999;
+      align-items: center;
+      justify-content: center;
+      padding: var(--space-4);
+    }
+    .modal-overlay.open { display: flex; }
+
+    .modal-box {
+      background: var(--white);
+      border-radius: var(--radius-xl);
+      width: 100%;
+      max-width: 680px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: var(--shadow-2xl);
+      animation: modalIn 0.2s ease;
+    }
+    @keyframes modalIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--space-5) var(--space-6);
+      border-bottom: 1px solid var(--gray-100);
+    }
+    .modal-header h3 {
+      font-family: var(--font-body);
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--gray-900);
+    }
+    .modal-close {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--gray-200);
+      background: var(--white);
+      color: var(--gray-500);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--transition-fast);
+    }
+    .modal-close:hover { background: var(--gray-100); color: var(--gray-800); }
+
+    .modal-body { padding: var(--space-6); }
+
+    .modal-detail-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-4);
+      margin-bottom: var(--space-6);
+    }
+    .modal-detail-item label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--gray-400);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+    .modal-detail-item span {
+      font-size: 0.9rem;
+      color: var(--gray-800);
+      font-weight: 500;
+    }
+
+    /* Payment timeline */
+    .pay-timeline {
+      position: relative;
+      padding-left: var(--space-8);
+      margin-top: var(--space-2);
+    }
+    .pay-timeline::before {
+      content: '';
+      position: absolute;
+      left: 11px;
+      top: 8px;
+      bottom: 8px;
+      width: 2px;
+      background: var(--gray-200);
+    }
+    .pay-timeline-item {
+      position: relative;
+      padding-bottom: var(--space-5);
+    }
+    .pay-timeline-item:last-child { padding-bottom: 0; }
+    .pay-timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -25px;
+      top: 5px;
+      width: 12px;
+      height: 12px;
+      border-radius: var(--radius-full);
+      background: var(--white);
+      border: 2px solid var(--gray-300);
+    }
+    .pay-timeline-item.done::before  { background: var(--success); border-color: var(--success); }
+    .pay-timeline-item.active::before { background: var(--info); border-color: var(--info); }
+    .pay-timeline-item .tl-title { font-size: 0.88rem; font-weight: 600; color: var(--gray-800); }
+    .pay-timeline-item .tl-time  { font-size: 0.78rem; color: var(--gray-400); margin-top: 2px; }
+
+    .section-divider {
+      border: none;
+      border-top: 1px solid var(--gray-100);
+      margin: var(--space-5) 0;
+    }
+
+    .modal-section-title {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--gray-500);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: var(--space-4);
+    }
+
+    /* amount highlight */
+    .amount-highlight {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    @media (max-width: 600px) {
+      .modal-detail-grid { grid-template-columns: 1fr; }
+      .admin-stats { grid-template-columns: repeat(2, 1fr) !important; }
+    }
+    @media (max-width: 400px) {
+      .admin-stats { grid-template-columns: 1fr !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="admin-wrapper">
+
+    <!-- ===== SIDEBAR ===== -->
+    <aside class="admin-sidebar" id="adminSidebar">
+      <div class="admin-sidebar-header">
+        <div class="logo-icon"><i class="fas fa-mountain-sun"></i></div>
+        <div>
+          <span class="logo-text" style="color: var(--white);">WanderVista</span>
+          <small>Admin Panel</small>
+        </div>
+      </div>
+
+      <nav class="admin-nav">
+        <div class="admin-nav-section">
+          <div class="admin-nav-section-title">Main</div>
+          <a href="dashboard.html" class="admin-nav-link"><i class="fas fa-gauge-high"></i> Dashboard</a>
+          <a href="bookings.html" class="admin-nav-link"><i class="fas fa-calendar-check"></i> Bookings <span class="nav-badge">12</span></a>
+          <a href="trips.html" class="admin-nav-link"><i class="fas fa-route"></i> Trips &amp; Packages</a>
+          <a href="customers.html" class="admin-nav-link"><i class="fas fa-users"></i> Customers</a>
+        </div>
+        <div class="admin-nav-section">
+          <div class="admin-nav-section-title">Finance</div>
+          <a href="payments.html" class="admin-nav-link active"><i class="fas fa-indian-rupee-sign"></i> Payments</a>
+          <a href="#" class="admin-nav-link"><i class="fas fa-file-invoice"></i> Invoices</a>
+          <a href="#" class="admin-nav-link"><i class="fas fa-chart-pie"></i> Reports</a>
+        </div>
+        <div class="admin-nav-section">
+          <div class="admin-nav-section-title">Communication</div>
+          <a href="integrations.html" class="admin-nav-link"><i class="fas fa-plug"></i> Integrations</a>
+          <a href="integrations.html" class="admin-nav-link"><i class="fas fa-bell"></i> Notifications <span class="nav-badge">5</span></a>
+          <a href="#" class="admin-nav-link"><i class="fas fa-envelope"></i> Messages</a>
+        </div>
+        <div class="admin-nav-section">
+          <div class="admin-nav-section-title">Settings</div>
+          <a href="#" class="admin-nav-link"><i class="fas fa-gear"></i> Settings</a>
+          <a href="#" class="admin-nav-link"><i class="fas fa-user-shield"></i> Team &amp; Roles</a>
+          <a href="../index.html" class="admin-nav-link"><i class="fas fa-globe"></i> View Website</a>
+        </div>
+      </nav>
+
+      <div class="admin-sidebar-footer">
+        <div class="admin-user">
+          <div class="admin-user-avatar">AM</div>
+          <div class="admin-user-info">
+            <strong>Arjun Mehta</strong>
+            <small>Super Admin</small>
+          </div>
+          <button style="color: var(--gray-500); background: none; border: none; cursor: pointer;"><i class="fas fa-right-from-bracket"></i></button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <div class="admin-main">
+      <!-- Top Bar -->
+      <div class="admin-topbar">
+        <div class="admin-topbar-left">
+          <button class="mobile-menu-btn" onclick="document.getElementById('adminSidebar').classList.toggle('open')"><i class="fas fa-bars"></i></button>
+          <div>
+            <h1>Payments</h1>
+            <span class="breadcrumb"><a href="dashboard.html">Dashboard</a> &rsaquo; Payments</span>
+          </div>
+        </div>
+        <div class="admin-topbar-right">
+          <div class="admin-search">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Search transactions...">
+          </div>
+          <button class="admin-topbar-btn"><i class="fas fa-bell"></i><span class="notif-dot"></span></button>
+          <button class="admin-topbar-btn"><i class="fas fa-expand"></i></button>
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div class="admin-content">
+
+        <!-- Stat Cards -->
+        <div class="admin-stats" style="grid-template-columns: repeat(4, 1fr);">
+          <div class="stat-card">
+            <div class="stat-card-header">
+              <div class="stat-card-icon green"><i class="fas fa-indian-rupee-sign"></i></div>
+              <div class="stat-card-trend up"><i class="fas fa-arrow-up"></i> 22%</div>
+            </div>
+            <div class="stat-card-value">₹2.8Cr</div>
+            <div class="stat-card-label">Total Revenue (All Time)</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-card-header">
+              <div class="stat-card-icon blue"><i class="fas fa-calendar-day"></i></div>
+              <div class="stat-card-trend up"><i class="fas fa-arrow-up"></i> 18%</div>
+            </div>
+            <div class="stat-card-value">₹48.5L</div>
+            <div class="stat-card-label">This Month</div>
+            <div class="stat-sublabel">May 2026 &bull; 248 transactions</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-card-header">
+              <div class="stat-card-icon orange"><i class="fas fa-hourglass-half"></i></div>
+              <div class="stat-card-trend down"><i class="fas fa-arrow-down"></i> 4%</div>
+            </div>
+            <div class="stat-card-value">₹12.3L</div>
+            <div class="stat-card-label">Pending Payments</div>
+            <div class="stat-sublabel">34 transactions awaiting</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-card-header">
+              <div class="stat-card-icon purple"><i class="fas fa-rotate-left"></i></div>
+              <div class="stat-card-trend down"><i class="fas fa-arrow-down"></i> 6%</div>
+            </div>
+            <div class="stat-card-value">₹3.2L</div>
+            <div class="stat-card-label">Refunds Processed</div>
+            <div class="stat-sublabel">12 refunds this month</div>
+          </div>
+        </div>
+
+        <!-- Payments Table Card -->
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <h3><i class="fas fa-receipt" style="color: var(--primary); margin-right: var(--space-2);"></i> Transaction History</h3>
+            <div style="display: flex; gap: var(--space-3); align-items: center;">
+              <button class="btn btn-sm btn-outline" style="display: flex; align-items: center; gap: 6px; padding: 6px 14px; border: 1px solid var(--gray-200); border-radius: var(--radius-md); font-size: 0.82rem; color: var(--gray-600); background: var(--white); cursor: pointer;">
+                <i class="fas fa-file-export"></i> Export CSV
+              </button>
+            </div>
+          </div>
+
+          <!-- Filter Bar -->
+          <div style="padding: var(--space-4) var(--space-6); border-bottom: 1px solid var(--gray-100);">
+            <div class="admin-filter-bar" style="margin-bottom: 0;">
+              <div style="display: flex; align-items: center; gap: 6px; background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: var(--radius-md); padding: 6px 12px; min-width: 200px;">
+                <i class="fas fa-calendar" style="color: var(--gray-400); font-size: 0.8rem;"></i>
+                <input type="text" placeholder="01 May – 31 May 2026" style="border: none; background: transparent; padding: 0; font-size: 0.83rem; color: var(--gray-700); width: 100%; box-shadow: none;">
+              </div>
+              <select>
+                <option value="">All Statuses</option>
+                <option value="completed">Completed</option>
+                <option value="pending">Pending</option>
+                <option value="failed">Failed</option>
+                <option value="refunded">Refunded</option>
+              </select>
+              <select>
+                <option value="">All Methods</option>
+                <option value="card">Credit / Debit Card</option>
+                <option value="upi">UPI</option>
+                <option value="net">Net Banking</option>
+                <option value="emi">EMI</option>
+              </select>
+              <div style="position: relative; flex: 1; min-width: 180px;">
+                <i class="fas fa-search" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--gray-400); font-size: 0.8rem;"></i>
+                <input type="text" placeholder="Search TXN ID or customer..." style="padding-left: 34px; font-size: 0.83rem;">
+              </div>
+              <span class="filter-count">Showing 1–10 of 248</span>
+            </div>
+          </div>
+
+          <!-- Table -->
+          <div class="admin-card-body" style="padding: 0;">
+            <div class="admin-table-wrapper">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>Transaction ID</th>
+                    <th>Customer</th>
+                    <th>Booking ID</th>
+                    <th>Amount</th>
+                    <th>Method</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+
+                  <!-- Row 1 -->
+                  <tr>
+                    <td><strong style="font-family: monospace; font-size: 0.82rem; color: var(--gray-700);">TXN-9204837</strong></td>
+                    <td>
+                      <div class="customer-cell">
+                        <div class="customer-avatar" style="background: var(--primary);">RS</div>
+                        <div class="customer-info"><strong>Rahul Sharma</strong><small>rahul@email.com</small></div>
+                      </div>
+                    </td>
+                    <td><a href="bookings.html" style="color: var(--primary-light); font-weight: 600;">WV-08742</a></td>
+                    <td><strong style="color: var(--gray-900);">₹1,30,200</strong></td>
+                    <td><span class="pay-method card"><i class="fas fa-credit-card"></i> Card</span></td>
+                    <td style="color: var(--gray-500); font-size: 0.83rem;">03 May 2026, 10:14 AM</td>
+                    <td><span class="status status-confirmed"><i class="fas fa-check-circle"></i> Completed</span></td>
+                    <td>
+                      <div class="action-btns">
+                        <button class="action-btn" title="View Details" onclick="openPaymentModal('TXN-9204837')"><i class="fas fa-eye"></i></button>
+                        <button class="action-btn" title="Download Receipt"><i class="fas fa-download"></i></button>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <!-- Row 2 -->
+                  <tr>
+                    <td><strong style="font-family: monospace; font-size: 0.82rem; color: var(--gray-700);">TXN-9204791</strong></td>
+                    <td>
+                      <div class="customer-cell">
+                        <div class="customer-avatar" style="background: var(--accent);">PM</div>
+                        <div class="customer-info"><strong>Priya Mehta</strong><small>priya@email.com</small></div>
+                      </div>
+                    </td>
+                    <td><a href="bookings.html" style="color: var(--primary-light); font-weight: 600;">WV-08741</a></td>
+                    <td><strong style="color: var(--gray-900);">₹97,998</strong></td>
+                    <td><span class="pay-method upi"><i class="fas fa-mobile-screen"></i> UPI</span></td>
+                    <td style="color: var(--gray-500); font-size: 0.83rem;">02 May 2026, 3:47 PM</td>
+                    <td><span class="status status-pending"><i class="fas fa-clock"></i> Pending</span></td>
+                    <td>
+                      <div class="action-btns">
+                        <button class="action-btn" title="View Details" onclick="openPaymentModal('TXN-9204791')"><i class="fas fa-eye"></i></button>
+                        <button class="action-btn danger" title="Send Reminder"><i class="fas fa-paper-plane"></i></button>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <!-- Row 3 -->
+                  <tr>
+                    <td><strong style="font-family: monospace; font-size: 0.82rem; color: var(--gray-700);">TXN-9204755</strong></td>
+                    <td>
+                      <div class="customer-cell">
+                        <div class="customer-avatar" style="background: var(--secondary);">VK</div>
+                        <div class="customer-info"><strong>Vikram Khanna</strong><small>vikram@email.com</small></div>
+                      </div>
+                    </td>
+                    <td><a href="bookings.html" style="color: var(--primary-light); font-weight: 600;">WV-08740</a></td>
+                    <td><strong style="color: var(--gray-900);">₹34,999</strong></td>
+                    <td><span class="pay-method emi"><i class="fas fa-coins"></i> EMI</span></td>
+                    <td style="color: var(--gray-500); font-size: 0.83rem;">01 May 2026, 11:30 AM</td>
+                    <td><span class="status status-confirmed"><i class="fas fa-check-circle"></i> Completed</span></td>
+                    <td>
+                      <div class="action-btns">
+                        <button class="action-btn" title="View Details" onclick="openPaymentModal('TXN-9204755')"><i class="fas fa-eye"></i></button>
+                        <button class="action-btn" title="Download Receipt"><i class="fas fa-download"></i></button>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <!-- Row 4 -->
+                  <tr>
+                    <td><strong style="font-family: monospace; font-size: 0.82rem; color: var(--gray-700);">TXN-9204712</strong></td>
+                    <td>
+                      <div class="customer-cell">
+                        <div class="customer-avatar" style="background: var(--info);">NG</div>
+                        <div class="customer-info"><strong>Neha Gupta</strong><small>neha@email.com</small></div>
+                      </div>
+                    </td>
+                    <td><a href="bookings.html" style="color: var(--primary-light); font-weight: 600;">WV-08739</a></td>
+                    <td><strong style="color: var(--gray-900);">₹65,000</strong></td>
+                    <td><span class="pay-method net"><i class="fas fa-building-columns"></i> Net Banking</span></td>
+                    <td style="color: var(--gray-500); font-size: 0.83rem;">30 Apr 2026, 2:10 PM</td>
+                    <td><span class="status status-refunded"><i class="fas fa-rotate-left"></i> Refunded</span></td>
+                    <td>
+                      <div class="action-btns">
+                        <button class="action-btn" title="View Details" onclick="openPaymentModal('TXN-9204712')"><i class="fas fa-eye"></i></button>
+                        <button class="action-btn" title="Download Receipt"><i class="fas fa-download"></i></button>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <!-- Row 5 -->
+                  <tr>
+                    <td><strong style="font-family: monospace; font-size: 0.82rem; color: var(--gray-700);">TXN-9204680</strong></td>
+                    <td>
+                      <div class="customer-cell">
+                        <div class="customer-avatar" style="background: #8b5cf6;">AK</div>
+                        <div class="customer-info"><strong>Ankit Kapoor</strong><small>ankit.k@email.com</small></div>
+                      </div>
+                    </td>
+                    <td><a href="bookings.html" style="color: var(--primary-light); font-weight: 600;">WV-08736</a></td>
+                    <td><strong style="color: var(--gray-900);">₹1,30,000</strong></td>
+                    <td><span class="pay-method card"><i class="fas fa-credit-card"></i> Card</span></td>
+                    <td style="color: var(--gray-500); font-size: 0.83rem;">29 Apr 2026, 9:05 AM</td>
+                    <td><span class="status status-confirmed"><i class="fas fa-check-circle"></i> Completed</span></td>
+                    <td>
+                      <div class="action-btns">
+                        <button class="action-btn" title="View Details" onclick="openPaymentModal('TXN-9204680')"><i class="fas fa-eye"></i></button>
+                        <button class="action-btn" title="Download Receipt"><i class="fas fa-download"></i></button>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <!-- Row 6 -->
+                  <tr>
+                    <td><strong style="font-family: monospace; font-size: 0.82rem; color: var(--gray-700);">TXN-9204641</strong></td>
+                    <td>
+                      <div class="customer-cell">
+                        <div class="customer-avatar" style="background: #ec4899;">SG</div>
+                        <div class="customer-info"><strong>Shruti Gupta</strong><small>shruti@email.com</small></div>
+                      </div>
+                    </td>
+                    <td><a href="bookings.html" style="color: var(--primary-light); font-weight: 600;">WV-08734</a></td>
+                    <td><strong style="color: var(--gray-900);">₹38,500</strong></td>
+                    <td><span class="pay-method upi"><i class="fas fa-mobile-screen"></i> UPI</span></td>
+                    <td style="color: var(--gray-500); font-size: 0.83rem;">28 Apr 2026, 6:22 PM</td>
+                    <td><span class="status status-confirmed"><i class="fas fa-check-circle"></i> Completed</span></td>
+                    <td>
+                      <div class="action-btns">
+                        <button class="action-btn" title="View Details" onclick="openPaymentModal('TXN-9204641')"><i class="fas fa-eye"></i></button>
+                        <button class="action-btn" title="Download Receipt"><i class="fas fa-download"></i></button>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <!-- Row 7 -->
+                  <tr>
+                    <td><strong style="font-family: monospace; font-size: 0.82rem; color: var(--gray-700);">TXN-9204598</strong></td>
+                    <td>
+                      <div class="customer-cell">
+                        <div class="customer-avatar" style="background: #0891b2;">MR</div>
+                        <div class="customer-info"><strong>Mohit Rao</strong><small>mohit.rao@email.com</small></div>
+                      </div>
+                    </td>
+                    <td><a href="bookings.html" style="color: var(--primary-light); font-weight: 600;">WV-08731</a></td>
+                    <td><strong style="color: var(--gray-900);">₹52,800</strong></td>
+                    <td><span class="pay-method emi"><i class="fas fa-coins"></i> EMI</span></td>
+                    <td style="color: var(--gray-500); font-size: 0.83rem;">27 Apr 2026, 1:45 PM</td>
+                    <td><span class="status status-cancelled"><i class="fas fa-times-circle"></i> Failed</span></td>
+                    <td>
+                      <div class="action-btns">
+                        <button class="action-btn" title="View Details" onclick="openPaymentModal('TXN-9204598')"><i class="fas fa-eye"></i></button>
+                        <button class="action-btn danger" title="Retry Payment"><i class="fas fa-rotate-right"></i></button>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <!-- Row 8 -->
+                  <tr>
+                    <td><strong style="font-family: monospace; font-size: 0.82rem; color: var(--gray-700);">TXN-9204562</strong></td>
+                    <td>
+                      <div class="customer-cell">
+                        <div class="customer-avatar" style="background: #d97706;">DP</div>
+                        <div class="customer-info"><strong>Divya Pillai</strong><small>divya.p@email.com</small></div>
+                      </div>
+                    </td>
+                    <td><a href="bookings.html" style="color: var(--primary-light); font-weight: 600;">WV-08728</a></td>
+                    <td><strong style="color: var(--gray-900);">₹78,500</strong></td>
+                    <td><span class="pay-method net"><i class="fas fa-building-columns"></i> Net Banking</span></td>
+                    <td style="color: var(--gray-500); font-size: 0.83rem;">26 Apr 2026, 4:55 PM</td>
+                    <td><span class="status status-confirmed"><i class="fas fa-check-circle"></i> Completed</span></td>
+                    <td>
+                      <div class="action-btns">
+                        <button class="action-btn" title="View Details" onclick="openPaymentModal('TXN-9204562')"><i class="fas fa-eye"></i></button>
+                        <button class="action-btn" title="Download Receipt"><i class="fas fa-download"></i></button>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <!-- Row 9 -->
+                  <tr>
+                    <td><strong style="font-family: monospace; font-size: 0.82rem; color: var(--gray-700);">TXN-9204521</strong></td>
+                    <td>
+                      <div class="customer-cell">
+                        <div class="customer-avatar" style="background: #7c3aed;">KN</div>
+                        <div class="customer-info"><strong>Kavya Nair</strong><small>kavya.n@email.com</small></div>
+                      </div>
+                    </td>
+                    <td><a href="bookings.html" style="color: var(--primary-light); font-weight: 600;">WV-08725</a></td>
+                    <td><strong style="color: var(--gray-900);">₹44,000</strong></td>
+                    <td><span class="pay-method upi"><i class="fas fa-mobile-screen"></i> UPI</span></td>
+                    <td style="color: var(--gray-500); font-size: 0.83rem;">25 Apr 2026, 8:30 AM</td>
+                    <td><span class="status status-pending"><i class="fas fa-clock"></i> Pending</span></td>
+                    <td>
+                      <div class="action-btns">
+                        <button class="action-btn" title="View Details" onclick="openPaymentModal('TXN-9204521')"><i class="fas fa-eye"></i></button>
+                        <button class="action-btn danger" title="Send Reminder"><i class="fas fa-paper-plane"></i></button>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <!-- Row 10 -->
+                  <tr>
+                    <td><strong style="font-family: monospace; font-size: 0.82rem; color: var(--gray-700);">TXN-9204488</strong></td>
+                    <td>
+                      <div class="customer-cell">
+                        <div class="customer-avatar" style="background: #059669;">AB</div>
+                        <div class="customer-info"><strong>Amit Bose</strong><small>amit.bose@email.com</small></div>
+                      </div>
+                    </td>
+                    <td><a href="bookings.html" style="color: var(--primary-light); font-weight: 600;">WV-08722</a></td>
+                    <td><strong style="color: var(--gray-900);">₹61,200</strong></td>
+                    <td><span class="pay-method card"><i class="fas fa-credit-card"></i> Card</span></td>
+                    <td style="color: var(--gray-500); font-size: 0.83rem;">24 Apr 2026, 12:00 PM</td>
+                    <td><span class="status status-refunded"><i class="fas fa-rotate-left"></i> Refunded</span></td>
+                    <td>
+                      <div class="action-btns">
+                        <button class="action-btn" title="View Details" onclick="openPaymentModal('TXN-9204488')"><i class="fas fa-eye"></i></button>
+                        <button class="action-btn" title="Download Receipt"><i class="fas fa-download"></i></button>
+                      </div>
+                    </td>
+                  </tr>
+
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Pagination -->
+          <div class="admin-pagination">
+            <span class="admin-pagination-info">Showing <strong>1–10</strong> of <strong>248</strong> transactions</span>
+            <div class="pagination-btns">
+              <button class="page-btn" disabled><i class="fas fa-chevron-left"></i></button>
+              <button class="page-btn active">1</button>
+              <button class="page-btn">2</button>
+              <button class="page-btn">3</button>
+              <span style="display:flex;align-items:center;padding:0 4px;color:var(--gray-400);font-size:0.85rem;">...</span>
+              <button class="page-btn">25</button>
+              <button class="page-btn"><i class="fas fa-chevron-right"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== PAYMENT DETAIL MODAL ===== -->
+  <div class="modal-overlay" id="paymentModal" onclick="handleModalOverlayClick(event)">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3><i class="fas fa-receipt" style="color: var(--primary); margin-right: 8px;"></i> Payment Details</h3>
+        <button class="modal-close" onclick="closePaymentModal()"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="modal-body">
+
+        <!-- Amount Hero -->
+        <div style="text-align: center; padding: var(--space-5) 0 var(--space-4);">
+          <div class="amount-highlight" id="modalAmount">₹1,30,200</div>
+          <div style="margin-top: 6px;" id="modalStatusBadge">
+            <span class="status status-confirmed"><i class="fas fa-check-circle"></i> Completed</span>
+          </div>
+        </div>
+        <hr class="section-divider">
+
+        <!-- Transaction Details Grid -->
+        <div class="modal-section-title">Transaction Details</div>
+        <div class="modal-detail-grid">
+          <div class="modal-detail-item">
+            <label>Transaction ID</label>
+            <span id="modalTxnId" style="font-family: monospace;">TXN-9204837</span>
+          </div>
+          <div class="modal-detail-item">
+            <label>Payment Method</label>
+            <span><span class="pay-method card"><i class="fas fa-credit-card"></i> Credit Card</span></span>
+          </div>
+          <div class="modal-detail-item">
+            <label>Date &amp; Time</label>
+            <span>03 May 2026, 10:14 AM</span>
+          </div>
+          <div class="modal-detail-item">
+            <label>Gateway</label>
+            <span>Razorpay</span>
+          </div>
+          <div class="modal-detail-item">
+            <label>Gateway Ref</label>
+            <span style="font-family: monospace; font-size: 0.82rem;">rzp_live_abc123XYZ</span>
+          </div>
+          <div class="modal-detail-item">
+            <label>Booking ID</label>
+            <span><a href="bookings.html" style="color: var(--primary-light); font-weight: 600;">WV-08742</a></span>
+          </div>
+        </div>
+
+        <hr class="section-divider">
+
+        <!-- Customer Info -->
+        <div class="modal-section-title">Customer Information</div>
+        <div style="display: flex; align-items: center; gap: var(--space-4); margin-bottom: var(--space-5);">
+          <div class="customer-avatar" style="width: 48px; height: 48px; font-size: 1rem; background: var(--primary);">RS</div>
+          <div>
+            <strong style="font-size: 0.95rem; color: var(--gray-900);">Rahul Sharma</strong>
+            <div style="font-size: 0.82rem; color: var(--gray-500); margin-top: 2px;">
+              <i class="fas fa-envelope" style="width: 14px;"></i> rahul@email.com &nbsp;&bull;&nbsp;
+              <i class="fas fa-phone" style="width: 14px;"></i> +91 98765 43210
+            </div>
+          </div>
+          <a href="customers.html" style="margin-left: auto; font-size: 0.82rem; color: var(--primary-light);">View Profile <i class="fas fa-arrow-right"></i></a>
+        </div>
+
+        <hr class="section-divider">
+
+        <!-- Payment Timeline -->
+        <div class="modal-section-title">Payment Timeline</div>
+        <div class="pay-timeline">
+          <div class="pay-timeline-item done">
+            <div class="tl-title"><i class="fas fa-circle-check" style="color: var(--success); margin-right: 6px;"></i> Payment Initiated</div>
+            <div class="tl-time">03 May 2026, 10:13:42 AM &bull; Customer submitted payment form</div>
+          </div>
+          <div class="pay-timeline-item done">
+            <div class="tl-title"><i class="fas fa-circle-check" style="color: var(--success); margin-right: 6px;"></i> Processing</div>
+            <div class="tl-time">03 May 2026, 10:13:55 AM &bull; Forwarded to Razorpay gateway</div>
+          </div>
+          <div class="pay-timeline-item done">
+            <div class="tl-title"><i class="fas fa-circle-check" style="color: var(--success); margin-right: 6px;"></i> Bank Authorization</div>
+            <div class="tl-time">03 May 2026, 10:14:08 AM &bull; Authorized by HDFC Bank</div>
+          </div>
+          <div class="pay-timeline-item done">
+            <div class="tl-title"><i class="fas fa-circle-check" style="color: var(--success); margin-right: 6px;"></i> Completed</div>
+            <div class="tl-time">03 May 2026, 10:14:12 AM &bull; Payment settled to WanderVista account</div>
+          </div>
+        </div>
+
+        <hr class="section-divider">
+
+        <!-- Actions -->
+        <div style="display: flex; gap: var(--space-3); justify-content: flex-end; flex-wrap: wrap;">
+          <button style="padding: 8px 18px; border: 1px solid var(--gray-200); border-radius: var(--radius-md); background: var(--white); color: var(--gray-600); font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+            <i class="fas fa-download"></i> Download Receipt
+          </button>
+          <button style="padding: 8px 18px; border: 1px solid var(--error); border-radius: var(--radius-md); background: var(--white); color: var(--error); font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+            <i class="fas fa-rotate-left"></i> Initiate Refund
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function openPaymentModal(txnId) {
+      document.getElementById('modalTxnId').textContent = txnId;
+      document.getElementById('paymentModal').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closePaymentModal() {
+      document.getElementById('paymentModal').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    function handleModalOverlayClick(e) {
+      if (e.target === document.getElementById('paymentModal')) {
+        closePaymentModal();
+      }
+    }
+
+    // Tab switching logic (for reuse)
+    document.querySelectorAll('.admin-tab').forEach(tab => {
+      tab.addEventListener('click', function() {
+        this.closest('.admin-tabs').querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
+
+    // Pagination
+    document.querySelectorAll('.page-btn:not([disabled])').forEach(btn => {
+      btn.addEventListener('click', function() {
+        if (this.querySelector('i')) return;
+        document.querySelectorAll('.page-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>
