@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us - WanderVista</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- ===== HEADER ===== -->
+  <header class="header scrolled" id="header">
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <div class="logo-icon"><i class="fas fa-mountain-sun"></i></div>
+        <span class="logo-text" style="color: var(--gray-800);">WanderVista</span>
+      </a>
+      <nav class="nav">
+        <ul class="nav-menu" id="navMenu">
+          <li><a href="packages.html" class="nav-link" style="color: var(--gray-800);">Destinations</a></li>
+          <li><a href="packages.html" class="nav-link" style="color: var(--gray-800);">Packages</a></li>
+          <li><a href="about.html" class="nav-link" style="color: var(--gray-800);">About Us</a></li>
+          <li><a href="contact.html" class="nav-link" style="color: var(--gray-800); font-weight: 700;">Contact</a></li>
+        </ul>
+        <div class="header-actions">
+          <a href="tel:18001234567" class="header-phone" style="color: var(--gray-800);"><i class="fas fa-phone"></i> 1800-123-4567</a>
+          <a href="booking.html" class="btn btn-primary btn-sm">Book Now</a>
+        </div>
+        <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ===== PAGE HEADER ===== -->
+  <section class="page-header">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="index.html">Home</a>
+        <span class="separator"><i class="fas fa-chevron-right"></i></span>
+        <span>Contact Us</span>
+      </div>
+      <h1>Get in Touch</h1>
+      <p>Have a question, need a custom package, or just want to say hello? We'd love to hear from you.</p>
+    </div>
+  </section>
+
+  <!-- ===== CONTACT CONTENT ===== -->
+  <section class="section">
+    <div class="container">
+      <!-- Contact Info Cards -->
+      <div class="contact-info-cards" style="grid-template-columns: repeat(4, 1fr); margin-bottom: var(--space-12);">
+        <div class="contact-info-card" data-aos>
+          <i class="fas fa-phone"></i>
+          <h4>Call Us</h4>
+          <p><a href="tel:18001234567"><strong>1800-123-4567</strong></a><br><small>Toll Free &bull; Mon-Sat, 9am-8pm</small></p>
+        </div>
+        <div class="contact-info-card" data-aos>
+          <i class="fab fa-whatsapp" style="color: #25D366;"></i>
+          <h4>WhatsApp</h4>
+          <p><a href="https://wa.me/911234567890"><strong>+91 12345 67890</strong></a><br><small>Quick replies &bull; 24/7</small></p>
+        </div>
+        <div class="contact-info-card" data-aos>
+          <i class="fas fa-envelope"></i>
+          <h4>Email Us</h4>
+          <p><a href="mailto:travel@wandervista.com">travel@wandervista.com</a><br><a href="mailto:support@wandervista.com">support@wandervista.com</a></p>
+        </div>
+        <div class="contact-info-card" data-aos>
+          <i class="fas fa-clock"></i>
+          <h4>Working Hours</h4>
+          <p><strong>Mon - Sat:</strong> 9:00 AM - 8:00 PM<br><strong>Sunday:</strong> 10:00 AM - 4:00 PM</p>
+        </div>
+      </div>
+
+      <!-- Contact Form + Office Info -->
+      <div class="contact-grid">
+        <div class="contact-form" data-aos>
+          <h3 style="margin-bottom: var(--space-2);"><i class="fas fa-paper-plane" style="color: var(--secondary); margin-right: var(--space-2);"></i> Send Us a Message</h3>
+          <p style="color: var(--gray-500); font-size: 0.9rem; margin-bottom: var(--space-6);">Fill in the form below and our travel expert will get back to you within 2 hours.</p>
+
+          <form>
+            <div class="form-row">
+              <div class="form-group">
+                <label>First Name <span class="required">*</span></label>
+                <input type="text" placeholder="Your first name" required>
+              </div>
+              <div class="form-group">
+                <label>Last Name <span class="required">*</span></label>
+                <input type="text" placeholder="Your last name" required>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label>Email <span class="required">*</span></label>
+                <input type="email" placeholder="your@email.com" required>
+              </div>
+              <div class="form-group">
+                <label>Phone <span class="required">*</span></label>
+                <input type="tel" placeholder="+91 9876543210" required>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Subject</label>
+              <select>
+                <option value="">What can we help with?</option>
+                <option>New Booking Enquiry</option>
+                <option>Custom Package Request</option>
+                <option>Existing Booking Query</option>
+                <option>Cancellation / Refund</option>
+                <option>Feedback / Complaint</option>
+                <option>Corporate Travel</option>
+                <option>Partnership / Business</option>
+                <option>Other</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Interested Destination</label>
+              <select>
+                <option value="">Select a destination (optional)</option>
+                <option>Ladakh</option>
+                <option>Spiti Valley</option>
+                <option>Kashmir</option>
+                <option>Kerala</option>
+                <option>Rajasthan</option>
+                <option>Goa</option>
+                <option>Andaman</option>
+                <option>Bali</option>
+                <option>Thailand</option>
+                <option>Vietnam</option>
+                <option>Europe</option>
+                <option>Maldives</option>
+                <option>Other / Not Sure</option>
+              </select>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label>Travel Date (Approx.)</label>
+                <input type="date">
+              </div>
+              <div class="form-group">
+                <label>Number of Travelers</label>
+                <select>
+                  <option value="">Select</option>
+                  <option>1 Person</option>
+                  <option>2 People</option>
+                  <option>3-5 People</option>
+                  <option>6-10 People</option>
+                  <option>10+ People (Group)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Your Message <span class="required">*</span></label>
+              <textarea rows="5" placeholder="Tell us about your travel plans, requirements, or questions..." required></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;"><i class="fas fa-paper-plane"></i> Send Message</button>
+          </form>
+        </div>
+
+        <div>
+          <!-- Office Locations -->
+          <div data-aos>
+            <h3 style="margin-bottom: var(--space-6);"><i class="fas fa-building" style="color: var(--secondary); margin-right: var(--space-2);"></i> Our Offices</h3>
+
+            <div style="margin-bottom: var(--space-6); padding: var(--space-6); background: var(--white); border: 1px solid var(--gray-200); border-radius: var(--radius-lg);">
+              <div style="display: flex; align-items: center; gap: var(--space-2); margin-bottom: var(--space-3);">
+                <span class="badge badge-primary">Headquarters</span>
+              </div>
+              <h4 style="font-family: var(--font-body); margin-bottom: var(--space-2);">Mumbai Office</h4>
+              <p style="font-size: 0.9rem; color: var(--gray-500); margin-bottom: var(--space-3);">
+                WanderVista Travel Pvt. Ltd.<br>
+                802, Trade Center, BKC<br>
+                Bandra East, Mumbai - 400051
+              </p>
+              <p style="font-size: 0.85rem; color: var(--gray-500);">
+                <i class="fas fa-phone" style="color: var(--secondary); width: 16px;"></i> +91 22 4567 8900<br>
+                <i class="fas fa-envelope" style="color: var(--secondary); width: 16px;"></i> mumbai@wandervista.com
+              </p>
+            </div>
+
+            <div style="margin-bottom: var(--space-6); padding: var(--space-6); background: var(--white); border: 1px solid var(--gray-200); border-radius: var(--radius-lg);">
+              <h4 style="font-family: var(--font-body); margin-bottom: var(--space-2);">Delhi Office</h4>
+              <p style="font-size: 0.9rem; color: var(--gray-500); margin-bottom: var(--space-3);">
+                WanderVista Travel Pvt. Ltd.<br>
+                415, Statesman House, Barakhamba Road<br>
+                Connaught Place, New Delhi - 110001
+              </p>
+              <p style="font-size: 0.85rem; color: var(--gray-500);">
+                <i class="fas fa-phone" style="color: var(--secondary); width: 16px;"></i> +91 11 4567 8900<br>
+                <i class="fas fa-envelope" style="color: var(--secondary); width: 16px;"></i> delhi@wandervista.com
+              </p>
+            </div>
+
+            <div style="margin-bottom: var(--space-6); padding: var(--space-6); background: var(--white); border: 1px solid var(--gray-200); border-radius: var(--radius-lg);">
+              <h4 style="font-family: var(--font-body); margin-bottom: var(--space-2);">Bangalore Office</h4>
+              <p style="font-size: 0.9rem; color: var(--gray-500); margin-bottom: var(--space-3);">
+                WanderVista Travel Pvt. Ltd.<br>
+                203, Brigade Road, Ashok Nagar<br>
+                Bangalore - 560025
+              </p>
+              <p style="font-size: 0.85rem; color: var(--gray-500);">
+                <i class="fas fa-phone" style="color: var(--secondary); width: 16px;"></i> +91 80 4567 8900<br>
+                <i class="fas fa-envelope" style="color: var(--secondary); width: 16px;"></i> bangalore@wandervista.com
+              </p>
+            </div>
+          </div>
+
+          <!-- Map Placeholder -->
+          <div class="map-container">
+            <i class="fas fa-map-location-dot" style="font-size: 2rem; margin-bottom: var(--space-2);"></i>
+            <span>Interactive Map</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FAQ ===== -->
+  <section class="section" style="background: var(--gray-50);">
+    <div class="container">
+      <div class="section-title" data-aos>
+        <h2>Frequently Asked Questions</h2>
+        <p>Quick answers to the most common questions we receive</p>
+      </div>
+
+      <div style="max-width: 800px; margin: 0 auto;">
+        <div class="faq-item open">
+          <button class="faq-question">
+            How do I book a tour package?
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="faq-answer">
+            <p>You can book directly on our website by clicking "Book Now" on any package page. Alternatively, you can call us at 1800-123-4567, WhatsApp us, or fill out the enquiry form above. Our travel expert will guide you through the entire process, help you choose dates, and finalize your booking.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question">
+            What is your cancellation and refund policy?
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="faq-answer">
+            <p>Our cancellation policy varies by package but generally follows a tiered structure: 10% deduction for cancellations 121+ days before departure, scaling up to 100% for cancellations within 15 days. Full details are available on each package page under the "Cancellation Policy" tab. Refunds are processed within 7-10 business days.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question">
+            Is travel insurance included in the package?
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="faq-answer">
+            <p>Yes! All our domestic and international packages include complimentary travel insurance for travelers up to age 70. The insurance covers medical emergencies, trip cancellation due to unforeseen circumstances, and baggage loss. For travelers above 70, additional insurance can be arranged at a nominal cost.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question">
+            Can I customize a package to suit my preferences?
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="faq-answer">
+            <p>Absolutely! We offer fully customizable packages. You can modify the duration, hotels, activities, and even create an entirely new itinerary. Fill out the contact form above with your requirements, or call us, and our travel planning team will create a personalized package within 24 hours.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question">
+            What payment options are available?
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="faq-answer">
+            <p>We accept all major credit/debit cards, net banking, UPI, and digital wallets. We also offer: (1) Full payment upfront, (2) 30% advance with remaining due 30 days before departure, and (3) No-cost EMI options starting at ₹2,999/month on select bank cards. All payments are processed through secure, PCI-DSS compliant gateways.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question">
+            Are your tours safe for solo female travelers?
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="faq-answer">
+            <p>Safety is our top priority. We have specific Women's Special tours designed exclusively for female travelers, led by experienced female tour managers. All our tours maintain strict safety protocols, 24/7 emergency support, and vetted accommodations. Over 35% of our solo travelers are women, and we have a 4.9/5 safety rating from female travelers.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question">
+            What happens if the tour gets cancelled due to weather or natural events?
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="faq-answer">
+            <p>In case of force majeure events (extreme weather, natural disasters, government restrictions), we offer two options: (1) Full credit for a future trip of equal or higher value, valid for 12 months, or (2) Refund of the package cost minus non-recoverable expenses (like already-issued permits or pre-booked flights). We always try to offer alternative dates or routes when possible.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CTA ===== -->
+  <section class="newsletter section">
+    <div class="container">
+      <div class="newsletter-inner">
+        <div>
+          <h3>Still have questions?</h3>
+          <p>Our travel experts are just a call away. We're here to help you plan the perfect trip.</p>
+        </div>
+        <a href="tel:18001234567" class="btn btn-primary btn-lg"><i class="fas fa-phone"></i> Call 1800-123-4567</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <span class="logo-text">WanderVista</span>
+          <p>Crafting unforgettable travel experiences since 2014. Your journey, our passion.</p>
+          <div class="footer-social">
+            <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="#" aria-label="Twitter"><i class="fab fa-x-twitter"></i></a>
+            <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+            <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+          </div>
+        </div>
+        <div class="footer-col"><h4>Destinations</h4><a href="packages.html">Himachal Pradesh</a><a href="packages.html">Ladakh</a><a href="packages.html">Kerala</a><a href="packages.html">Rajasthan</a><a href="packages.html">Goa</a></div>
+        <div class="footer-col"><h4>International</h4><a href="packages.html">Bali</a><a href="packages.html">Thailand</a><a href="packages.html">Vietnam</a><a href="packages.html">Maldives</a></div>
+        <div class="footer-col"><h4>Company</h4><a href="about.html">About Us</a><a href="contact.html">Contact</a><a href="#">Careers</a><a href="#">Blog</a></div>
+        <div class="footer-col">
+          <h4>Support</h4>
+          <div class="footer-contact-item"><i class="fas fa-phone"></i><div><strong>1800-123-4567</strong></div></div>
+          <a href="#">FAQ</a><a href="#">Privacy Policy</a><a href="#">Terms</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2024 - 2026 WanderVista Travel Pvt Ltd. All rights reserved.</p>
+        <div class="footer-badges">
+          <div class="footer-badge"><i class="fas fa-lock"></i> Secure</div>
+          <div class="footer-badge"><i class="fas fa-certificate"></i> IATA</div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Floating -->
+  <div class="floating-enquiry">
+    <button class="floating-btn floating-btn-top" aria-label="Scroll to top"><i class="fas fa-arrow-up"></i></button>
+    <a href="https://wa.me/911234567890" class="floating-btn floating-btn-whatsapp" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
