@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bookings Management - WanderVista Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../css/admin.css">
+  <style>
+    /* Bookings-page scoped styles (no new file - inline only) */
+    .bookings-summary-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-6);
+      margin-bottom: var(--space-8);
+    }
+    .addon-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(139,92,246,0.1);
+      color: #8b5cf6;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: var(--radius-full);
+    }
+    .addon-badge.none {
+      background: var(--gray-100);
+      color: var(--gray-400);
+    }
+    .pay-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: var(--radius-full);
+    }
+    .pay-paid   { background: #f0fdf4; color: var(--success); }
+    .pay-partial{ background: #fffbeb; color: var(--warning); }
+    .pay-unpaid { background: #fef2f2; color: var(--error); }
+    .pay-refunded { background: rgba(139,92,246,0.1); color: #8b5cf6; }
+    /* Pagination */
+    .pagination {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--space-4) var(--space-6);
+      border-top: 1px solid var(--gray-100);
+      background: var(--gray-50);
+      font-size: 0.85rem;
+      color: var(--gray-500);
+    }
+    .pagination-pages {
+      display: flex;
+      gap: var(--space-1);
+    }
+    .page-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--gray-200);
+      background: var(--white);
+      color: var(--gray-600);
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--transition-fast);
+    }
+    .page-btn:hover { background: var(--gray-100); }
+    .page-btn.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: var(--white);
+    }
+    .page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15,23,42,0.6);
+      z-index: 200;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: var(--space-8) var(--space-4);
+      overflow-y: auto;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity var(--transition-base);
+    }
+    .modal-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .modal-box {
+      background: var(--white);
+      border-radius: var(--radius-xl);
+      width: 100%;
+      max-width: 780px;
+      box-shadow: var(--shadow-2xl);
+      transform: translateY(20px);
+      transition: transform var(--transition-base);
+    }
+    .modal-overlay.open .modal-box {
+      transform: translateY(0);
+    }
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--space-5) var(--space-6);
+      border-bottom: 1px solid var(--gray-100);
+    }
+    .modal-header h3 {
+      font-family: var(--font-body);
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--gray-900);
+    }
+    .modal-close {
+      width: 34px;
+      height: 34px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--gray-200);
+      background: var(--gray-50);
+      color: var(--gray-500);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--transition-fast);
+    }
+    .modal-close:hover { background: var(--gray-100); color: var(--gray-800); }
+    .modal-body {
+      padding: var(--space-6);
+    }
+    .modal-section-title {
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--gray-400);
+      margin-bottom: var(--space-3);
+      margin-top: var(--space-5);
+    }
+    .modal-section-title:first-child { margin-top: 0; }
+    .modal-detail-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-4);
+      margin-bottom: var(--space-5);
+    }
+    .modal-detail-item label {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--gray-400);
+      margin-bottom: 2px;
+      font-weight: 500;
+    }
+    .modal-detail-item span {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--gray-800);
+    }
+    .modal-travelers-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      margin-bottom: var(--space-4);
+    }
+    .modal-travelers-table th {
+      background: var(--gray-50);
+      padding: var(--space-2) var(--space-3);
+      text-align: left;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--gray-500);
+      border-bottom: 1px solid var(--gray-200);
+    }
+    .modal-travelers-table td {
+      padding: var(--space-2) var(--space-3);
+      border-bottom: 1px solid var(--gray-100);
+      color: var(--gray-700);
+    }
+    .modal-addons-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+      margin-bottom: var(--space-4);
+    }
+    .modal-addon-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--space-3) var(--space-4);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-md);
+      background: var(--gray-50);
+      font-size: 0.85rem;
+    }
+    .modal-addon-row span { color: var(--gray-700); }
+    .modal-addon-row strong { color: var(--primary); }
+    .modal-payment-rows {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+      margin-bottom: var(--space-4);
+    }
+    .payment-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--space-3) var(--space-4);
+      border-left: 3px solid var(--gray-200);
+      font-size: 0.85rem;
+    }
+    .payment-row.success { border-left-color: var(--success); }
+    .payment-row.pending { border-left-color: var(--warning); }
+    .payment-row-left small { display: block; font-size: 0.75rem; color: var(--gray-400); }
+    /* Booking Timeline */
+    .booking-timeline {
+      padding-left: var(--space-8);
+      position: relative;
+    }
+    .booking-timeline::before {
+      content: '';
+      position: absolute;
+      left: 15px;
+      top: 6px;
+      bottom: 6px;
+      width: 2px;
+      background: var(--gray-200);
+    }
+    .timeline-step {
+      position: relative;
+      padding-bottom: var(--space-5);
+      font-size: 0.85rem;
+    }
+    .timeline-step:last-child { padding-bottom: 0; }
+    .timeline-step::before {
+      content: '';
+      position: absolute;
+      left: -25px;
+      top: 5px;
+      width: 10px;
+      height: 10px;
+      border-radius: var(--radius-full);
+      background: var(--white);
+      border: 2px solid var(--gray-300);
+    }
+    .timeline-step.done::before { background: var(--success); border-color: var(--success); }
+    .timeline-step.active::before { background: var(--info); border-color: var(--info); }
+    .timeline-step .step-time { font-size: 0.75rem; color: var(--gray-400); display: block; }
+    .timeline-step strong { color: var(--gray-800); display: block; }
+    .modal-footer {
+      display: flex;
+      gap: var(--space-3);
+      justify-content: flex-end;
+      padding: var(--space-5) var(--space-6);
+      border-top: 1px solid var(--gray-100);
+      background: var(--gray-50);
+      border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+    }
+    /* Responsive table hint */
+    @media (max-width: 900px) {
+      .bookings-summary-bar {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (max-width: 768px) {
+      .bookings-summary-bar {
+        grid-template-columns: 1fr 1fr;
+      }
+      .modal-detail-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+      .admin-tabs {
+        overflow-x: auto;
+        width: 100%;
+      }
+      .pagination {
+        flex-direction: column;
+        gap: var(--space-3);
+        align-items: flex-start;
+      }
+    }
+    @media (max-width: 480px) {
+      .bookings-summary-bar {
+        grid-template-columns: 1fr;
+      }
+      .modal-detail-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="admin-wrapper">
+
+    <!-- ===== SIDEBAR ===== -->
+    <aside class="admin-sidebar" id="adminSidebar">
+      <div class="admin-sidebar-header">
+        <div class="logo-icon"><i class="fas fa-mountain-sun"></i></div>
+        <div>
+          <span class="logo-text" style="color: var(--white);">WanderVista</span>
+          <small>Admin Panel</small>
+        </div>
+      </div>
+
+      <nav class="admin-nav">
+        <div class="admin-nav-section">
+          <div class="admin-nav-section-title">Main</div>
+          <a href="dashboard.html" class="admin-nav-link"><i class="fas fa-gauge-high"></i> Dashboard</a>
+          <a href="bookings.html" class="admin-nav-link active"><i class="fas fa-calendar-check"></i> Bookings <span class="nav-badge">12</span></a>
+          <a href="trips.html" class="admin-nav-link"><i class="fas fa-route"></i> Trips & Packages</a>
+          <a href="customers.html" class="admin-nav-link"><i class="fas fa-users"></i> Customers</a>
+        </div>
+        <div class="admin-nav-section">
+          <div class="admin-nav-section-title">Finance</div>
+          <a href="payments.html" class="admin-nav-link"><i class="fas fa-indian-rupee-sign"></i> Payments</a>
+          <a href="#" class="admin-nav-link"><i class="fas fa-file-invoice"></i> Invoices</a>
+          <a href="#" class="admin-nav-link"><i class="fas fa-chart-pie"></i> Reports</a>
+        </div>
+        <div class="admin-nav-section">
+          <div class="admin-nav-section-title">Communication</div>
+          <a href="integrations.html" class="admin-nav-link"><i class="fas fa-plug"></i> Integrations</a>
+          <a href="integrations.html" class="admin-nav-link"><i class="fas fa-bell"></i> Notifications <span class="nav-badge">5</span></a>
+          <a href="#" class="admin-nav-link"><i class="fas fa-envelope"></i> Messages</a>
+        </div>
+        <div class="admin-nav-section">
+          <div class="admin-nav-section-title">Settings</div>
+          <a href="#" class="admin-nav-link"><i class="fas fa-gear"></i> Settings</a>
+          <a href="#" class="admin-nav-link"><i class="fas fa-user-shield"></i> Team & Roles</a>
+          <a href="../index.html" class="admin-nav-link"><i class="fas fa-globe"></i> View Website</a>
+        </div>
+      </nav>
+
+      <div class="admin-sidebar-footer">
+        <div class="admin-user">
+          <div class="admin-user-avatar">AM</div>
+          <div class="admin-user-info">
+            <strong>Arjun Mehta</strong>
+            <small>Super Admin</small>
+          </div>
+          <button style="color: var(--gray-500); background: none; border: none; cursor: pointer;"><i class="fas fa-right-from-bracket"></i></button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <div class="admin-main">
+
+      <!-- Top Bar -->
+      <div class="admin-topbar">
+        <div class="admin-topbar-left">
+          <button class="mobile-menu-btn" onclick="document.getElementById('adminSidebar').classList.toggle('open')"><i class="fas fa-bars"></i></button>
+          <div>
+            <h1>Bookings</h1>
+            <span class="breadcrumb"><a href="dashboard.html">Dashboard</a> / Bookings Management</span>
+          </div>
+        </div>
+        <div class="admin-topbar-right">
+          <div class="admin-search">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Search bookings, customers...">
+          </div>
+          <button class="admin-topbar-btn"><i class="fas fa-bell"></i><span class="notif-dot"></span></button>
+          <button class="admin-topbar-btn"><i class="fas fa-expand"></i></button>
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div class="admin-content">
+
+        <!-- Summary Stat Cards -->
+        <div class="bookings-summary-bar">
+          <div class="stat-card">
+            <div class="stat-card-header">
+              <div class="stat-card-icon blue"><i class="fas fa-calendar-check"></i></div>
+              <div class="stat-card-trend up"><i class="fas fa-arrow-up"></i> 18%</div>
+            </div>
+            <div class="stat-card-value">248</div>
+            <div class="stat-card-label">Total Bookings</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-header">
+              <div class="stat-card-icon green"><i class="fas fa-circle-check"></i></div>
+              <div class="stat-card-trend up"><i class="fas fa-arrow-up"></i> 22%</div>
+            </div>
+            <div class="stat-card-value">186</div>
+            <div class="stat-card-label">Confirmed</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-header">
+              <div class="stat-card-icon orange"><i class="fas fa-clock"></i></div>
+              <div class="stat-card-trend down"><i class="fas fa-arrow-down"></i> 4%</div>
+            </div>
+            <div class="stat-card-value">12</div>
+            <div class="stat-card-label">Pending Action</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-header">
+              <div class="stat-card-icon red"><i class="fas fa-ban"></i></div>
+              <div class="stat-card-trend down"><i class="fas fa-arrow-down"></i> 3%</div>
+            </div>
+            <div class="stat-card-value">8</div>
+            <div class="stat-card-label">Cancelled</div>
+          </div>
+        </div>
+
+        <!-- Main Bookings Card -->
+        <div class="admin-card">
+          <div class="admin-card-header">
+            <h3><i class="fas fa-table-list" style="color: var(--info); margin-right: var(--space-2);"></i> All Bookings</h3>
+            <div style="display: flex; gap: var(--space-3);">
+              <button class="btn btn-sm btn-outline"><i class="fas fa-file-export"></i> Export</button>
+              <button class="btn btn-sm btn-outline" onclick="openModal('new')"><i class="fas fa-plus"></i> Manual Booking</button>
+            </div>
+          </div>
+
+          <div class="admin-card-body">
+
+            <!-- Filter Bar -->
+            <div class="admin-filter-bar">
+              <select id="filterStatus">
+                <option value="">All Statuses</option>
+                <option value="confirmed">Confirmed</option>
+                <option value="pending">Pending</option>
+                <option value="cancelled">Cancelled</option>
+                <option value="completed">Completed</option>
+              </select>
+              <input type="date" id="filterDateFrom" title="Date From" style="min-width: 140px;">
+              <input type="date" id="filterDateTo" title="Date To" style="min-width: 140px;">
+              <select id="filterPackage">
+                <option value="">All Packages</option>
+                <option>Spiti Valley Road Trip</option>
+                <option>Ladakh Bike Expedition</option>
+                <option>Bali Honeymoon Package</option>
+                <option>Kerala Backwaters Retreat</option>
+                <option>Women's Special Rajasthan</option>
+                <option>Manali Snow Retreat</option>
+                <option>Andaman Island Escape</option>
+                <option>Goa Beach Getaway</option>
+              </select>
+              <div class="admin-search" style="width: auto; flex: 1; min-width: 180px;">
+                <i class="fas fa-search"></i>
+                <input type="text" id="filterSearch" placeholder="Search by ID, name or email..." oninput="filterTable()">
+              </div>
+              <span class="filter-count" id="filterCount">Showing 248 bookings</span>
+            </div>
+
+            <!-- Tabs -->
+            <div class="admin-tabs" id="bookingTabs">
+              <button class="admin-tab active" data-tab="all" onclick="switchTab(this)">All Bookings</button>
+              <button class="admin-tab" data-tab="pending" onclick="switchTab(this)">Pending <span style="background:var(--warning);color:var(--white);border-radius:var(--radius-full);padding:1px 7px;font-size:0.72rem;font-weight:700;margin-left:4px;">12</span></button>
+              <button class="admin-tab" data-tab="confirmed" onclick="switchTab(this)">Confirmed <span style="background:var(--success);color:var(--white);border-radius:var(--radius-full);padding:1px 7px;font-size:0.72rem;font-weight:700;margin-left:4px;">186</span></button>
+              <button class="admin-tab" data-tab="cancelled" onclick="switchTab(this)">Cancelled <span style="background:var(--error);color:var(--white);border-radius:var(--radius-full);padding:1px 7px;font-size:0.72rem;font-weight:700;margin-left:4px;">8</span></button>
+              <button class="admin-tab" data-tab="completed" onclick="switchTab(this)">Completed <span style="background:var(--info);color:var(--white);border-radius:var(--radius-full);padding:1px 7px;font-size:0.72rem;font-weight:700;margin-left:4px;">42</span></button>
+            </div>
+
+            <!-- Table -->
+            <div class="admin-table-wrapper">
+              <table class="admin-table" id="bookingsTable">
+                <thead>
+                  <tr>
+                    <th><input type="checkbox" id="selectAll" onchange="toggleSelectAll(this)" style="width:16px;height:16px;cursor:pointer;"></th>
+                    <th>Booking ID</th>
+                    <th>Customer</th>
+                    <th>Package</th>
+                    <th>Travel Dates</th>
+                    <th>Travelers</th>
+                    <th>Amount</th>
+                    <th>Add-ons</th>
+                    <th>Payment</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="bookingsBody">
+
+                  <!-- Row 1 -->
+                  <tr data-status="confirmed">
+                    <td><input type="checkbox" class="row-check" style="width:16px;height:16px;cursor:pointer;"></td>
+                    <td><strong style="color:var(--primary);">WV-08742</strong><br><small style="color:var(--gray-400);font-size:0.72rem;">09 May 2026</small></td>
+                    <td>
+                      <div class="customer-cell">
+                        <div class="customer-avatar" style="background:var(--primary);">RS</div>
+                        <div class="customer-info">
+                          <strong>Rahul Sharma</strong>
+                          <small>rahul.sharma@gmail.com</small>
+                        </div>
+                      </div>
+                    </td>
+                    <td style="max-width:180px;white-space:normal;font-size:0.85rem;">Spiti Valley Road Trip<br><small style="color:var(--gray-400);">10 Nights / 11 Days</small></td>
+                    <td>21 Jun – 01 Jul 2026</td>
+                    <td style="text-align:center;"><i class="fas fa-user-group" style="color:var(--gray-400);margin-right:4px;"></i> <strong>4</strong></td>
+                    <td><strong style="color:var(--gray-900);">₹1,30,200</strong></td>
+                    <td><span class="addon-badge"><i class="fas fa-plus-circle"></i> 2 add-ons</span></td>
+                    <td><span class="pay-status pay-paid"><i class="fas fa-check"></i> Paid</span></td>
+                    <td><span class="status status-confirmed"><i class="fas fa-check-circle"></i> Confirmed</span></td>
+                    <td>
+                      <div class="action-btns">
+                        <button class="action-btn" title="View Details" onclick="openModal('WV-08742')"><i class="fas fa-eye"></i></button>
+                        <button class="action-btn" title="Edit"><i class="fas fa-pen"></i></button>
+                        <button class="action-btn danger" title="Delete"><i class="fas fa-trash"></i></button>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <!-- Row 2 -->
+                  <tr data-status="pending">
+                    <td><input type="checkbox" class="row-check" style="width:16px;height:16px;cursor:pointer;"></td>
+                    <td><strong style="color:var(--primary);">WV-08741</strong><br><small style="color:var(--gray-400);font-size:0.72rem;">08 May 2026</small></td>
+                    <td>
+                      <div class="customer-cell">
+                        <div class="customer-avatar" style="background:var(--accent);">PM</div>
+                        <div class="customer-info">
+                          <strong>Priya Mehta</strong>
+                          <small>priya.mehta@yahoo.com</small>
+                        </div>
+                      </div>
+                    </td>
+                    <td style="max-width:180px;white-space:normal;font-size:0.85rem;">Bali Honeymoon Package<br><small style="color:var(--gray-400);">7 Nights / 8 Days</small></td>
+                    <td>15 Jul – 22 Jul 2026</td>
+                    <td style="text-align:center;"><i class="fas fa-user-group" style="color:var(--gray-400);margin-right:4px;"></i> <strong>2</strong></td>
+                    <td><strong style="color:var(--gray-900);">₹97,998</strong></td>
+                    <td><span class="addon-badge"><i class="fas fa-plus-circle"></i> 3 add-ons</span></td>
+                    <td><span class="pay-status pay-partial"><i class="fas fa-circle-half-stroke"></i> Partial</span></td>
+                    <td><span class="status status-pending"><i class="fas fa-clock"></i> Pending</span></td>
+                    <td>
+                      <div class="action-btns">
+                        <button class="action-btn" title="View Details" onclick="openModal('WV-08741')"><i class="fas fa-eye"></i></button>
+                        <button class="action-btn" title="Edit"><i class="fas fa-pen"></i></button>
+                        <button class="action-btn danger" title="Delete"><i class="fas fa-trash"></i></button>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <!-- Row 3 -->
+                  <tr data-status="confirmed">
+                    <td><input type="checkbox" class="row-check" style="width:16px;height:16px;cursor:pointer;"></td>
+                    <td><strong style="color:var(--primary);">WV-08740</strong><br><small style="color:var(--gray-400);font-size:0.72rem;">07 May 2026</small></td>
+                    <td>
+                      <div class="customer-cell">
+                        <div class="customer-avatar" style="background:var(--secondary);">VK</div>
+                        <div class="customer-info">
+                          <strong>Vikram Khanna</strong>
+                          <small>vikram.k@hotmail.com</small>
+                        </div>
+                      </div>
+                    </td>
+                    <td style="max-width:180px;white-space:normal;font-size:0.85rem;">Ladakh Bike Expedition<br><small style="color:var(--gray-400);">14 Nights / 15 Days</small></td>
+                    <td>05 Jul – 19 Jul 2026</td>
+                    <td style="text-align:center;"><i class="fas fa-user-group" style="color:var(--gray-400);margin-right:4px;"></i> <strong>6</strong></td>
+                    <td><strong style="color:var(--gray-900);">₹34,999</strong></td>
+                    <td><span class="addon-badge none"><i class="fas fa-minus"></i> No add-ons</span></td>
+                    <td><span class="pay-status pay-paid"><i class="fas fa-check"></i> Paid</span></td>
+                    <td><span class="status status-confirmed"><i class="fas fa-check-circle"></i> Confirmed</span></td>
+                    <td>
+                      <div class="action-btns">
+                        <button class="action-btn" title="View Details" onclick="openModal('WV-08740')"><i class="fas fa-eye"></i></button>
+                        <button class="action-btn" title="Edit"><i class="fas fa-pen"></i></button>
+                        <button class="action-btn danger" title="Delete"><i class="fas fa-trash"></i></button>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <!-- Row 4 -->
+                  <tr data-status="cancelled">
+                    <td><input type="checkbox" class="row-check" style="width:16px;height:16px;cursor:pointer;"></td>
+                    <td><strong style="color:var(--primary);">WV-08739</strong><br><small style="color:var(--gray-400);font-size:0.72rem;">06 May 2026</small></td>
+                    <td>
+                      <div class="customer-cell">
+                        <div class="customer-avatar" style="background:var(--info);">NG</div>
+                        <div class="customer-info">
+                          <strong>Neha Gupta</strong>
+                          <small>neha.gupta@gmail.com</small>
+                        </div>
+                      </div>
+                    </td>
+                    <td style="max-width:180px;white-space:normal;font-size:0.85rem;">Kerala Backwaters Retreat<br><small style="color:var(--gray-400);">5 Nights / 6 Days</small></td>
+                    <td>28 Jun – 03 Jul 2026</td>
+                    <td style="text-align:center;"><i class="fas fa-user-group" style="color:var(--gray-400);margin-right:4px;"></i> <strong>2</strong></td>
+                    <td><strong style="color:var(--gray-900);">₹65,000</strong></td>
+                    <td><span class="addon-badge"><i class="fas fa-plus-circle"></i> 1 add-on</span></td>
+                    <td><span class="pay-status pay-refunded"><i class="fas fa-rotate-left"></i> Refunded</span></td>
+                    <td><span class="status status-cancelled"><i class="fas fa-times-circle"></i> Cancelled</span></td>
+                    <td>
+                      <div class="action-btns">
+                        <button class="action-btn" title="View Details" onclick="openModal('WV-08739')"><i class="fas fa-eye"></i></button>
+                        <button class="action-btn" title="Edit"><i class="fas fa-pen"></i></button>
+                        <button class="action-btn danger" title="Delete"><i class="fas fa-trash"></i></button>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <!-- Row 5 -->
+                  <tr data-status="completed">
+                    <td><input type="checkbox" class="row-check" style="width:16px;height:16px;cursor:pointer;"></td>
+                    <td><strong style="color:var(--primary);">WV-08738</strong><br><small style="color:var(--gray-400);font-size:0.72rem;">02 May 2026</small></td>
+                    <td>
+                      <div class="customer-cell">
+                        <div class="customer-avatar" style="background:#8b5cf6;">SG</div>
+                        <div class="customer-info">
+                          <strong>Shruti Gupta</strong>
+                          <small>shruti.g@outlook.com</small>
+                        </div>
+                      </div>
+                    </td>
+                    <td style="max-width:180px;white-space:normal;font-size:0.85rem;">Women's Special Rajasthan<br><small style="color:var(--gray-400);">6 Nights / 7 Days</small></td>
+                    <td>22 Apr – 28 Apr 2026</td>
+                    <td style="text-align:center;"><i class="fas fa-user-group" style="color:var(--gray-400);margin-right:4px;"></i> <strong>8</strong></td>
+                    <td><strong style="color:var(--gray-900);">₹38,500</strong></td>
+                    <td><span class="addon-badge"><i class="fas fa-plus-circle"></i> 2 add-ons</span></td>
+                    <td><span class="pay-status pay-paid"><i class="fas fa-check"></i> Paid</span></td>
+                    <td><span class="status status-completed"><i class="fas fa-flag-checkered"></i> Completed</span></td>
+                    <td>
+                      <div class="action-btns">
+                        <button class="action-btn" title="View Details" onclick="openModal('WV-08738')"><i class="fas fa-eye"></i></button>
+                        <button class="action-btn" title="Edit"><i class="fas fa-pen"></i></button>
+                        <button class="action-btn danger" title="Delete"><i class="fas fa-trash"></i></button>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <!-- Row 6 -->
+                  <tr data-status="confirmed">
+                    <td><input type="checkbox" class="row-check" style="width:16px;height:16px;cursor:pointer;"></td>
+                    <td><strong style="color:var(--primary);">WV-08737</strong><br><small style="color:var(--gray-400);font-size:0.72rem;">01 May 2026</small></td>
+                    <td>
+                      <div class="customer-cell">
+                        <div class="customer-avatar" style="background:#db2777;">AK</div>
+                        <div class="customer-info">
+                          <strong>Ankit Kapoor</strong>
+                          <small>ankit.kapoor@gmail.com</small>
+                        </div>
+                      </div>
+                    </td>
+                    <td style="max-width:180px;white-space:normal;font-size:0.85rem;">Manali Snow Retreat<br><small style="color:var(--gray-400);">4 Nights / 5 Days</small></td>
+                    <td>12 Jun – 16 Jun 2026</td>
+                    <td style="text-align:center;"><i class="fas fa-user-group" style="color:var(--gray-400);margin-right:4px;"></i> <strong>3</strong></td>
+                    <td><strong style="color:var(--gray-900);">₹52,500</strong></td>
+                    <td><span class="addon-badge"><i class="fas fa-plus-circle"></i> 4 add-ons</span></td>
+                    <td><span class="pay-status pay-paid"><i class="fas fa-check"></i> Paid</span></td>
+                    <td><span class="status status-confirmed"><i class="fas fa-check-circle"></i> Confirmed</span></td>
+                    <td>
+                      <div class="action-btns">
+                        <button class="action-btn" title="View Details" onclick="openModal('WV-08737')"><i class="fas fa-eye"></i></button>
+                        <button class="action-btn" title="Edit"><i class="fas fa-pen"></i></button>
+                        <button class="action-btn danger" title="Delete"><i class="fas fa-trash"></i></button>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <!-- Row 7 -->
+                  <tr data-status="pending">
+                    <td><input type="checkbox" class="row-check" style="width:16px;height:16px;cursor:pointer;"></td>
+                    <td><strong style="color:var(--primary);">WV-08736</strong><br><small style="color:var(--gray-400);font-size:0.72rem;">30 Apr 2026</small></td>
+                    <td>
+                      <div class="customer-cell">
+                        <div class="customer-avatar" style="background:#0891b2;">DR</div>
+                        <div class="customer-info">
+                          <strong>Deepika Rao</strong>
+                          <small>deepika.rao@gmail.com</small>
+                        </div>
+                      </div>
+                    </td>
+                    <td style="max-width:180px;white-space:normal;font-size:0.85rem;">Andaman Island Escape<br><small style="color:var(--gray-400);">5 Nights / 6 Days</small></td>
+                    <td>08 Aug – 13 Aug 2026</td>
+                    <td style="text-align:center;"><i class="fas fa-user-group" style="color:var(--gray-400);margin-right:4px;"></i> <strong>2</strong></td>
+                    <td><strong style="color:var(--gray-900);">₹84,200</strong></td>
+                    <td><span class="addon-badge none"><i class="fas fa-minus"></i> No add-ons</span></td>
+                    <td><span class="pay-status pay-unpaid"><i class="fas fa-hourglass-half"></i> Unpaid</span></td>
+                    <td><span class="status status-pending"><i class="fas fa-clock"></i> Pending</span></td>
+                    <td>
+                      <div class="action-btns">
+                        <button class="action-btn" title="View Details" onclick="openModal('WV-08736')"><i class="fas fa-eye"></i></button>
+                        <button class="action-btn" title="Edit"><i class="fas fa-pen"></i></button>
+                        <button class="action-btn danger" title="Delete"><i class="fas fa-trash"></i></button>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <!-- Row 8 -->
+                  <tr data-status="completed">
+                    <td><input type="checkbox" class="row-check" style="width:16px;height:16px;cursor:pointer;"></td>
+                    <td><strong style="color:var(--primary);">WV-08735</strong><br><small style="color:var(--gray-400);font-size:0.72rem;">28 Apr 2026</small></td>
+                    <td>
+                      <div class="customer-cell">
+                        <div class="customer-avatar" style="background:#065f46;">MS</div>
+                        <div class="customer-info">
+                          <strong>Manish Singh</strong>
+                          <small>manish.singh@rediffmail.com</small>
+                        </div>
+                      </div>
+                    </td>
+                    <td style="max-width:180px;white-space:normal;font-size:0.85rem;">Goa Beach Getaway<br><small style="color:var(--gray-400);">3 Nights / 4 Days</small></td>
+                    <td>10 Apr – 13 Apr 2026</td>
+                    <td style="text-align:center;"><i class="fas fa-user-group" style="color:var(--gray-400);margin-right:4px;"></i> <strong>5</strong></td>
+                    <td><strong style="color:var(--gray-900);">₹29,750</strong></td>
+                    <td><span class="addon-badge"><i class="fas fa-plus-circle"></i> 2 add-ons</span></td>
+                    <td><span class="pay-status pay-paid"><i class="fas fa-check"></i> Paid</span></td>
+                    <td><span class="status status-completed"><i class="fas fa-flag-checkered"></i> Completed</span></td>
+                    <td>
+                      <div class="action-btns">
+                        <button class="action-btn" title="View Details" onclick="openModal('WV-08735')"><i class="fas fa-eye"></i></button>
+                        <button class="action-btn" title="Edit"><i class="fas fa-pen"></i></button>
+                        <button class="action-btn danger" title="Delete"><i class="fas fa-trash"></i></button>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <!-- Row 9 -->
+                  <tr data-status="cancelled">
+                    <td><input type="checkbox" class="row-check" style="width:16px;height:16px;cursor:pointer;"></td>
+                    <td><strong style="color:var(--primary);">WV-08734</strong><br><small style="color:var(--gray-400);font-size:0.72rem;">27 Apr 2026</small></td>
+                    <td>
+                      <div class="customer-cell">
+                        <div class="customer-avatar" style="background:#b45309;">TJ</div>
+                        <div class="customer-info">
+                          <strong>Tanvi Joshi</strong>
+                          <small>tanvi.joshi@gmail.com</small>
+                        </div>
+                      </div>
+                    </td>
+                    <td style="max-width:180px;white-space:normal;font-size:0.85rem;">Spiti Valley Road Trip<br><small style="color:var(--gray-400);">10 Nights / 11 Days</small></td>
+                    <td>15 May – 25 May 2026</td>
+                    <td style="text-align:center;"><i class="fas fa-user-group" style="color:var(--gray-400);margin-right:4px;"></i> <strong>1</strong></td>
+                    <td><strong style="color:var(--gray-900);">₹32,550</strong></td>
+                    <td><span class="addon-badge none"><i class="fas fa-minus"></i> No add-ons</span></td>
+                    <td><span class="pay-status pay-refunded"><i class="fas fa-rotate-left"></i> Refunded</span></td>
+                    <td><span class="status status-cancelled"><i class="fas fa-times-circle"></i> Cancelled</span></td>
+                    <td>
+                      <div class="action-btns">
+                        <button class="action-btn" title="View Details" onclick="openModal('WV-08734')"><i class="fas fa-eye"></i></button>
+                        <button class="action-btn" title="Edit"><i class="fas fa-pen"></i></button>
+                        <button class="action-btn danger" title="Delete"><i class="fas fa-trash"></i></button>
+                      </div>
+                    </td>
+                  </tr>
+
+                  <!-- Row 10 -->
+                  <tr data-status="confirmed">
+                    <td><input type="checkbox" class="row-check" style="width:16px;height:16px;cursor:pointer;"></td>
+                    <td><strong style="color:var(--primary);">WV-08733</strong><br><small style="color:var(--gray-400);font-size:0.72rem;">25 Apr 2026</small></td>
+                    <td>
+                      <div class="customer-cell">
+                        <div class="customer-avatar" style="background:#1d4ed8;">RV</div>
+                        <div class="customer-info">
+                          <strong>Ravi Verma</strong>
+                          <small>ravi.verma@icloud.com</small>
+                        </div>
+                      </div>
+                    </td>
+                    <td style="max-width:180px;white-space:normal;font-size:0.85rem;">Kerala Family Retreat<br><small style="color:var(--gray-400);">8 Nights / 9 Days</small></td>
+                    <td>20 Jun – 28 Jun 2026</td>
+                    <td style="text-align:center;"><i class="fas fa-user-group" style="color:var(--gray-400);margin-right:4px;"></i> <strong>5</strong></td>
+                    <td><strong style="color:var(--gray-900);">₹1,12,500</strong></td>
+                    <td><span class="addon-badge"><i class="fas fa-plus-circle"></i> 3 add-ons</span></td>
+                    <td><span class="pay-status pay-partial"><i class="fas fa-circle-half-stroke"></i> Partial</span></td>
+                    <td><span class="status status-confirmed"><i class="fas fa-check-circle"></i> Confirmed</span></td>
+                    <td>
+                      <div class="action-btns">
+                        <button class="action-btn" title="View Details" onclick="openModal('WV-08733')"><i class="fas fa-eye"></i></button>
+                        <button class="action-btn" title="Edit"><i class="fas fa-pen"></i></button>
+                        <button class="action-btn danger" title="Delete"><i class="fas fa-trash"></i></button>
+                      </div>
+                    </td>
+                  </tr>
+
+                </tbody>
+              </table>
+            </div><!-- /.admin-table-wrapper -->
+          </div><!-- /.admin-card-body -->
+
+          <!-- Pagination -->
+          <div class="pagination">
+            <span id="paginationInfo">Showing 1–10 of 248 bookings</span>
+            <div class="pagination-pages">
+              <button class="page-btn" disabled title="Previous"><i class="fas fa-chevron-left"></i></button>
+              <button class="page-btn active">1</button>
+              <button class="page-btn">2</button>
+              <button class="page-btn">3</button>
+              <span style="padding: 0 var(--space-2); align-self:center; color:var(--gray-400);">...</span>
+              <button class="page-btn">25</button>
+              <button class="page-btn" title="Next"><i class="fas fa-chevron-right"></i></button>
+            </div>
+          </div>
+
+        </div><!-- /.admin-card -->
+      </div><!-- /.admin-content -->
+    </div><!-- /.admin-main -->
+  </div><!-- /.admin-wrapper -->
+
+  <!-- ===== BOOKING DETAIL MODAL ===== -->
+  <div class="modal-overlay" id="bookingModal" onclick="closeModalOnBg(event)">
+    <div class="modal-box" id="modalBox">
+      <div class="modal-header">
+        <div>
+          <h3 id="modalTitle">Booking Details — WV-08742</h3>
+          <small style="color:var(--gray-400);font-size:0.78rem;" id="modalSubtitle">Booked on 09 May 2026 &bull; Spiti Valley Road Trip</small>
+        </div>
+        <button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="modal-body" id="modalContent">
+
+        <!-- Booking Overview -->
+        <p class="modal-section-title">Booking Overview</p>
+        <div class="modal-detail-grid">
+          <div class="modal-detail-item">
+            <label>Booking ID</label>
+            <span id="m-id">WV-08742</span>
+          </div>
+          <div class="modal-detail-item">
+            <label>Package</label>
+            <span id="m-package">Spiti Valley Road Trip</span>
+          </div>
+          <div class="modal-detail-item">
+            <label>Duration</label>
+            <span id="m-duration">10 Nights / 11 Days</span>
+          </div>
+          <div class="modal-detail-item">
+            <label>Travel Dates</label>
+            <span id="m-dates">21 Jun – 01 Jul 2026</span>
+          </div>
+          <div class="modal-detail-item">
+            <label>Total Travelers</label>
+            <span id="m-travelers">4 Adults</span>
+          </div>
+          <div class="modal-detail-item">
+            <label>Booking Status</label>
+            <span id="m-status"><span class="status status-confirmed"><i class="fas fa-check-circle"></i> Confirmed</span></span>
+          </div>
+        </div>
+
+        <!-- Customer Info -->
+        <p class="modal-section-title">Customer Information</p>
+        <div class="modal-detail-grid">
+          <div class="modal-detail-item">
+            <label>Full Name</label>
+            <span id="m-name">Rahul Sharma</span>
+          </div>
+          <div class="modal-detail-item">
+            <label>Email</label>
+            <span id="m-email">rahul.sharma@gmail.com</span>
+          </div>
+          <div class="modal-detail-item">
+            <label>Phone</label>
+            <span id="m-phone">+91 98765 43210</span>
+          </div>
+          <div class="modal-detail-item">
+            <label>City</label>
+            <span id="m-city">Mumbai, Maharashtra</span>
+          </div>
+          <div class="modal-detail-item">
+            <label>Loyalty Tier</label>
+            <span style="color:#d97706;font-weight:700;"><i class="fas fa-medal"></i> Gold Member</span>
+          </div>
+          <div class="modal-detail-item">
+            <label>Total Trips</label>
+            <span>5 trips with WanderVista</span>
+          </div>
+        </div>
+
+        <!-- Traveler Details -->
+        <p class="modal-section-title">Traveler Details</p>
+        <table class="modal-travelers-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>Age</th>
+              <th>ID Type</th>
+              <th>ID Number</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>1</td><td>Rahul Sharma (Lead)</td><td>34</td><td>Aadhar</td><td>XXXX-XXXX-4321</td></tr>
+            <tr><td>2</td><td>Sunita Sharma</td><td>31</td><td>PAN</td><td>ABCDE1234F</td></tr>
+            <tr><td>3</td><td>Rohan Sharma</td><td>9</td><td>Passport</td><td>J1234567</td></tr>
+            <tr><td>4</td><td>Ria Sharma</td><td>6</td><td>Birth Cert.</td><td>BC-MH-2019</td></tr>
+          </tbody>
+        </table>
+
+        <!-- Add-ons -->
+        <p class="modal-section-title">Selected Add-ons</p>
+        <div class="modal-addons-list">
+          <div class="modal-addon-row">
+            <div>
+              <span><i class="fas fa-camera" style="color:var(--secondary);margin-right:6px;"></i><strong>Photography Package</strong></span>
+              <small style="display:block;color:var(--gray-400);margin-top:2px;">Professional shoot at 3 key locations</small>
+            </div>
+            <strong>+ ₹8,500</strong>
+          </div>
+          <div class="modal-addon-row">
+            <div>
+              <span><i class="fas fa-helicopter" style="color:var(--info);margin-right:6px;"></i><strong>Helicopter Ride — Kaza</strong></span>
+              <small style="display:block;color:var(--gray-400);margin-top:2px;">Scenic aerial ride over Spiti Valley</small>
+            </div>
+            <strong>+ ₹12,000</strong>
+          </div>
+        </div>
+
+        <!-- Payment History -->
+        <p class="modal-section-title">Payment History</p>
+        <div class="modal-payment-rows">
+          <div class="payment-row success">
+            <div class="payment-row-left">
+              <strong>₹65,100</strong> — Advance (50%)
+              <small>Paid on 09 May 2026 via UPI · Ref: TXN884521</small>
+            </div>
+            <span class="pay-status pay-paid"><i class="fas fa-check"></i> Success</span>
+          </div>
+          <div class="payment-row success">
+            <div class="payment-row-left">
+              <strong>₹65,100</strong> — Balance (50%)
+              <small>Paid on 01 Jun 2026 via Net Banking · Ref: TXN991034</small>
+            </div>
+            <span class="pay-status pay-paid"><i class="fas fa-check"></i> Success</span>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:0.88rem;font-weight:700;padding:var(--space-2) 0;border-top:2px solid var(--gray-200);">
+          <span>Total Paid</span>
+          <span style="color:var(--success);">₹1,30,200</span>
+        </div>
+
+        <!-- Booking Timeline -->
+        <p class="modal-section-title">Booking Timeline</p>
+        <div class="booking-timeline">
+          <div class="timeline-step done">
+            <strong>Booking Created</strong>
+            <span class="step-time">09 May 2026, 10:34 AM</span>
+          </div>
+          <div class="timeline-step done">
+            <strong>Advance Payment Received — ₹65,100</strong>
+            <span class="step-time">09 May 2026, 10:41 AM</span>
+          </div>
+          <div class="timeline-step done">
+            <strong>Booking Confirmed by Admin</strong>
+            <span class="step-time">09 May 2026, 11:15 AM</span>
+          </div>
+          <div class="timeline-step done">
+            <strong>Balance Payment Received — ₹65,100</strong>
+            <span class="step-time">01 Jun 2026, 03:22 PM</span>
+          </div>
+          <div class="timeline-step done">
+            <strong>Itinerary & Voucher Sent to Customer</strong>
+            <span class="step-time">02 Jun 2026, 09:00 AM</span>
+          </div>
+          <div class="timeline-step active">
+            <strong>Trip Departure</strong>
+            <span class="step-time">21 Jun 2026 — Upcoming</span>
+          </div>
+        </div>
+
+      </div><!-- /.modal-body -->
+
+      <div class="modal-footer">
+        <button class="btn btn-sm btn-outline" onclick="closeModal()"><i class="fas fa-times"></i> Close</button>
+        <button class="btn btn-sm btn-outline"><i class="fas fa-file-pdf"></i> Download Invoice</button>
+        <button class="btn btn-sm btn-outline" style="color:var(--error);border-color:var(--error);"><i class="fas fa-ban"></i> Cancel Booking</button>
+        <button class="btn btn-sm btn-primary"><i class="fas fa-pen"></i> Edit Booking</button>
+      </div>
+    </div><!-- /.modal-box -->
+  </div><!-- /.modal-overlay -->
+
+  <script>
+    // ── Tab switching ──
+    function switchTab(btn) {
+      document.querySelectorAll('#bookingTabs .admin-tab').forEach(t => t.classList.remove('active'));
+      btn.classList.add('active');
+      const tab = btn.dataset.tab;
+      const rows = document.querySelectorAll('#bookingsBody tr');
+      let visible = 0;
+      rows.forEach(row => {
+        const status = row.dataset.status;
+        const show = tab === 'all' || status === tab;
+        row.style.display = show ? '' : 'none';
+        if (show) visible++;
+      });
+      document.getElementById('filterCount').textContent = `Showing ${visible} bookings`;
+      document.getElementById('paginationInfo').textContent = `Showing 1–${Math.min(visible, 10)} of ${visible} bookings`;
+    }
+
+    // ── Filter / search ──
+    function filterTable() {
+      const query = document.getElementById('filterSearch').value.toLowerCase();
+      const rows = document.querySelectorAll('#bookingsBody tr');
+      let visible = 0;
+      rows.forEach(row => {
+        const text = row.textContent.toLowerCase();
+        const show = text.includes(query);
+        row.style.display = show ? '' : 'none';
+        if (show) visible++;
+      });
+      document.getElementById('filterCount').textContent = `Showing ${visible} bookings`;
+    }
+
+    // ── Select all ──
+    function toggleSelectAll(master) {
+      document.querySelectorAll('.row-check').forEach(cb => cb.checked = master.checked);
+    }
+
+    // ── Modal data per booking ID ──
+    const bookingData = {
+      'WV-08742': {
+        title: 'Booking Details — WV-08742',
+        subtitle: 'Booked on 09 May 2026 · Spiti Valley Road Trip',
+        id: 'WV-08742', package: 'Spiti Valley Road Trip', duration: '10 Nights / 11 Days',
+        dates: '21 Jun – 01 Jul 2026', travelers: '4 (2 Adults, 2 Children)',
+        status: '<span class="status status-confirmed"><i class="fas fa-check-circle"></i> Confirmed</span>',
+        name: 'Rahul Sharma', email: 'rahul.sharma@gmail.com', phone: '+91 98765 43210', city: 'Mumbai, Maharashtra'
+      },
+      'WV-08741': {
+        title: 'Booking Details — WV-08741',
+        subtitle: 'Booked on 08 May 2026 · Bali Honeymoon Package',
+        id: 'WV-08741', package: 'Bali Honeymoon Package', duration: '7 Nights / 8 Days',
+        dates: '15 Jul – 22 Jul 2026', travelers: '2 Adults',
+        status: '<span class="status status-pending"><i class="fas fa-clock"></i> Pending</span>',
+        name: 'Priya Mehta', email: 'priya.mehta@yahoo.com', phone: '+91 91234 56780', city: 'Pune, Maharashtra'
+      },
+      'WV-08740': {
+        title: 'Booking Details — WV-08740',
+        subtitle: 'Booked on 07 May 2026 · Ladakh Bike Expedition',
+        id: 'WV-08740', package: 'Ladakh Bike Expedition', duration: '14 Nights / 15 Days',
+        dates: '05 Jul – 19 Jul 2026', travelers: '6 Adults',
+        status: '<span class="status status-confirmed"><i class="fas fa-check-circle"></i> Confirmed</span>',
+        name: 'Vikram Khanna', email: 'vikram.k@hotmail.com', phone: '+91 99001 12233', city: 'Delhi, NCR'
+      },
+      'WV-08739': {
+        title: 'Booking Details — WV-08739',
+        subtitle: 'Booked on 06 May 2026 · Kerala Backwaters Retreat',
+        id: 'WV-08739', package: 'Kerala Backwaters Retreat', duration: '5 Nights / 6 Days',
+        dates: '28 Jun – 03 Jul 2026', travelers: '2 Adults',
+        status: '<span class="status status-cancelled"><i class="fas fa-times-circle"></i> Cancelled</span>',
+        name: 'Neha Gupta', email: 'neha.gupta@gmail.com', phone: '+91 98100 33445', city: 'Bengaluru, Karnataka'
+      },
+      'WV-08738': {
+        title: 'Booking Details — WV-08738',
+        subtitle: 'Booked on 02 May 2026 · Women\'s Special Rajasthan',
+        id: 'WV-08738', package: "Women's Special Rajasthan", duration: '6 Nights / 7 Days',
+        dates: '22 Apr – 28 Apr 2026', travelers: '8 Adults',
+        status: '<span class="status status-completed"><i class="fas fa-flag-checkered"></i> Completed</span>',
+        name: 'Shruti Gupta', email: 'shruti.g@outlook.com', phone: '+91 93344 55667', city: 'Jaipur, Rajasthan'
+      },
+      'WV-08737': {
+        title: 'Booking Details — WV-08737',
+        subtitle: 'Booked on 01 May 2026 · Manali Snow Retreat',
+        id: 'WV-08737', package: 'Manali Snow Retreat', duration: '4 Nights / 5 Days',
+        dates: '12 Jun – 16 Jun 2026', travelers: '3 Adults',
+        status: '<span class="status status-confirmed"><i class="fas fa-check-circle"></i> Confirmed</span>',
+        name: 'Ankit Kapoor', email: 'ankit.kapoor@gmail.com', phone: '+91 90011 22334', city: 'Chandigarh, Punjab'
+      },
+      'WV-08736': {
+        title: 'Booking Details — WV-08736',
+        subtitle: 'Booked on 30 Apr 2026 · Andaman Island Escape',
+        id: 'WV-08736', package: 'Andaman Island Escape', duration: '5 Nights / 6 Days',
+        dates: '08 Aug – 13 Aug 2026', travelers: '2 Adults',
+        status: '<span class="status status-pending"><i class="fas fa-clock"></i> Pending</span>',
+        name: 'Deepika Rao', email: 'deepika.rao@gmail.com', phone: '+91 87654 32109', city: 'Hyderabad, Telangana'
+      },
+      'WV-08735': {
+        title: 'Booking Details — WV-08735',
+        subtitle: 'Booked on 28 Apr 2026 · Goa Beach Getaway',
+        id: 'WV-08735', package: 'Goa Beach Getaway', duration: '3 Nights / 4 Days',
+        dates: '10 Apr – 13 Apr 2026', travelers: '5 Adults',
+        status: '<span class="status status-completed"><i class="fas fa-flag-checkered"></i> Completed</span>',
+        name: 'Manish Singh', email: 'manish.singh@rediffmail.com', phone: '+91 77889 90011', city: 'Kolkata, West Bengal'
+      },
+      'WV-08734': {
+        title: 'Booking Details — WV-08734',
+        subtitle: 'Booked on 27 Apr 2026 · Spiti Valley Road Trip',
+        id: 'WV-08734', package: 'Spiti Valley Road Trip', duration: '10 Nights / 11 Days',
+        dates: '15 May – 25 May 2026', travelers: '1 Adult',
+        status: '<span class="status status-cancelled"><i class="fas fa-times-circle"></i> Cancelled</span>',
+        name: 'Tanvi Joshi', email: 'tanvi.joshi@gmail.com', phone: '+91 99887 76655', city: 'Ahmedabad, Gujarat'
+      },
+      'WV-08733': {
+        title: 'Booking Details — WV-08733',
+        subtitle: 'Booked on 25 Apr 2026 · Kerala Family Retreat',
+        id: 'WV-08733', package: 'Kerala Family Retreat', duration: '8 Nights / 9 Days',
+        dates: '20 Jun – 28 Jun 2026', travelers: '5 (3 Adults, 2 Children)',
+        status: '<span class="status status-confirmed"><i class="fas fa-check-circle"></i> Confirmed</span>',
+        name: 'Ravi Verma', email: 'ravi.verma@icloud.com', phone: '+91 88001 23456', city: 'Chennai, Tamil Nadu'
+      }
+    };
+
+    function openModal(id) {
+      const data = bookingData[id];
+      if (!data) return;
+      document.getElementById('modalTitle').textContent = data.title;
+      document.getElementById('modalSubtitle').textContent = data.subtitle;
+      document.getElementById('m-id').textContent = data.id;
+      document.getElementById('m-package').textContent = data.package;
+      document.getElementById('m-duration').textContent = data.duration;
+      document.getElementById('m-dates').textContent = data.dates;
+      document.getElementById('m-travelers').textContent = data.travelers;
+      document.getElementById('m-status').innerHTML = data.status;
+      document.getElementById('m-name').textContent = data.name;
+      document.getElementById('m-email').textContent = data.email;
+      document.getElementById('m-phone').textContent = data.phone;
+      document.getElementById('m-city').textContent = data.city;
+      document.getElementById('bookingModal').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      document.getElementById('bookingModal').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    function closeModalOnBg(e) {
+      if (e.target === document.getElementById('bookingModal')) closeModal();
+    }
+
+    // Close modal on Escape key
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+    // Pagination buttons (cosmetic)
+    document.querySelectorAll('.page-btn:not([disabled])').forEach(btn => {
+      btn.addEventListener('click', function() {
+        if (this.querySelector('i')) return;
+        document.querySelectorAll('.page-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
+
+    // Filter selects trigger table filter
+    ['filterStatus', 'filterPackage'].forEach(id => {
+      document.getElementById(id).addEventListener('change', filterTable);
+    });
+  </script>
+</body>
+</html>
