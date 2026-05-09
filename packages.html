@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tour Packages - WanderVista</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- ===== HEADER ===== -->
+  <header class="header scrolled" id="header">
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <div class="logo-icon"><i class="fas fa-mountain-sun"></i></div>
+        <span class="logo-text" style="color: var(--gray-800);">WanderVista</span>
+      </a>
+      <nav class="nav">
+        <ul class="nav-menu" id="navMenu">
+          <li class="nav-item">
+            <a href="packages.html" class="nav-link" style="color: var(--gray-800);">Destinations <span class="arrow"><i class="fas fa-chevron-down"></i></span></a>
+            <div class="mega-menu">
+              <div class="mega-menu-grid">
+                <div class="mega-menu-col">
+                  <h4>North India</h4>
+                  <a href="packages.html">Himachal Pradesh</a>
+                  <a href="packages.html">Ladakh & Leh</a>
+                  <a href="packages.html">Kashmir</a>
+                  <a href="packages.html">Uttarakhand</a>
+                  <a href="packages.html">Rajasthan</a>
+                </div>
+                <div class="mega-menu-col">
+                  <h4>South India</h4>
+                  <a href="packages.html">Kerala</a>
+                  <a href="packages.html">Karnataka</a>
+                  <a href="packages.html">Tamil Nadu</a>
+                  <a href="packages.html">Andaman & Nicobar</a>
+                  <a href="packages.html">Goa</a>
+                </div>
+                <div class="mega-menu-col">
+                  <h4>International</h4>
+                  <a href="packages.html">Bali, Indonesia</a>
+                  <a href="packages.html">Thailand</a>
+                  <a href="packages.html">Vietnam</a>
+                  <a href="packages.html">Europe Tours</a>
+                  <a href="packages.html">Maldives</a>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a href="packages.html" class="nav-link" style="color: var(--gray-800);">Packages <span class="arrow"><i class="fas fa-chevron-down"></i></span></a>
+            <div class="mega-menu">
+              <div class="mega-menu-grid">
+                <div class="mega-menu-col">
+                  <h4>By Type</h4>
+                  <a href="packages.html">Family Holidays</a>
+                  <a href="packages.html">Honeymoon Specials</a>
+                  <a href="packages.html">Adventure Tours</a>
+                  <a href="packages.html">Road Trips</a>
+                </div>
+                <div class="mega-menu-col">
+                  <h4>By Budget</h4>
+                  <a href="packages.html">Under ₹25,000</a>
+                  <a href="packages.html">₹25K - ₹50K</a>
+                  <a href="packages.html">₹50K - ₹1 Lakh</a>
+                  <a href="packages.html">Luxury</a>
+                </div>
+                <div class="mega-menu-col">
+                  <h4>Special</h4>
+                  <a href="packages.html">Women's Special</a>
+                  <a href="packages.html">Solo Travel</a>
+                  <a href="packages.html">Group Tours</a>
+                  <a href="packages.html">Weekend Getaways</a>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li><a href="packages.html" class="nav-link" style="color: var(--gray-800);">Road Trips</a></li>
+          <li><a href="about.html" class="nav-link" style="color: var(--gray-800);">About Us</a></li>
+          <li><a href="contact.html" class="nav-link" style="color: var(--gray-800);">Contact</a></li>
+        </ul>
+        <div class="header-actions">
+          <a href="tel:18001234567" class="header-phone" style="color: var(--gray-800);">
+            <i class="fas fa-phone"></i> 1800-123-4567
+          </a>
+          <a href="booking.html" class="btn btn-primary btn-sm">Book Now</a>
+        </div>
+        <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">
+          <span></span><span></span><span></span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ===== PAGE HEADER ===== -->
+  <section class="page-header">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="index.html">Home</a>
+        <span class="separator"><i class="fas fa-chevron-right"></i></span>
+        <span>Tour Packages</span>
+      </div>
+      <h1>Explore Tour Packages</h1>
+      <p>Discover 500+ handcrafted travel packages across India and the world</p>
+    </div>
+  </section>
+
+  <!-- ===== LISTING LAYOUT ===== -->
+  <div class="container">
+    <div class="listing-layout">
+
+      <!-- FILTER SIDEBAR -->
+      <aside class="filter-sidebar">
+        <div class="filter-group">
+          <h4><i class="fas fa-sliders" style="margin-right: var(--space-2); color: var(--secondary);"></i> Filters</h4>
+          <button class="btn btn-sm btn-outline" style="width: 100%; margin-top: var(--space-2);">Clear All</button>
+        </div>
+
+        <div class="filter-group">
+          <h4>Price Range</h4>
+          <div class="price-range">
+            <input type="range" min="5000" max="200000" value="100000" step="5000">
+            <div class="price-range-values">
+              <span>₹5,000</span>
+              <span>₹2,00,000</span>
+            </div>
+          </div>
+          <div class="filter-option">
+            <input type="checkbox" id="price1">
+            <label for="price1">Under ₹25,000</label>
+            <span class="count">(42)</span>
+          </div>
+          <div class="filter-option">
+            <input type="checkbox" id="price2">
+            <label for="price2">₹25,000 - ₹50,000</label>
+            <span class="count">(78)</span>
+          </div>
+          <div class="filter-option">
+            <input type="checkbox" id="price3">
+            <label for="price3">₹50,000 - ₹1,00,000</label>
+            <span class="count">(56)</span>
+          </div>
+          <div class="filter-option">
+            <input type="checkbox" id="price4">
+            <label for="price4">₹1,00,000+</label>
+            <span class="count">(24)</span>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <h4>Duration</h4>
+          <div class="filter-option">
+            <input type="checkbox" id="dur1">
+            <label for="dur1">1-3 Days</label>
+            <span class="count">(15)</span>
+          </div>
+          <div class="filter-option">
+            <input type="checkbox" id="dur2">
+            <label for="dur2">4-7 Days</label>
+            <span class="count">(89)</span>
+          </div>
+          <div class="filter-option">
+            <input type="checkbox" id="dur3">
+            <label for="dur3">8-12 Days</label>
+            <span class="count">(67)</span>
+          </div>
+          <div class="filter-option">
+            <input type="checkbox" id="dur4">
+            <label for="dur4">13+ Days</label>
+            <span class="count">(29)</span>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <h4>Trip Type</h4>
+          <div class="filter-option">
+            <input type="checkbox" id="type1">
+            <label for="type1">Family</label>
+            <span class="count">(65)</span>
+          </div>
+          <div class="filter-option">
+            <input type="checkbox" id="type2">
+            <label for="type2">Couple / Honeymoon</label>
+            <span class="count">(48)</span>
+          </div>
+          <div class="filter-option">
+            <input type="checkbox" id="type3">
+            <label for="type3">Friends / Group</label>
+            <span class="count">(52)</span>
+          </div>
+          <div class="filter-option">
+            <input type="checkbox" id="type4">
+            <label for="type4">Solo</label>
+            <span class="count">(35)</span>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <h4>Theme</h4>
+          <div class="filter-option">
+            <input type="checkbox" id="theme1">
+            <label for="theme1">Adventure</label>
+            <span class="count">(45)</span>
+          </div>
+          <div class="filter-option">
+            <input type="checkbox" id="theme2">
+            <label for="theme2">Beach & Island</label>
+            <span class="count">(38)</span>
+          </div>
+          <div class="filter-option">
+            <input type="checkbox" id="theme3">
+            <label for="theme3">Heritage & Culture</label>
+            <span class="count">(32)</span>
+          </div>
+          <div class="filter-option">
+            <input type="checkbox" id="theme4">
+            <label for="theme4">Nature & Wildlife</label>
+            <span class="count">(28)</span>
+          </div>
+          <div class="filter-option">
+            <input type="checkbox" id="theme5">
+            <label for="theme5">Road Trip</label>
+            <span class="count">(22)</span>
+          </div>
+          <div class="filter-option">
+            <input type="checkbox" id="theme6">
+            <label for="theme6">Pilgrimage</label>
+            <span class="count">(18)</span>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <h4>Rating</h4>
+          <div class="filter-option">
+            <input type="checkbox" id="rate1">
+            <label for="rate1"><i class="fas fa-star" style="color:var(--warning);"></i> 4.5+ Excellent</label>
+            <span class="count">(120)</span>
+          </div>
+          <div class="filter-option">
+            <input type="checkbox" id="rate2">
+            <label for="rate2"><i class="fas fa-star" style="color:var(--warning);"></i> 4.0+ Very Good</label>
+            <span class="count">(165)</span>
+          </div>
+          <div class="filter-option">
+            <input type="checkbox" id="rate3">
+            <label for="rate3"><i class="fas fa-star" style="color:var(--warning);"></i> 3.5+ Good</label>
+            <span class="count">(185)</span>
+          </div>
+        </div>
+      </aside>
+
+      <!-- MAIN LISTING AREA -->
+      <main>
+        <!-- Sort Bar -->
+        <div class="sort-bar">
+          <span class="results-count">Showing <strong>200</strong> packages</span>
+          <div class="sort-options">
+            <label>Sort by:</label>
+            <select>
+              <option>Popularity</option>
+              <option>Price: Low to High</option>
+              <option>Price: High to Low</option>
+              <option>Duration: Short to Long</option>
+              <option>Rating: High to Low</option>
+              <option>Newest First</option>
+            </select>
+            <div class="view-toggle">
+              <button class="active" aria-label="Grid view"><i class="fas fa-grid-2"></i></button>
+              <button aria-label="List view"><i class="fas fa-list"></i></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Package Cards Grid -->
+        <div class="packages-grid" style="grid-template-columns: repeat(2, 1fr);">
+          <!-- Card 1 -->
+          <a href="package-detail.html" class="package-card">
+            <div class="package-card-image">
+              <img src="https://images.unsplash.com/photo-1585409677983-0f6c41ca9c3b?w=500&q=80" alt="Spiti Valley" loading="lazy">
+              <span class="package-card-badge badge badge-secondary">Road Trip</span>
+              <button class="package-card-wishlist" aria-label="Add to wishlist"><i class="far fa-heart"></i></button>
+              <span class="package-card-duration"><i class="far fa-clock"></i> 12D / 11N</span>
+            </div>
+            <div class="package-card-body">
+              <div class="package-card-route">
+                <i class="fas fa-route"></i>
+                <span>Shimla &bull; Manali &bull; Spiti &bull; Chandrataal</span>
+              </div>
+              <h3 class="package-card-title">Lahaul Spiti Chandrataal Road Trip Adventure</h3>
+              <div class="package-card-highlights">
+                <span>All Meals</span><span>4x4 Vehicle</span><span>Camping</span><span>Guide</span>
+              </div>
+              <div class="package-card-footer">
+                <div class="package-card-price">
+                  <span class="label">Starting from</span>
+                  <span class="amount">₹65,000</span>
+                  <span class="per-person">per person</span>
+                </div>
+                <div class="package-card-rating"><i class="fas fa-star"></i> <strong>4.9</strong> <span>(402)</span></div>
+              </div>
+            </div>
+          </a>
+
+          <!-- Card 2 -->
+          <a href="package-detail.html" class="package-card">
+            <div class="package-card-image">
+              <img src="https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?w=500&q=80" alt="Kerala" loading="lazy">
+              <span class="package-card-badge badge badge-success">Family</span>
+              <button class="package-card-wishlist" aria-label="Add to wishlist"><i class="far fa-heart"></i></button>
+              <span class="package-card-duration"><i class="far fa-clock"></i> 7D / 6N</span>
+            </div>
+            <div class="package-card-body">
+              <div class="package-card-route">
+                <i class="fas fa-route"></i>
+                <span>Kochi &bull; Munnar &bull; Alleppey &bull; Kovalam</span>
+              </div>
+              <h3 class="package-card-title">Kerala Backwaters & Hills Family Retreat</h3>
+              <div class="package-card-highlights">
+                <span>Houseboat</span><span>Tea Plantation</span><span>Ayurveda</span>
+              </div>
+              <div class="package-card-footer">
+                <div class="package-card-price">
+                  <span class="label">Starting from</span>
+                  <span class="amount">₹32,500</span>
+                  <span class="per-person">per person</span>
+                </div>
+                <div class="package-card-rating"><i class="fas fa-star"></i> <strong>4.8</strong> <span>(318)</span></div>
+              </div>
+            </div>
+          </a>
+
+          <!-- Card 3 -->
+          <a href="package-detail.html" class="package-card">
+            <div class="package-card-image">
+              <img src="https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=500&q=80" alt="Rajasthan" loading="lazy">
+              <span class="package-card-badge badge badge-warning">Heritage</span>
+              <button class="package-card-wishlist" aria-label="Add to wishlist"><i class="far fa-heart"></i></button>
+              <span class="package-card-duration"><i class="far fa-clock"></i> 9D / 8N</span>
+            </div>
+            <div class="package-card-body">
+              <div class="package-card-route">
+                <i class="fas fa-route"></i>
+                <span>Jaipur &bull; Jodhpur &bull; Udaipur &bull; Jaisalmer</span>
+              </div>
+              <h3 class="package-card-title">Royal Rajasthan Heritage & Desert Safari</h3>
+              <div class="package-card-highlights">
+                <span>Palace Stay</span><span>Camel Safari</span><span>Cultural Shows</span>
+              </div>
+              <div class="package-card-footer">
+                <div class="package-card-price">
+                  <span class="label">Starting from</span>
+                  <span class="amount">₹38,500</span>
+                  <span class="per-person">per person</span>
+                </div>
+                <div class="package-card-rating"><i class="fas fa-star"></i> <strong>4.7</strong> <span>(189)</span></div>
+              </div>
+            </div>
+          </a>
+
+          <!-- Card 4 -->
+          <a href="package-detail.html" class="package-card">
+            <div class="package-card-image">
+              <img src="https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?w=500&q=80" alt="Ladakh" loading="lazy">
+              <span class="package-card-badge badge badge-secondary">Adventure</span>
+              <button class="package-card-wishlist" aria-label="Add to wishlist"><i class="far fa-heart"></i></button>
+              <span class="package-card-duration"><i class="far fa-clock"></i> 10D / 9N</span>
+            </div>
+            <div class="package-card-body">
+              <div class="package-card-route">
+                <i class="fas fa-route"></i>
+                <span>Manali &bull; Keylong &bull; Leh &bull; Pangong &bull; Nubra</span>
+              </div>
+              <h3 class="package-card-title">Ladakh Manali Highway Bike Expedition</h3>
+              <div class="package-card-highlights">
+                <span>Royal Enfield</span><span>Camping</span><span>5 Passes</span>
+              </div>
+              <div class="package-card-footer">
+                <div class="package-card-price">
+                  <span class="label">Starting from</span>
+                  <span class="amount">₹34,999</span>
+                  <span class="per-person">per person</span>
+                </div>
+                <div class="package-card-rating"><i class="fas fa-star"></i> <strong>4.8</strong> <span>(445)</span></div>
+              </div>
+            </div>
+          </a>
+
+          <!-- Card 5 -->
+          <a href="package-detail.html" class="package-card">
+            <div class="package-card-image">
+              <img src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=500&q=80" alt="Bali" loading="lazy">
+              <span class="package-card-badge badge badge-primary">Honeymoon</span>
+              <button class="package-card-wishlist" aria-label="Add to wishlist"><i class="far fa-heart"></i></button>
+              <span class="package-card-duration"><i class="far fa-clock"></i> 6D / 5N</span>
+            </div>
+            <div class="package-card-body">
+              <div class="package-card-route">
+                <i class="fas fa-route"></i>
+                <span>Ubud &bull; Kintamani &bull; Seminyak &bull; Nusa Dua</span>
+              </div>
+              <h3 class="package-card-title">Bali Romantic Honeymoon Getaway</h3>
+              <div class="package-card-highlights">
+                <span>Private Pool Villa</span><span>Sunset Cruise</span><span>Spa</span>
+              </div>
+              <div class="package-card-footer">
+                <div class="package-card-price">
+                  <span class="label">Starting from</span>
+                  <span class="amount">₹48,999</span>
+                  <span class="per-person">per person</span>
+                </div>
+                <div class="package-card-rating"><i class="fas fa-star"></i> <strong>4.9</strong> <span>(256)</span></div>
+              </div>
+            </div>
+          </a>
+
+          <!-- Card 6 -->
+          <a href="package-detail.html" class="package-card">
+            <div class="package-card-image">
+              <img src="https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=500&q=80" alt="Goa" loading="lazy">
+              <span class="package-card-badge badge badge-success">Friends</span>
+              <button class="package-card-wishlist" aria-label="Add to wishlist"><i class="far fa-heart"></i></button>
+              <span class="package-card-duration"><i class="far fa-clock"></i> 5D / 4N</span>
+            </div>
+            <div class="package-card-body">
+              <div class="package-card-route">
+                <i class="fas fa-route"></i>
+                <span>North Goa &bull; South Goa &bull; Old Goa</span>
+              </div>
+              <h3 class="package-card-title">Goa Sun, Sand & Party Friends Trip</h3>
+              <div class="package-card-highlights">
+                <span>Beach Hopping</span><span>Water Sports</span><span>Nightlife</span>
+              </div>
+              <div class="package-card-footer">
+                <div class="package-card-price">
+                  <span class="label">Starting from</span>
+                  <span class="amount">₹14,999</span>
+                  <span class="per-person">per person</span>
+                </div>
+                <div class="package-card-rating"><i class="fas fa-star"></i> <strong>4.6</strong> <span>(523)</span></div>
+              </div>
+            </div>
+          </a>
+
+          <!-- Card 7 -->
+          <a href="package-detail.html" class="package-card">
+            <div class="package-card-image">
+              <img src="https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?w=500&q=80" alt="Thailand" loading="lazy">
+              <span class="package-card-badge badge badge-success">Family</span>
+              <button class="package-card-wishlist" aria-label="Add to wishlist"><i class="far fa-heart"></i></button>
+              <span class="package-card-duration"><i class="far fa-clock"></i> 8D / 7N</span>
+            </div>
+            <div class="package-card-body">
+              <div class="package-card-route">
+                <i class="fas fa-route"></i>
+                <span>Bangkok &bull; Pattaya &bull; Krabi &bull; Phuket</span>
+              </div>
+              <h3 class="package-card-title">Thailand Complete Family Holiday Package</h3>
+              <div class="package-card-highlights">
+                <span>Island Hopping</span><span>Snorkeling</span><span>Night Market</span>
+              </div>
+              <div class="package-card-footer">
+                <div class="package-card-price">
+                  <span class="label">Starting from</span>
+                  <span class="amount">₹42,500</span>
+                  <span class="per-person">per person</span>
+                </div>
+                <div class="package-card-rating"><i class="fas fa-star"></i> <strong>4.7</strong> <span>(267)</span></div>
+              </div>
+            </div>
+          </a>
+
+          <!-- Card 8 -->
+          <a href="package-detail.html" class="package-card">
+            <div class="package-card-image">
+              <img src="https://images.unsplash.com/photo-1506665531195-3566af2b4dfa?w=500&q=80" alt="Kashmir" loading="lazy">
+              <span class="package-card-badge badge badge-primary">Romantic</span>
+              <button class="package-card-wishlist" aria-label="Add to wishlist"><i class="far fa-heart"></i></button>
+              <span class="package-card-duration"><i class="far fa-clock"></i> 6D / 5N</span>
+            </div>
+            <div class="package-card-body">
+              <div class="package-card-route">
+                <i class="fas fa-route"></i>
+                <span>Srinagar &bull; Gulmarg &bull; Pahalgam &bull; Sonmarg</span>
+              </div>
+              <h3 class="package-card-title">Kashmir Paradise Romantic Escape</h3>
+              <div class="package-card-highlights">
+                <span>Shikara Ride</span><span>Gondola</span><span>Houseboat</span>
+              </div>
+              <div class="package-card-footer">
+                <div class="package-card-price">
+                  <span class="label">Starting from</span>
+                  <span class="amount">₹27,999</span>
+                  <span class="per-person">per person</span>
+                </div>
+                <div class="package-card-rating"><i class="fas fa-star"></i> <strong>4.8</strong> <span>(312)</span></div>
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination">
+          <button disabled><i class="fas fa-chevron-left"></i></button>
+          <button class="active">1</button>
+          <button>2</button>
+          <button>3</button>
+          <button>4</button>
+          <button>...</button>
+          <button>12</button>
+          <button><i class="fas fa-chevron-right"></i></button>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- ===== NEWSLETTER ===== -->
+  <section class="newsletter section" style="margin-top: var(--space-16);">
+    <div class="container">
+      <div class="newsletter-inner">
+        <div>
+          <h3>Can't find what you're looking for?</h3>
+          <p>Tell us your dream destination and we'll create a custom package just for you.</p>
+        </div>
+        <a href="contact.html" class="btn btn-primary btn-lg">Get Custom Package <i class="fas fa-arrow-right"></i></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <span class="logo-text">WanderVista</span>
+          <p>We craft unforgettable travel experiences across India and the world. With 500+ curated packages and 15,000+ happy travelers, your next adventure is just a click away.</p>
+          <div class="footer-social">
+            <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="#" aria-label="Twitter"><i class="fab fa-x-twitter"></i></a>
+            <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+            <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Destinations</h4>
+          <a href="packages.html">Himachal Pradesh</a>
+          <a href="packages.html">Ladakh</a>
+          <a href="packages.html">Kerala</a>
+          <a href="packages.html">Rajasthan</a>
+          <a href="packages.html">Goa</a>
+          <a href="packages.html">Kashmir</a>
+        </div>
+        <div class="footer-col">
+          <h4>International</h4>
+          <a href="packages.html">Bali</a>
+          <a href="packages.html">Thailand</a>
+          <a href="packages.html">Vietnam</a>
+          <a href="packages.html">Maldives</a>
+          <a href="packages.html">Europe</a>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <a href="about.html">About Us</a>
+          <a href="contact.html">Contact Us</a>
+          <a href="#">Careers</a>
+          <a href="#">Blog</a>
+          <a href="#">Press</a>
+        </div>
+        <div class="footer-col">
+          <h4>Support</h4>
+          <div class="footer-contact-item">
+            <i class="fas fa-phone"></i>
+            <div><strong>1800-123-4567</strong><br><small style="color: var(--gray-500);">Toll Free</small></div>
+          </div>
+          <a href="#">FAQ</a>
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms & Conditions</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2024 - 2026 WanderVista Travel Pvt Ltd. All rights reserved.</p>
+        <div class="footer-badges">
+          <div class="footer-badge"><i class="fas fa-lock"></i> Secure Payments</div>
+          <div class="footer-badge"><i class="fas fa-certificate"></i> IATA Certified</div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Floating Buttons -->
+  <div class="floating-enquiry">
+    <button class="floating-btn floating-btn-top" aria-label="Scroll to top"><i class="fas fa-arrow-up"></i></button>
+    <a href="https://wa.me/911234567890" class="floating-btn floating-btn-whatsapp" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+    <button class="floating-btn floating-btn-enquiry" data-modal-open="enquiryModal" aria-label="Quick Enquiry"><i class="fas fa-pen"></i></button>
+  </div>
+
+  <!-- Quick Enquiry Modal -->
+  <div class="modal-overlay" id="enquiryModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3><i class="fas fa-paper-plane" style="color: var(--secondary); margin-right: var(--space-2);"></i> Quick Enquiry</h3>
+        <button class="modal-close" aria-label="Close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label>Full Name <span class="required">*</span></label>
+            <input type="text" placeholder="Enter your full name" required>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Email</label><input type="email" placeholder="your@email.com"></div>
+            <div class="form-group"><label>Phone <span class="required">*</span></label><input type="tel" placeholder="+91 9876543210" required></div>
+          </div>
+          <div class="form-group">
+            <label>Destination</label>
+            <select>
+              <option value="">Select destination</option>
+              <option>Ladakh</option><option>Spiti Valley</option><option>Kerala</option><option>Rajasthan</option><option>Goa</option><option>Bali</option><option>Thailand</option><option>Other</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Message</label><textarea rows="3" placeholder="Tell us about your travel plans..."></textarea></div>
+          <button type="submit" class="btn btn-primary" style="width:100%; padding: var(--space-4);">Submit Enquiry</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
