@@ -1,0 +1,1509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Integrations & Notifications - WanderVista Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../css/admin.css">
+  <style>
+    /* ── Page-scoped styles (no new CSS file) ── */
+
+    /* Section headings */
+    .page-section { margin-bottom: var(--space-8); }
+    .page-section-title {
+      font-family: var(--font-body);
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--gray-700);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: var(--space-4);
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+    .page-section-title i { color: var(--secondary); font-size: 1rem; }
+
+    /* Integration cards grid */
+    .integrations-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-5);
+    }
+
+    /* Expanded integration card (full detail) */
+    .integration-card-full {
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-lg);
+      background: var(--white);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+      transition: box-shadow var(--transition-base);
+    }
+    .integration-card-full:hover { box-shadow: var(--shadow-md); }
+    .integration-card-full.connected { border-color: var(--accent); }
+
+    .integration-card-head {
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+      padding: var(--space-5) var(--space-5) var(--space-4);
+      border-bottom: 1px solid var(--gray-100);
+    }
+
+    .integration-card-head .integration-meta { flex: 1; }
+    .integration-card-head .integration-meta h4 {
+      font-family: var(--font-body);
+      font-size: 0.98rem;
+      font-weight: 700;
+      color: var(--gray-900);
+      margin-bottom: 2px;
+    }
+    .integration-card-head .integration-meta p {
+      font-size: 0.8rem;
+      color: var(--gray-500);
+    }
+    .integration-card-head .integration-head-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+
+    .integration-card-body { padding: var(--space-5); }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-3);
+    }
+
+    .form-group { margin-bottom: var(--space-4); }
+    .form-group:last-child { margin-bottom: 0; }
+    .form-group label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--gray-600);
+      margin-bottom: var(--space-1);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      font-size: 0.88rem;
+    }
+    .form-group textarea { resize: vertical; min-height: 72px; }
+
+    /* Connected status pill */
+    .connected-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #f0fdf4;
+      color: var(--success);
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: var(--radius-full);
+    }
+    .connected-pill .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--success); display: inline-block; }
+
+    .disconnected-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--gray-100);
+      color: var(--gray-500);
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: var(--radius-full);
+    }
+    .disconnected-pill .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--gray-400); display: inline-block; }
+
+    /* Phone number display */
+    .phone-display {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--gray-700);
+      background: var(--gray-50);
+      padding: var(--space-2) var(--space-3);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--gray-200);
+      display: inline-block;
+      margin-bottom: var(--space-3);
+    }
+
+    /* Trigger checkboxes block */
+    .trigger-block {
+      background: var(--gray-50);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-md);
+      padding: var(--space-4);
+      margin-top: var(--space-3);
+    }
+    .trigger-block-title {
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--gray-500);
+      margin-bottom: var(--space-3);
+    }
+    .trigger-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+    }
+    .trigger-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-size: 0.85rem;
+      color: var(--gray-700);
+      cursor: pointer;
+    }
+    .trigger-item input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--primary-light);
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+
+    /* Card footer action bar */
+    .integration-card-foot {
+      padding: var(--space-3) var(--space-5);
+      border-top: 1px solid var(--gray-100);
+      background: var(--gray-50);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-3);
+      flex-wrap: wrap;
+    }
+
+    /* Notification center layout */
+    .notif-center-grid {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: var(--space-6);
+    }
+
+    /* Tabs inside the notif card - override margin for inline use */
+    .notif-tabs-wrap { margin-bottom: 0; }
+
+    /* Notification settings table */
+    .notif-settings-table { width: 100%; border-collapse: collapse; }
+    .notif-settings-table thead th {
+      padding: var(--space-3) var(--space-4);
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--gray-500);
+      background: var(--gray-50);
+      border-bottom: 1px solid var(--gray-200);
+      text-align: center;
+    }
+    .notif-settings-table thead th:first-child { text-align: left; }
+    .notif-settings-table tbody tr { border-bottom: 1px solid var(--gray-100); }
+    .notif-settings-table tbody tr:hover { background: var(--gray-50); }
+    .notif-settings-table tbody td {
+      padding: var(--space-4) var(--space-4);
+      font-size: 0.88rem;
+      color: var(--gray-700);
+      text-align: center;
+    }
+    .notif-settings-table tbody td:first-child { text-align: left; }
+    .notif-settings-table .notif-type-cell strong { display: block; font-size: 0.9rem; color: var(--gray-800); }
+    .notif-settings-table .notif-type-cell small { color: var(--gray-400); font-size: 0.78rem; }
+    .notif-settings-table .channel-icon {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: var(--radius-full);
+      margin-bottom: var(--space-1);
+      display: inline-block;
+    }
+    .channel-icon.wa { background: #dcfce7; color: #15803d; }
+    .channel-icon.em { background: rgba(234,88,12,0.1); color: var(--secondary); }
+    .channel-icon.sm { background: rgba(139,92,246,0.1); color: #7c3aed; }
+
+    /* Sub-trigger rows (indented) */
+    .notif-settings-table .sub-row td:first-child {
+      padding-left: var(--space-8);
+      color: var(--gray-500);
+      font-size: 0.83rem;
+    }
+
+    /* Contact collection */
+    .contact-collect-grid {
+      display: grid;
+      grid-template-columns: 360px 1fr;
+      gap: var(--space-6);
+    }
+
+    .phone-input-group {
+      display: flex;
+      gap: 0;
+    }
+    .phone-prefix {
+      padding: var(--space-3) var(--space-3);
+      background: var(--gray-100);
+      border: 1px solid var(--gray-300);
+      border-right: none;
+      border-radius: var(--radius-md) 0 0 var(--radius-md);
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--gray-600);
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+    }
+    .phone-input-group input {
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    }
+
+    .channel-toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--space-3) var(--space-4);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-md);
+      margin-bottom: var(--space-2);
+      background: var(--white);
+    }
+    .channel-toggle-label { display: flex; align-items: center; gap: var(--space-2); font-size: 0.88rem; font-weight: 500; }
+    .channel-toggle-label i { font-size: 1rem; }
+    .channel-toggle-label .wa-icon { color: #25D366; }
+    .channel-toggle-label .tg-icon { color: #0088cc; }
+
+    /* Channel tag pills in table */
+    .channel-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 8px;
+      border-radius: var(--radius-full);
+      font-size: 0.72rem;
+      font-weight: 600;
+      margin: 1px;
+    }
+    .channel-tag.wa { background: #dcfce7; color: #15803d; }
+    .channel-tag.tg { background: #e0f2fe; color: #0369a1; }
+
+    /* ── MODAL styles ── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15,23,42,0.55);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--space-4);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity var(--transition-base);
+    }
+    .modal-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .modal {
+      background: var(--white);
+      border-radius: var(--radius-xl);
+      width: 100%;
+      max-width: 560px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: var(--shadow-2xl);
+      transform: translateY(20px);
+      transition: transform var(--transition-base);
+    }
+    .modal-overlay.open .modal { transform: translateY(0); }
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--space-5) var(--space-6);
+      border-bottom: 1px solid var(--gray-100);
+      position: sticky;
+      top: 0;
+      background: var(--white);
+      z-index: 1;
+    }
+    .modal-header h3 {
+      font-family: var(--font-body);
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--gray-900);
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+    .modal-close {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-md);
+      background: var(--gray-100);
+      color: var(--gray-500);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    .modal-close:hover { background: var(--gray-200); color: var(--gray-700); }
+    .modal-body { padding: var(--space-6); }
+    .modal-footer {
+      padding: var(--space-4) var(--space-6);
+      border-top: 1px solid var(--gray-100);
+      background: var(--gray-50);
+      display: flex;
+      justify-content: flex-end;
+      gap: var(--space-3);
+    }
+
+    /* inline toggle-row inside modal */
+    .modal-toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--space-3) 0;
+      border-bottom: 1px solid var(--gray-100);
+    }
+    .modal-toggle-row:last-child { border-bottom: none; }
+    .modal-toggle-label { font-size: 0.88rem; color: var(--gray-700); font-weight: 500; }
+
+    /* ── Responsive ── */
+    @media (max-width: 1200px) {
+      .integrations-grid { grid-template-columns: 1fr; }
+      .notif-center-grid { grid-template-columns: 1fr; }
+      .contact-collect-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 768px) {
+      .form-row { grid-template-columns: 1fr; }
+      .integration-card-head { flex-wrap: wrap; }
+      .notif-settings-table thead th:nth-child(3),
+      .notif-settings-table tbody td:nth-child(3) { display: none; } /* hide SMS col on mobile */
+      .admin-tabs { flex-wrap: wrap; }
+      .modal { max-width: 100%; border-radius: var(--radius-lg); }
+    }
+    @media (max-width: 480px) {
+      .integration-card-foot { flex-direction: column; align-items: stretch; }
+      .integration-card-foot .btn { width: 100%; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+  <div class="admin-wrapper">
+
+    <!-- ===== SIDEBAR ===== -->
+    <aside class="admin-sidebar" id="adminSidebar">
+      <div class="admin-sidebar-header">
+        <div class="logo-icon"><i class="fas fa-mountain-sun"></i></div>
+        <div>
+          <span class="logo-text" style="color: var(--white);">WanderVista</span>
+          <small>Admin Panel</small>
+        </div>
+      </div>
+
+      <nav class="admin-nav">
+        <div class="admin-nav-section">
+          <div class="admin-nav-section-title">Main</div>
+          <a href="dashboard.html" class="admin-nav-link"><i class="fas fa-gauge-high"></i> Dashboard</a>
+          <a href="bookings.html" class="admin-nav-link"><i class="fas fa-calendar-check"></i> Bookings <span class="nav-badge">12</span></a>
+          <a href="trips.html" class="admin-nav-link"><i class="fas fa-route"></i> Trips &amp; Packages</a>
+          <a href="customers.html" class="admin-nav-link"><i class="fas fa-users"></i> Customers</a>
+        </div>
+        <div class="admin-nav-section">
+          <div class="admin-nav-section-title">Finance</div>
+          <a href="payments.html" class="admin-nav-link"><i class="fas fa-indian-rupee-sign"></i> Payments</a>
+          <a href="#" class="admin-nav-link"><i class="fas fa-file-invoice"></i> Invoices</a>
+          <a href="#" class="admin-nav-link"><i class="fas fa-chart-pie"></i> Reports</a>
+        </div>
+        <div class="admin-nav-section">
+          <div class="admin-nav-section-title">Communication</div>
+          <a href="integrations.html" class="admin-nav-link active"><i class="fas fa-plug"></i> Integrations</a>
+          <a href="integrations.html" class="admin-nav-link"><i class="fas fa-bell"></i> Notifications <span class="nav-badge">5</span></a>
+          <a href="#" class="admin-nav-link"><i class="fas fa-envelope"></i> Messages</a>
+        </div>
+        <div class="admin-nav-section">
+          <div class="admin-nav-section-title">Settings</div>
+          <a href="#" class="admin-nav-link"><i class="fas fa-gear"></i> Settings</a>
+          <a href="#" class="admin-nav-link"><i class="fas fa-user-shield"></i> Team &amp; Roles</a>
+          <a href="../index.html" class="admin-nav-link"><i class="fas fa-globe"></i> View Website</a>
+        </div>
+      </nav>
+
+      <div class="admin-sidebar-footer">
+        <div class="admin-user">
+          <div class="admin-user-avatar">AM</div>
+          <div class="admin-user-info">
+            <strong>Arjun Mehta</strong>
+            <small>Super Admin</small>
+          </div>
+          <button style="color: var(--gray-500); background: none; border: none; cursor: pointer;"><i class="fas fa-right-from-bracket"></i></button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <div class="admin-main">
+
+      <!-- Top Bar -->
+      <div class="admin-topbar">
+        <div class="admin-topbar-left">
+          <button class="mobile-menu-btn" onclick="document.getElementById('adminSidebar').classList.toggle('open')"><i class="fas fa-bars"></i></button>
+          <div>
+            <h1>Integrations &amp; Notifications</h1>
+            <span class="breadcrumb">Manage messaging channels, notification triggers and customer contacts.</span>
+          </div>
+        </div>
+        <div class="admin-topbar-right">
+          <div class="admin-search">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Search integrations...">
+          </div>
+          <button class="admin-topbar-btn"><i class="fas fa-bell"></i><span class="notif-dot"></span></button>
+          <button class="admin-topbar-btn"><i class="fas fa-expand"></i></button>
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div class="admin-content">
+
+        <!-- ══════════════════════════════════════════
+             SECTION 1: MESSAGING INTEGRATIONS
+        ══════════════════════════════════════════ -->
+        <div class="page-section">
+          <div class="page-section-title">
+            <i class="fas fa-plug"></i> Messaging Integrations
+          </div>
+
+          <div class="integrations-grid">
+
+            <!-- WhatsApp Business -->
+            <div class="integration-card-full connected" id="card-whatsapp">
+              <div class="integration-card-head">
+                <div class="integration-icon whatsapp"><i class="fab fa-whatsapp"></i></div>
+                <div class="integration-meta">
+                  <h4>WhatsApp Business</h4>
+                  <p>Send booking confirmations, reminders &amp; updates via WhatsApp Business API.</p>
+                  <div style="display:flex; align-items:center; gap:var(--space-3); margin-top:var(--space-2); flex-wrap:wrap;">
+                    <span class="connected-pill"><span class="dot"></span> Connected</span>
+                    <span class="phone-display"><i class="fas fa-phone" style="font-size:0.78rem; margin-right:4px;"></i> +91 98765 43210</span>
+                  </div>
+                </div>
+                <div class="integration-head-actions">
+                  <label class="toggle-switch" title="Enable / Disable">
+                    <input type="checkbox" checked onchange="updateIntegrationStatus('whatsapp', this.checked)">
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+              </div>
+              <div class="integration-card-body">
+                <div class="trigger-block">
+                  <div class="trigger-block-title">Active notification triggers</div>
+                  <div class="trigger-list">
+                    <label class="trigger-item"><input type="checkbox" checked> New Booking</label>
+                    <label class="trigger-item"><input type="checkbox" checked> Payment Received</label>
+                    <label class="trigger-item"><input type="checkbox" checked> Booking Confirmed</label>
+                    <label class="trigger-item"><input type="checkbox" checked> Trip Reminder</label>
+                    <label class="trigger-item"><input type="checkbox"> Cancellation Request</label>
+                  </div>
+                </div>
+              </div>
+              <div class="integration-card-foot">
+                <span style="font-size:0.78rem; color:var(--gray-400);">Last message sent: 4 minutes ago</span>
+                <button class="btn btn-sm btn-secondary" onclick="openModal('modal-whatsapp')"><i class="fas fa-sliders"></i> Configure</button>
+              </div>
+            </div>
+
+            <!-- Telegram Bot -->
+            <div class="integration-card-full" id="card-telegram">
+              <div class="integration-card-head">
+                <div class="integration-icon telegram"><i class="fab fa-telegram"></i></div>
+                <div class="integration-meta">
+                  <h4>Telegram Bot</h4>
+                  <p>Push admin alerts and booking updates to a Telegram channel or group.</p>
+                  <div style="display:flex; align-items:center; gap:var(--space-3); margin-top:var(--space-2); flex-wrap:wrap;">
+                    <span class="disconnected-pill"><span class="dot"></span> Not Connected</span>
+                  </div>
+                </div>
+                <div class="integration-head-actions">
+                  <label class="toggle-switch" title="Enable / Disable">
+                    <input type="checkbox" onchange="updateIntegrationStatus('telegram', this.checked)">
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+              </div>
+              <div class="integration-card-body">
+                <div class="form-group">
+                  <label>Bot Token</label>
+                  <input type="text" placeholder="1234567890:AAF...your-bot-token">
+                </div>
+                <div class="form-row">
+                  <div class="form-group" style="margin-bottom:0;">
+                    <label>Chat ID / Channel ID</label>
+                    <input type="text" placeholder="-100123456789">
+                  </div>
+                  <div class="form-group" style="margin-bottom:0;">
+                    <label>Channel Link</label>
+                    <input type="text" placeholder="t.me/wandervista_alerts">
+                  </div>
+                </div>
+                <div class="trigger-block" style="margin-top:var(--space-4);">
+                  <div class="trigger-block-title">Notification triggers</div>
+                  <div class="trigger-list">
+                    <label class="trigger-item"><input type="checkbox"> New Booking</label>
+                    <label class="trigger-item"><input type="checkbox"> Payment Received</label>
+                    <label class="trigger-item"><input type="checkbox"> Booking Confirmed</label>
+                    <label class="trigger-item"><input type="checkbox"> Trip Reminder</label>
+                    <label class="trigger-item"><input type="checkbox"> Cancellation Request</label>
+                  </div>
+                </div>
+              </div>
+              <div class="integration-card-foot">
+                <span style="font-size:0.78rem; color:var(--gray-400);">Not connected &mdash; enter credentials above.</span>
+                <button class="btn btn-sm btn-outline" onclick="testTelegramConnection()"><i class="fas fa-plug"></i> Test Connection</button>
+              </div>
+            </div>
+
+            <!-- Email SMTP -->
+            <div class="integration-card-full connected" id="card-email">
+              <div class="integration-card-head">
+                <div class="integration-icon email"><i class="fas fa-envelope"></i></div>
+                <div class="integration-meta">
+                  <h4>Email (SMTP)</h4>
+                  <p>Send transactional emails via your SMTP server for confirmations and invoices.</p>
+                  <div style="display:flex; align-items:center; gap:var(--space-3); margin-top:var(--space-2);">
+                    <span class="connected-pill"><span class="dot"></span> Connected</span>
+                  </div>
+                </div>
+                <div class="integration-head-actions">
+                  <label class="toggle-switch">
+                    <input type="checkbox" checked onchange="updateIntegrationStatus('email', this.checked)">
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+              </div>
+              <div class="integration-card-body">
+                <div class="form-row">
+                  <div class="form-group">
+                    <label>SMTP Server</label>
+                    <input type="text" value="smtp.gmail.com" placeholder="smtp.yourserver.com">
+                  </div>
+                  <div class="form-group">
+                    <label>Port</label>
+                    <input type="number" value="587" placeholder="587">
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label>Username</label>
+                    <input type="email" value="bookings@wandervista.in" placeholder="user@domain.com">
+                  </div>
+                  <div class="form-group">
+                    <label>Password / App Key</label>
+                    <input type="password" value="••••••••••••" placeholder="App password">
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group" style="margin-bottom:0;">
+                    <label>From Email</label>
+                    <input type="email" value="noreply@wandervista.in" placeholder="noreply@domain.com">
+                  </div>
+                  <div class="form-group" style="margin-bottom:0;">
+                    <label>From Name</label>
+                    <input type="text" value="WanderVista" placeholder="Your Company">
+                  </div>
+                </div>
+              </div>
+              <div class="integration-card-foot">
+                <span style="font-size:0.78rem; color:var(--gray-400);">TLS/STARTTLS &bull; Last tested: Today 9:14 AM</span>
+                <button class="btn btn-sm btn-outline" onclick="sendTestEmail()"><i class="fas fa-paper-plane"></i> Send Test Email</button>
+              </div>
+            </div>
+
+            <!-- SMS Gateway -->
+            <div class="integration-card-full" id="card-sms">
+              <div class="integration-card-head">
+                <div class="integration-icon sms"><i class="fas fa-comment-sms"></i></div>
+                <div class="integration-meta">
+                  <h4>SMS Gateway</h4>
+                  <p>Send OTP, booking confirmations and reminders via SMS to customers in India.</p>
+                  <div style="display:flex; align-items:center; gap:var(--space-3); margin-top:var(--space-2);">
+                    <span class="disconnected-pill"><span class="dot"></span> Not Connected</span>
+                  </div>
+                </div>
+                <div class="integration-head-actions">
+                  <label class="toggle-switch">
+                    <input type="checkbox" onchange="updateIntegrationStatus('sms', this.checked)">
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+              </div>
+              <div class="integration-card-body">
+                <div class="form-row">
+                  <div class="form-group">
+                    <label>Provider</label>
+                    <select>
+                      <option>Textlocal</option>
+                      <option>MSG91</option>
+                      <option>Twilio</option>
+                      <option>2Factor</option>
+                      <option>Exotel</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>Sender ID (DLT)</label>
+                    <input type="text" placeholder="WNDRVS" maxlength="6">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>API Key</label>
+                  <input type="text" placeholder="Enter your SMS gateway API key">
+                </div>
+                <div class="form-group" style="margin-bottom:0;">
+                  <label>Default SMS Template (DLT registered)</label>
+                  <textarea placeholder="Dear {name}, your booking {booking_id} for {trip} on {date} is confirmed. &mdash; WanderVista"></textarea>
+                </div>
+              </div>
+              <div class="integration-card-foot">
+                <span style="font-size:0.78rem; color:var(--gray-400);">DLT registration required for India.</span>
+                <button class="btn btn-sm btn-outline" onclick="saveSmsConfig()"><i class="fas fa-floppy-disk"></i> Save Config</button>
+              </div>
+            </div>
+
+          </div><!-- /integrations-grid -->
+        </div><!-- /SECTION 1 -->
+
+
+        <!-- ══════════════════════════════════════════
+             SECTION 2: NOTIFICATION CENTER
+        ══════════════════════════════════════════ -->
+        <div class="page-section">
+          <div class="page-section-title">
+            <i class="fas fa-bell"></i> Notification Center
+          </div>
+
+          <div class="notif-center-grid">
+
+            <!-- Feed card -->
+            <div class="admin-card">
+              <div class="admin-card-header">
+                <h3><i class="fas fa-inbox" style="color:var(--info); margin-right:var(--space-2);"></i> Live Feed</h3>
+                <button class="btn btn-sm btn-outline" onclick="markAllRead()"><i class="fas fa-check-double"></i> Mark all read</button>
+              </div>
+              <div class="admin-card-body" style="padding:0;">
+                <!-- Tabs -->
+                <div style="padding: var(--space-4) var(--space-5) 0;">
+                  <div class="admin-tabs notif-tabs-wrap" id="notifTabs">
+                    <button class="admin-tab active" onclick="filterNotifs('all', this)">All</button>
+                    <button class="admin-tab" onclick="filterNotifs('bookings', this)">Bookings</button>
+                    <button class="admin-tab" onclick="filterNotifs('payments', this)">Payments</button>
+                    <button class="admin-tab" onclick="filterNotifs('cancellations', this)">Cancellations</button>
+                    <button class="admin-tab" onclick="filterNotifs('system', this)">System</button>
+                  </div>
+                </div>
+
+                <!-- Notification feed -->
+                <div class="notif-feed" id="notifFeed">
+
+                  <div class="notif-item unread" data-cat="bookings">
+                    <div class="notif-icon booking"><i class="fas fa-calendar-plus"></i></div>
+                    <div class="notif-content">
+                      <p><strong>Rahul Sharma</strong> made a new booking &mdash; Spiti Valley Road Trip (WV-08742). <span style="color:var(--accent); font-weight:600;">₹1,30,200</span></p>
+                      <span class="notif-time">2 min ago</span>
+                    </div>
+                  </div>
+
+                  <div class="notif-item unread" data-cat="payments">
+                    <div class="notif-icon payment"><i class="fas fa-indian-rupee-sign"></i></div>
+                    <div class="notif-content">
+                      <p>Payment of <strong>₹48,999</strong> received from <strong>Priya Mehta</strong> via Razorpay for Bali Honeymoon Package.</p>
+                      <span class="notif-time">15 min ago</span>
+                    </div>
+                  </div>
+
+                  <div class="notif-item unread" data-cat="bookings">
+                    <div class="notif-icon message"><i class="fab fa-whatsapp"></i></div>
+                    <div class="notif-content">
+                      <p>WhatsApp message received from <strong>+91 87654 32109</strong>: &ldquo;Hi, can I change my travel date to 25th July?&rdquo;</p>
+                      <span class="notif-time">28 min ago</span>
+                    </div>
+                  </div>
+
+                  <div class="notif-item unread" data-cat="cancellations">
+                    <div class="notif-icon cancel"><i class="fas fa-times-circle"></i></div>
+                    <div class="notif-content">
+                      <p><strong>Neha Gupta</strong> requested cancellation for <strong>Kerala Backwaters Retreat</strong> (WV-08739). Reason: Medical emergency.</p>
+                      <span class="notif-time">1 hr ago</span>
+                    </div>
+                  </div>
+
+                  <div class="notif-item" data-cat="payments">
+                    <div class="notif-icon payment"><i class="fas fa-indian-rupee-sign"></i></div>
+                    <div class="notif-content">
+                      <p>Payment of <strong>₹1,30,000</strong> confirmed from <strong>Ankit Kapoor</strong> for Ladakh Bike Expedition. Status: <span style="color:var(--success);font-weight:600;">Settled</span></p>
+                      <span class="notif-time">2 hr ago</span>
+                    </div>
+                  </div>
+
+                  <div class="notif-item" data-cat="bookings">
+                    <div class="notif-icon booking"><i class="fas fa-calendar-check"></i></div>
+                    <div class="notif-content">
+                      <p><strong>Vikram Khanna</strong> booked <strong>Ladakh Bike Expedition</strong> (WV-08740) for 5 Jul 2026 &mdash; ₹34,999.</p>
+                      <span class="notif-time">3 hr ago</span>
+                    </div>
+                  </div>
+
+                  <div class="notif-item" data-cat="system">
+                    <div class="notif-icon system"><i class="fas fa-triangle-exclamation"></i></div>
+                    <div class="notif-content">
+                      <p><strong>System Alert:</strong> WhatsApp API rate limit reached (1000/day). Messages queued. Resets at midnight.</p>
+                      <span class="notif-time">4 hr ago</span>
+                    </div>
+                  </div>
+
+                  <div class="notif-item" data-cat="bookings">
+                    <div class="notif-icon booking"><i class="fas fa-calendar-plus"></i></div>
+                    <div class="notif-content">
+                      <p><strong>Shruti Gupta</strong> booked <strong>Women's Special Rajasthan</strong> (WV-08738) &mdash; ₹38,500. Trip date: 10 Jul 2026.</p>
+                      <span class="notif-time">5 hr ago</span>
+                    </div>
+                  </div>
+
+                  <div class="notif-item" data-cat="payments">
+                    <div class="notif-icon payment"><i class="fas fa-credit-card"></i></div>
+                    <div class="notif-content">
+                      <p>Refund of <strong>₹22,000</strong> processed for <strong>Meera Joshi</strong> (WV-08731). Refunded to original payment method within 5-7 days.</p>
+                      <span class="notif-time">Yesterday, 6:42 PM</span>
+                    </div>
+                  </div>
+
+                  <div class="notif-item" data-cat="system">
+                    <div class="notif-icon system"><i class="fas fa-rotate"></i></div>
+                    <div class="notif-content">
+                      <p><strong>System:</strong> Automated trip reminder WhatsApp messages sent to <strong>14 customers</strong> with trips in the next 7 days.</p>
+                      <span class="notif-time">Yesterday, 9:00 AM</span>
+                    </div>
+                  </div>
+
+                  <div class="notif-item" data-cat="cancellations">
+                    <div class="notif-icon cancel"><i class="fas fa-ban"></i></div>
+                    <div class="notif-content">
+                      <p>Cancellation approved for <strong>Deepak Patel</strong> (WV-08725) &mdash; Goa Beach Holiday. Refund initiated: ₹18,500.</p>
+                      <span class="notif-time">2 days ago</span>
+                    </div>
+                  </div>
+
+                  <div class="notif-item" data-cat="bookings">
+                    <div class="notif-icon message"><i class="fab fa-whatsapp"></i></div>
+                    <div class="notif-content">
+                      <p>Incoming WhatsApp from <strong>+91 76543 21098</strong>: &ldquo;Please share the complete itinerary for Spiti tour.&rdquo;</p>
+                      <span class="notif-time">2 days ago</span>
+                    </div>
+                  </div>
+
+                </div><!-- /notif-feed -->
+              </div>
+            </div>
+
+            <!-- Stats sidebar -->
+            <div style="display: flex; flex-direction: column; gap: var(--space-5);">
+
+              <!-- Summary card -->
+              <div class="admin-card">
+                <div class="admin-card-header">
+                  <h3><i class="fas fa-chart-simple" style="color:var(--secondary); margin-right:var(--space-2);"></i> Today's Summary</h3>
+                </div>
+                <div class="admin-card-body">
+                  <div style="display:flex; flex-direction:column; gap:var(--space-4);">
+                    <div style="display:flex; justify-content:space-between; align-items:center; padding-bottom:var(--space-3); border-bottom:1px solid var(--gray-100);">
+                      <span style="font-size:0.88rem; color:var(--gray-600);"><i class="fas fa-calendar-plus" style="color:var(--accent); margin-right:6px;"></i> New Bookings</span>
+                      <strong style="color:var(--gray-900);">8</strong>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; align-items:center; padding-bottom:var(--space-3); border-bottom:1px solid var(--gray-100);">
+                      <span style="font-size:0.88rem; color:var(--gray-600);"><i class="fas fa-indian-rupee-sign" style="color:var(--info); margin-right:6px;"></i> Payments</span>
+                      <strong style="color:var(--gray-900);">5 &bull; ₹3.2L</strong>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; align-items:center; padding-bottom:var(--space-3); border-bottom:1px solid var(--gray-100);">
+                      <span style="font-size:0.88rem; color:var(--gray-600);"><i class="fas fa-times-circle" style="color:var(--error); margin-right:6px;"></i> Cancellations</span>
+                      <strong style="color:var(--gray-900);">1</strong>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; align-items:center; padding-bottom:var(--space-3); border-bottom:1px solid var(--gray-100);">
+                      <span style="font-size:0.88rem; color:var(--gray-600);"><i class="fab fa-whatsapp" style="color:#25D366; margin-right:6px;"></i> WhatsApp msgs</span>
+                      <strong style="color:var(--gray-900);">47 sent / 12 recv</strong>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                      <span style="font-size:0.88rem; color:var(--gray-600);"><i class="fas fa-envelope" style="color:var(--secondary); margin-right:6px;"></i> Emails sent</span>
+                      <strong style="color:var(--gray-900);">23</strong>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Channel health -->
+              <div class="admin-card">
+                <div class="admin-card-header">
+                  <h3><i class="fas fa-signal" style="color:var(--accent); margin-right:var(--space-2);"></i> Channel Health</h3>
+                </div>
+                <div class="admin-card-body">
+                  <div style="display:flex; flex-direction:column; gap:var(--space-3);">
+                    <div style="display:flex; align-items:center; gap:var(--space-3);">
+                      <div class="integration-icon whatsapp" style="width:36px; height:36px; font-size:1rem; border-radius:var(--radius-md);"><i class="fab fa-whatsapp"></i></div>
+                      <div style="flex:1;">
+                        <div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span style="font-size:0.82rem; font-weight:600;">WhatsApp</span><span style="font-size:0.78rem; color:var(--success);">96% delivery</span></div>
+                        <div style="background:var(--gray-200); height:6px; border-radius:var(--radius-full);"><div style="background:var(--success); height:6px; border-radius:var(--radius-full); width:96%;"></div></div>
+                      </div>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:var(--space-3);">
+                      <div class="integration-icon email" style="width:36px; height:36px; font-size:1rem; border-radius:var(--radius-md);"><i class="fas fa-envelope"></i></div>
+                      <div style="flex:1;">
+                        <div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span style="font-size:0.82rem; font-weight:600;">Email</span><span style="font-size:0.78rem; color:var(--info);">88% open rate</span></div>
+                        <div style="background:var(--gray-200); height:6px; border-radius:var(--radius-full);"><div style="background:var(--info); height:6px; border-radius:var(--radius-full); width:88%;"></div></div>
+                      </div>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:var(--space-3);">
+                      <div class="integration-icon telegram" style="width:36px; height:36px; font-size:1rem; border-radius:var(--radius-md);"><i class="fab fa-telegram"></i></div>
+                      <div style="flex:1;">
+                        <div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span style="font-size:0.82rem; font-weight:600;">Telegram</span><span style="font-size:0.78rem; color:var(--gray-400);">Not connected</span></div>
+                        <div style="background:var(--gray-200); height:6px; border-radius:var(--radius-full);"><div style="background:var(--gray-300); height:6px; border-radius:var(--radius-full); width:0%;"></div></div>
+                      </div>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:var(--space-3);">
+                      <div class="integration-icon sms" style="width:36px; height:36px; font-size:1rem; border-radius:var(--radius-md);"><i class="fas fa-comment-sms"></i></div>
+                      <div style="flex:1;">
+                        <div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span style="font-size:0.82rem; font-weight:600;">SMS</span><span style="font-size:0.78rem; color:var(--gray-400);">Not connected</span></div>
+                        <div style="background:var(--gray-200); height:6px; border-radius:var(--radius-full);"><div style="background:var(--gray-300); height:6px; border-radius:var(--radius-full); width:0%;"></div></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div><!-- /sidebar -->
+          </div><!-- /notif-center-grid -->
+        </div><!-- /SECTION 2 -->
+
+
+        <!-- ══════════════════════════════════════════
+             SECTION 3: NOTIFICATION SETTINGS
+        ══════════════════════════════════════════ -->
+        <div class="page-section">
+          <div class="page-section-title">
+            <i class="fas fa-sliders"></i> Notification Settings
+          </div>
+
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <h3><i class="fas fa-gear" style="color:var(--gray-500); margin-right:var(--space-2);"></i> Per-event Channel Configuration</h3>
+              <div style="display:flex; gap:var(--space-2);">
+                <span class="channel-icon wa">WA</span>
+                <span class="channel-icon em">Email</span>
+                <span class="channel-icon sm">SMS</span>
+              </div>
+            </div>
+            <div class="admin-card-body" style="padding:0;">
+              <div class="admin-table-wrapper">
+                <table class="notif-settings-table">
+                  <thead>
+                    <tr>
+                      <th style="min-width:220px;">Notification Type</th>
+                      <th><span class="channel-icon wa">WhatsApp</span></th>
+                      <th><span class="channel-icon em">Email</span></th>
+                      <th><span class="channel-icon sm">SMS</span></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- New Booking -->
+                    <tr>
+                      <td class="notif-type-cell">
+                        <strong><i class="fas fa-calendar-plus" style="color:var(--accent); margin-right:6px;"></i> New Booking</strong>
+                        <small>Customer creates a booking request</small>
+                      </td>
+                      <td><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></td>
+                      <td><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></td>
+                      <td><label class="toggle-switch"><input type="checkbox"><span class="toggle-slider"></span></label></td>
+                    </tr>
+
+                    <!-- Payment Received -->
+                    <tr>
+                      <td class="notif-type-cell">
+                        <strong><i class="fas fa-indian-rupee-sign" style="color:var(--info); margin-right:6px;"></i> Payment Received</strong>
+                        <small>Full or partial payment confirmed</small>
+                      </td>
+                      <td><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></td>
+                      <td><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></td>
+                      <td><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></td>
+                    </tr>
+
+                    <!-- Booking Confirmed -->
+                    <tr>
+                      <td class="notif-type-cell">
+                        <strong><i class="fas fa-check-circle" style="color:var(--success); margin-right:6px;"></i> Booking Confirmed</strong>
+                        <small>Admin confirms a booking manually</small>
+                      </td>
+                      <td><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></td>
+                      <td><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></td>
+                      <td><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></td>
+                    </tr>
+
+                    <!-- Trip Reminder parent row -->
+                    <tr style="background:var(--gray-50);">
+                      <td class="notif-type-cell">
+                        <strong><i class="fas fa-clock" style="color:var(--warning); margin-right:6px;"></i> Trip Reminder</strong>
+                        <small>Automated pre-trip reminders</small>
+                      </td>
+                      <td><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></td>
+                      <td><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></td>
+                      <td><label class="toggle-switch"><input type="checkbox"><span class="toggle-slider"></span></label></td>
+                    </tr>
+                    <tr class="sub-row">
+                      <td><i class="fas fa-circle-dot" style="margin-right:6px; font-size:0.6rem; color:var(--gray-300);"></i> 1 day before</td>
+                      <td><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></td>
+                      <td><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></td>
+                      <td><label class="toggle-switch"><input type="checkbox"><span class="toggle-slider"></span></label></td>
+                    </tr>
+                    <tr class="sub-row">
+                      <td><i class="fas fa-circle-dot" style="margin-right:6px; font-size:0.6rem; color:var(--gray-300);"></i> 3 days before</td>
+                      <td><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></td>
+                      <td><label class="toggle-switch"><input type="checkbox"><span class="toggle-slider"></span></label></td>
+                      <td><label class="toggle-switch"><input type="checkbox"><span class="toggle-slider"></span></label></td>
+                    </tr>
+                    <tr class="sub-row">
+                      <td><i class="fas fa-circle-dot" style="margin-right:6px; font-size:0.6rem; color:var(--gray-300);"></i> 7 days before</td>
+                      <td><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></td>
+                      <td><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></td>
+                      <td><label class="toggle-switch"><input type="checkbox"><span class="toggle-slider"></span></label></td>
+                    </tr>
+
+                    <!-- Cancellation Request -->
+                    <tr>
+                      <td class="notif-type-cell">
+                        <strong><i class="fas fa-times-circle" style="color:var(--error); margin-right:6px;"></i> Cancellation Request</strong>
+                        <small>Customer requests to cancel a booking</small>
+                      </td>
+                      <td><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></td>
+                      <td><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></td>
+                      <td><label class="toggle-switch"><input type="checkbox"><span class="toggle-slider"></span></label></td>
+                    </tr>
+
+                    <!-- Review Received -->
+                    <tr>
+                      <td class="notif-type-cell">
+                        <strong><i class="fas fa-star" style="color:#f59e0b; margin-right:6px;"></i> Review Received</strong>
+                        <small>Customer submits a post-trip review</small>
+                      </td>
+                      <td><label class="toggle-switch"><input type="checkbox"><span class="toggle-slider"></span></label></td>
+                      <td><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></td>
+                      <td><label class="toggle-switch"><input type="checkbox"><span class="toggle-slider"></span></label></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="admin-card-footer" style="display:flex; justify-content:flex-end;">
+              <button class="btn btn-primary" onclick="saveNotifSettings()"><i class="fas fa-floppy-disk"></i> Save Settings</button>
+            </div>
+          </div>
+        </div><!-- /SECTION 3 -->
+
+
+        <!-- ══════════════════════════════════════════
+             SECTION 4: CUSTOMER CONTACT COLLECTION
+        ══════════════════════════════════════════ -->
+        <div class="page-section">
+          <div class="page-section-title">
+            <i class="fas fa-address-book"></i> Customer Contact Collection
+          </div>
+
+          <div class="contact-collect-grid">
+
+            <!-- Add contact form -->
+            <div class="admin-card">
+              <div class="admin-card-header">
+                <h3><i class="fas fa-user-plus" style="color:var(--secondary); margin-right:var(--space-2);"></i> Add New Contact</h3>
+              </div>
+              <div class="admin-card-body">
+                <div class="form-group">
+                  <label>Full Name</label>
+                  <input type="text" id="contactName" placeholder="e.g. Ravi Kumar">
+                </div>
+                <div class="form-group">
+                  <label>Phone Number</label>
+                  <div class="phone-input-group">
+                    <span class="phone-prefix"><i class="fas fa-flag" style="margin-right:5px; color:#FF9933;"></i> +91</span>
+                    <input type="tel" id="contactPhone" placeholder="98765 43210" maxlength="10">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>Source</label>
+                  <select id="contactSource">
+                    <option value="">Select source...</option>
+                    <option value="website">Website Enquiry</option>
+                    <option value="whatsapp">WhatsApp Inbound</option>
+                    <option value="walkin">Walk-in</option>
+                    <option value="referral">Referral</option>
+                    <option value="instagram">Instagram DM</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+
+                <div style="margin-bottom:var(--space-4);">
+                  <label style="display:block; font-size:0.8rem; font-weight:700; color:var(--gray-600); margin-bottom:var(--space-2); text-transform:uppercase; letter-spacing:0.5px;">Add to Channels</label>
+                  <div class="channel-toggle-row">
+                    <div class="channel-toggle-label">
+                      <i class="fab fa-whatsapp wa-icon"></i>
+                      <span>Add to WhatsApp Broadcast List</span>
+                    </div>
+                    <label class="toggle-switch">
+                      <input type="checkbox" id="addToWhatsapp" checked>
+                      <span class="toggle-slider"></span>
+                    </label>
+                  </div>
+                  <div class="channel-toggle-row">
+                    <div class="channel-toggle-label">
+                      <i class="fab fa-telegram tg-icon"></i>
+                      <span>Add to Telegram Channel</span>
+                    </div>
+                    <label class="toggle-switch">
+                      <input type="checkbox" id="addToTelegram">
+                      <span class="toggle-slider"></span>
+                    </label>
+                  </div>
+                </div>
+
+                <button class="btn btn-primary" style="width:100%;" onclick="addContact()">
+                  <i class="fas fa-plus"></i> Add Contact
+                </button>
+              </div>
+            </div>
+
+            <!-- Recent contacts table -->
+            <div class="admin-card">
+              <div class="admin-card-header">
+                <h3><i class="fas fa-users" style="color:var(--info); margin-right:var(--space-2);"></i> Recent Contacts Collected</h3>
+                <span style="font-size:0.8rem; color:var(--gray-400);">Last 5 entries</span>
+              </div>
+              <div class="admin-card-body" style="padding:0;">
+                <div class="admin-table-wrapper">
+                  <table class="admin-table" id="contactsTable">
+                    <thead>
+                      <tr>
+                        <th>Name</th>
+                        <th>Phone</th>
+                        <th>Source</th>
+                        <th>Channels</th>
+                        <th>Date Added</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody id="contactsBody">
+                      <tr>
+                        <td>
+                          <div class="customer-cell">
+                            <div class="customer-avatar" style="background:var(--accent);">AK</div>
+                            <div class="customer-info"><strong>Amit Khurana</strong></div>
+                          </div>
+                        </td>
+                        <td>+91 98110 44221</td>
+                        <td><span class="badge badge-primary">Website</span></td>
+                        <td>
+                          <span class="channel-tag wa"><i class="fab fa-whatsapp"></i> WA</span>
+                        </td>
+                        <td style="color:var(--gray-400); font-size:0.8rem;">09 May 2026</td>
+                        <td>
+                          <div class="action-btns">
+                            <button class="action-btn danger" title="Remove"><i class="fas fa-trash"></i></button>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <div class="customer-cell">
+                            <div class="customer-avatar" style="background:var(--secondary);">SV</div>
+                            <div class="customer-info"><strong>Sneha Verma</strong></div>
+                          </div>
+                        </td>
+                        <td>+91 87654 11223</td>
+                        <td><span class="badge badge-success">WhatsApp</span></td>
+                        <td>
+                          <span class="channel-tag wa"><i class="fab fa-whatsapp"></i> WA</span>
+                          <span class="channel-tag tg"><i class="fab fa-telegram"></i> TG</span>
+                        </td>
+                        <td style="color:var(--gray-400); font-size:0.8rem;">08 May 2026</td>
+                        <td>
+                          <div class="action-btns">
+                            <button class="action-btn danger" title="Remove"><i class="fas fa-trash"></i></button>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <div class="customer-cell">
+                            <div class="customer-avatar" style="background:#8b5cf6;">RP</div>
+                            <div class="customer-info"><strong>Rohan Pillai</strong></div>
+                          </div>
+                        </td>
+                        <td>+91 76543 98765</td>
+                        <td><span class="badge badge-warning">Referral</span></td>
+                        <td>
+                          <span class="channel-tag wa"><i class="fab fa-whatsapp"></i> WA</span>
+                        </td>
+                        <td style="color:var(--gray-400); font-size:0.8rem;">07 May 2026</td>
+                        <td>
+                          <div class="action-btns">
+                            <button class="action-btn danger" title="Remove"><i class="fas fa-trash"></i></button>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <div class="customer-cell">
+                            <div class="customer-avatar" style="background:var(--info);">DN</div>
+                            <div class="customer-info"><strong>Divya Nair</strong></div>
+                          </div>
+                        </td>
+                        <td>+91 96321 87450</td>
+                        <td><span class="badge badge-secondary">Walk-in</span></td>
+                        <td>
+                          <span class="channel-tag tg"><i class="fab fa-telegram"></i> TG</span>
+                        </td>
+                        <td style="color:var(--gray-400); font-size:0.8rem;">06 May 2026</td>
+                        <td>
+                          <div class="action-btns">
+                            <button class="action-btn danger" title="Remove"><i class="fas fa-trash"></i></button>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <div class="customer-cell">
+                            <div class="customer-avatar">MS</div>
+                            <div class="customer-info"><strong>Manish Saxena</strong></div>
+                          </div>
+                        </td>
+                        <td>+91 90876 54321</td>
+                        <td><span class="badge badge-primary">Website</span></td>
+                        <td>
+                          <span class="channel-tag wa"><i class="fab fa-whatsapp"></i> WA</span>
+                          <span class="channel-tag tg"><i class="fab fa-telegram"></i> TG</span>
+                        </td>
+                        <td style="color:var(--gray-400); font-size:0.8rem;">05 May 2026</td>
+                        <td>
+                          <div class="action-btns">
+                            <button class="action-btn danger" title="Remove"><i class="fas fa-trash"></i></button>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="admin-card-footer" style="display:flex; justify-content:flex-end;">
+                <a href="#" class="btn btn-sm btn-outline"><i class="fas fa-download"></i> Export CSV</a>
+              </div>
+            </div>
+
+          </div><!-- /contact-collect-grid -->
+        </div><!-- /SECTION 4 -->
+
+      </div><!-- /admin-content -->
+    </div><!-- /admin-main -->
+  </div><!-- /admin-wrapper -->
+
+
+  <!-- ══════════════════════════════════════════
+       MODAL: WhatsApp Configure
+  ══════════════════════════════════════════ -->
+  <div class="modal-overlay" id="modal-whatsapp" onclick="handleOverlayClick(event, 'modal-whatsapp')">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-wa-title">
+      <div class="modal-header">
+        <h3 id="modal-wa-title"><span style="color:#25D366; margin-right:8px;"><i class="fab fa-whatsapp"></i></span> Configure WhatsApp Business</h3>
+        <button class="modal-close" onclick="closeModal('modal-whatsapp')" aria-label="Close"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="modal-body">
+
+        <div class="form-group">
+          <label>WhatsApp Business API Key</label>
+          <input type="text" placeholder="Enter your Cloud API access token from Meta Business Manager">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Phone Number (with country code)</label>
+            <input type="tel" value="+91 98765 43210" placeholder="+91 XXXXX XXXXX">
+          </div>
+          <div class="form-group">
+            <label>Phone Number ID</label>
+            <input type="text" placeholder="Meta phone number ID">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Welcome Message</label>
+          <textarea placeholder="Hi {name}! Welcome to WanderVista. How can we help you plan your next adventure?"></textarea>
+        </div>
+
+        <div class="modal-toggle-row">
+          <span class="modal-toggle-label"><i class="fas fa-robot" style="margin-right:6px; color:var(--info);"></i> Enable Auto-Reply for inbound messages</span>
+          <label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+        </div>
+        <div class="modal-toggle-row">
+          <span class="modal-toggle-label"><i class="fas fa-moon" style="margin-right:6px; color:var(--gray-400);"></i> Out-of-hours auto-reply</span>
+          <label class="toggle-switch"><input type="checkbox"><span class="toggle-slider"></span></label>
+        </div>
+
+        <div class="trigger-block" style="margin-top:var(--space-5);">
+          <div class="trigger-block-title">Notification Triggers &mdash; send WhatsApp for</div>
+          <div class="trigger-list">
+            <label class="trigger-item"><input type="checkbox" checked> New Booking received</label>
+            <label class="trigger-item"><input type="checkbox" checked> Payment Received &amp; confirmed</label>
+            <label class="trigger-item"><input type="checkbox" checked> Booking Confirmed by admin</label>
+            <label class="trigger-item"><input type="checkbox" checked> Trip Reminder (auto-scheduled)</label>
+            <label class="trigger-item"><input type="checkbox"> Cancellation Request processed</label>
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeModal('modal-whatsapp')">Cancel</button>
+        <button class="btn btn-primary" onclick="saveWhatsappConfig()"><i class="fas fa-floppy-disk"></i> Save Configuration</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════
+       TOAST NOTIFICATION
+  ══════════════════════════════════════════ -->
+  <div id="toast" style="
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--gray-900);
+    color: var(--white);
+    padding: 12px 20px;
+    border-radius: var(--radius-lg);
+    font-size: 0.88rem;
+    font-weight: 500;
+    box-shadow: var(--shadow-xl);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transform: translateY(80px);
+    opacity: 0;
+    transition: all 0.3s ease;
+    pointer-events: none;
+  ">
+    <i class="fas fa-check-circle" style="color:var(--accent);"></i>
+    <span id="toastMsg">Done!</span>
+  </div>
+
+
+  <script>
+    /* ── Modal helpers ── */
+    function openModal(id) {
+      document.getElementById(id).classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    function handleOverlayClick(e, id) {
+      if (e.target === document.getElementById(id)) closeModal(id);
+    }
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        document.querySelectorAll('.modal-overlay.open').forEach(function(el) {
+          closeModal(el.id);
+        });
+      }
+    });
+
+    /* ── Toast helper ── */
+    function showToast(msg, type) {
+      var toast = document.getElementById('toast');
+      var icon = toast.querySelector('i');
+      document.getElementById('toastMsg').textContent = msg;
+      icon.className = type === 'error'
+        ? 'fas fa-exclamation-circle'
+        : type === 'warn'
+          ? 'fas fa-triangle-exclamation'
+          : 'fas fa-check-circle';
+      icon.style.color = type === 'error' ? 'var(--error)' : type === 'warn' ? 'var(--warning)' : 'var(--accent)';
+      toast.style.opacity = '1';
+      toast.style.transform = 'translateY(0)';
+      setTimeout(function() {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(80px)';
+      }, 3000);
+    }
+
+    /* ── Integration enable/disable ── */
+    function updateIntegrationStatus(name, enabled) {
+      var card = document.getElementById('card-' + name);
+      if (!card) return;
+      var pill = card.querySelector('.connected-pill, .disconnected-pill');
+      if (enabled) {
+        showToast(name.charAt(0).toUpperCase() + name.slice(1) + ' integration enabled.');
+      } else {
+        showToast(name.charAt(0).toUpperCase() + name.slice(1) + ' integration disabled.', 'warn');
+      }
+    }
+
+    /* ── Save WhatsApp config ── */
+    function saveWhatsappConfig() {
+      closeModal('modal-whatsapp');
+      showToast('WhatsApp Business configuration saved.');
+    }
+
+    /* ── Test Telegram connection ── */
+    function testTelegramConnection() {
+      showToast('Testing Telegram connection...', 'warn');
+      setTimeout(function() {
+        showToast('Telegram: Connection failed. Check bot token and Chat ID.', 'error');
+      }, 1800);
+    }
+
+    /* ── Send test email ── */
+    function sendTestEmail() {
+      showToast('Test email sent to bookings@wandervista.in');
+    }
+
+    /* ── Save SMS config ── */
+    function saveSmsConfig() {
+      showToast('SMS gateway configuration saved.');
+    }
+
+    /* ── Mark all notifications as read ── */
+    function markAllRead() {
+      document.querySelectorAll('.notif-item.unread').forEach(function(el) {
+        el.classList.remove('unread');
+      });
+      showToast('All notifications marked as read.');
+    }
+
+    /* ── Filter notification tabs ── */
+    function filterNotifs(cat, btn) {
+      /* Update tab active state */
+      document.querySelectorAll('#notifTabs .admin-tab').forEach(function(t) {
+        t.classList.remove('active');
+      });
+      btn.classList.add('active');
+
+      /* Show/hide items */
+      document.querySelectorAll('#notifFeed .notif-item').forEach(function(item) {
+        if (cat === 'all' || item.dataset.cat === cat) {
+          item.style.display = 'flex';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    }
+
+    /* ── Save notification settings ── */
+    function saveNotifSettings() {
+      showToast('Notification settings saved successfully.');
+    }
+
+    /* ── Add contact ── */
+    function addContact() {
+      var name = document.getElementById('contactName').value.trim();
+      var phone = document.getElementById('contactPhone').value.trim();
+      var source = document.getElementById('contactSource').value;
+      var toWa = document.getElementById('addToWhatsapp').checked;
+      var toTg = document.getElementById('addToTelegram').checked;
+
+      if (!name || !phone || !source) {
+        showToast('Please fill all required fields.', 'error');
+        return;
+      }
+      if (!/^\d{10}$/.test(phone)) {
+        showToast('Enter a valid 10-digit phone number.', 'error');
+        return;
+      }
+
+      /* Build initials */
+      var parts = name.split(' ');
+      var initials = parts.map(function(p) { return p[0]; }).join('').slice(0, 2).toUpperCase();
+      var colors = ['var(--primary)', 'var(--secondary)', 'var(--accent)', 'var(--info)', '#8b5cf6', '#d97706'];
+      var color = colors[Math.floor(Math.random() * colors.length)];
+
+      /* Source badge map */
+      var sourceLabelMap = {
+        website: { label: 'Website', cls: 'badge-primary' },
+        whatsapp: { label: 'WhatsApp', cls: 'badge-success' },
+        walkin: { label: 'Walk-in', cls: 'badge-secondary' },
+        referral: { label: 'Referral', cls: 'badge-warning' },
+        instagram: { label: 'Instagram', cls: 'badge-primary' },
+        other: { label: 'Other', cls: '' }
+      };
+      var srcInfo = sourceLabelMap[source] || { label: source, cls: '' };
+
+      /* Channel tags */
+      var channels = '';
+      if (toWa) channels += '<span class="channel-tag wa"><i class="fab fa-whatsapp"></i> WA</span>';
+      if (toTg) channels += '<span class="channel-tag tg"><i class="fab fa-telegram"></i> TG</span>';
+      if (!channels) channels = '<span style="color:var(--gray-400); font-size:0.78rem;">None</span>';
+
+      /* Date */
+      var today = new Date();
+      var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      var dateStr = ('0' + today.getDate()).slice(-2) + ' ' + months[today.getMonth()] + ' ' + today.getFullYear();
+
+      var row = document.createElement('tr');
+      row.innerHTML =
+        '<td>' +
+          '<div class="customer-cell">' +
+            '<div class="customer-avatar" style="background:' + color + ';">' + initials + '</div>' +
+            '<div class="customer-info"><strong>' + name + '</strong></div>' +
+          '</div>' +
+        '</td>' +
+        '<td>+91 ' + phone.slice(0,5) + ' ' + phone.slice(5) + '</td>' +
+        '<td><span class="badge ' + srcInfo.cls + '">' + srcInfo.label + '</span></td>' +
+        '<td>' + channels + '</td>' +
+        '<td style="color:var(--gray-400); font-size:0.8rem;">' + dateStr + '</td>' +
+        '<td><div class="action-btns"><button class="action-btn danger" title="Remove" onclick="removeContactRow(this)"><i class="fas fa-trash"></i></button></div></td>';
+
+      var tbody = document.getElementById('contactsBody');
+      tbody.insertBefore(row, tbody.firstChild);
+
+      /* Remove last row if more than 5 */
+      while (tbody.rows.length > 5) {
+        tbody.removeChild(tbody.lastChild);
+      }
+
+      /* Reset form */
+      document.getElementById('contactName').value = '';
+      document.getElementById('contactPhone').value = '';
+      document.getElementById('contactSource').value = '';
+      document.getElementById('addToWhatsapp').checked = true;
+      document.getElementById('addToTelegram').checked = false;
+
+      showToast(name + ' added to contacts successfully.');
+    }
+
+    function removeContactRow(btn) {
+      btn.closest('tr').remove();
+      showToast('Contact removed.', 'warn');
+    }
+  </script>
+
+</body>
+</html>
