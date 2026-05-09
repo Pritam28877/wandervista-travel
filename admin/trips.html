@@ -1,0 +1,1698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trips & Packages - WanderVista Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../css/admin.css">
+  <style>
+    /* ── Page-scoped styles (no new file) ── */
+
+    /* Package list row */
+    .pkg-list { display: flex; flex-direction: column; gap: var(--space-4); }
+
+    .pkg-row {
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      transition: box-shadow var(--transition-base);
+    }
+    .pkg-row:hover { box-shadow: var(--shadow-md); }
+
+    .pkg-row-main {
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+      padding: var(--space-4) var(--space-5);
+      flex-wrap: wrap;
+    }
+
+    .pkg-thumb {
+      width: 80px;
+      height: 60px;
+      border-radius: var(--radius-md);
+      object-fit: cover;
+      flex-shrink: 0;
+      background: var(--gray-100);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gray-400);
+      font-size: 1.4rem;
+      overflow: hidden;
+    }
+    .pkg-thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+    .pkg-info { flex: 1; min-width: 160px; }
+    .pkg-info h4 {
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--gray-900);
+      margin-bottom: 3px;
+    }
+    .pkg-info .pkg-meta {
+      display: flex;
+      gap: var(--space-3);
+      flex-wrap: wrap;
+      font-size: 0.78rem;
+      color: var(--gray-500);
+    }
+    .pkg-info .pkg-meta span { display: flex; align-items: center; gap: 4px; }
+
+    .pkg-stats {
+      display: flex;
+      gap: var(--space-5);
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .pkg-stat { text-align: center; }
+    .pkg-stat-val {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--gray-800);
+    }
+    .pkg-stat-label {
+      font-size: 0.7rem;
+      color: var(--gray-400);
+      white-space: nowrap;
+    }
+
+    .pkg-rating {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--warning);
+    }
+
+    .pkg-row-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      margin-left: auto;
+      flex-shrink: 0;
+    }
+
+    /* Addon panel (collapsible) */
+    .pkg-addon-panel {
+      border-top: 1px solid var(--gray-100);
+      background: var(--gray-50);
+      padding: var(--space-4) var(--space-5);
+      display: none;
+    }
+    .pkg-addon-panel.open { display: block; }
+
+    .pkg-addon-panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: var(--space-3);
+    }
+    .pkg-addon-panel-header h5 {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--gray-700);
+    }
+
+    .addon-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: var(--space-3);
+    }
+
+    .addon-item-compact {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      padding: var(--space-3) var(--space-4);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-md);
+      background: var(--white);
+    }
+    .addon-item-compact .addon-cat-badge {
+      font-size: 0.68rem;
+      padding: 2px 7px;
+      border-radius: var(--radius-full);
+      background: rgba(3,105,161,0.1);
+      color: var(--primary-light);
+      white-space: nowrap;
+    }
+    .addon-item-compact .ai-info { flex: 1; min-width: 0; }
+    .addon-item-compact .ai-name {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--gray-800);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .addon-item-compact .ai-price {
+      font-size: 0.78rem;
+      color: var(--primary);
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    /* Toggle btn for addons row */
+    .btn-addon-toggle {
+      font-size: 0.78rem;
+      padding: 4px 10px;
+      border-radius: var(--radius-full);
+      border: 1px solid var(--gray-300);
+      background: var(--white);
+      color: var(--gray-600);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: all var(--transition-fast);
+      white-space: nowrap;
+    }
+    .btn-addon-toggle:hover { background: var(--gray-100); color: var(--gray-800); }
+
+    /* "Create New Package" header area */
+    .trips-page-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: var(--space-6);
+      flex-wrap: wrap;
+      gap: var(--space-3);
+    }
+
+    /* status-archived not in admin.css */
+    .status-archived { background: #fdf2f8; color: #9d174d; }
+
+    /* ── Modal ── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15,23,42,0.55);
+      backdrop-filter: blur(2px);
+      z-index: 999;
+      display: none;
+      align-items: flex-start;
+      justify-content: center;
+      padding: var(--space-6) var(--space-4);
+      overflow-y: auto;
+    }
+    .modal-overlay.open { display: flex; }
+
+    .modal {
+      background: var(--white);
+      border-radius: var(--radius-xl);
+      width: 100%;
+      max-width: 880px;
+      box-shadow: var(--shadow-2xl);
+      display: flex;
+      flex-direction: column;
+      margin: auto;
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--space-5) var(--space-6);
+      border-bottom: 1px solid var(--gray-100);
+    }
+    .modal-header h2 {
+      font-family: var(--font-body);
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--gray-900);
+    }
+    .modal-close {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-full);
+      border: 1px solid var(--gray-200);
+      background: var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--gray-500);
+      transition: all var(--transition-fast);
+      font-size: 0.85rem;
+    }
+    .modal-close:hover { background: var(--gray-100); color: var(--error); }
+
+    .modal-body {
+      padding: var(--space-6);
+      overflow-y: auto;
+      max-height: 75vh;
+    }
+
+    .modal-footer {
+      padding: var(--space-4) var(--space-6);
+      border-top: 1px solid var(--gray-100);
+      display: flex;
+      justify-content: flex-end;
+      gap: var(--space-3);
+      background: var(--gray-50);
+      border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+    }
+
+    /* Modal form sections */
+    .modal-section {
+      margin-bottom: var(--space-6);
+      padding-bottom: var(--space-6);
+      border-bottom: 1px solid var(--gray-100);
+    }
+    .modal-section:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+
+    .modal-section-title {
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--gray-400);
+      margin-bottom: var(--space-4);
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+    .modal-section-title i { color: var(--secondary); }
+
+    .form-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-4);
+    }
+    .form-grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: var(--space-4);
+    }
+
+    .form-group { display: flex; flex-direction: column; gap: var(--space-1); }
+    .form-group label {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--gray-700);
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: var(--space-2) var(--space-3);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-md);
+      font-family: var(--font-body);
+      font-size: 0.88rem;
+      color: var(--gray-800);
+      background: var(--white);
+      transition: border-color var(--transition-fast);
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--primary-light);
+      box-shadow: 0 0 0 3px rgba(3,105,161,0.08);
+    }
+    .form-group textarea { resize: vertical; min-height: 80px; }
+    .form-full { grid-column: 1 / -1; }
+
+    /* Itinerary builder */
+    .itinerary-days { display: flex; flex-direction: column; gap: var(--space-3); }
+
+    .itinerary-day {
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+    }
+    .itinerary-day-header {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      padding: var(--space-3) var(--space-4);
+      background: var(--gray-50);
+      border-bottom: 1px solid var(--gray-200);
+    }
+    .itinerary-day-header .day-num {
+      width: 28px;
+      height: 28px;
+      border-radius: var(--radius-full);
+      background: var(--primary);
+      color: var(--white);
+      font-size: 0.78rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .itinerary-day-header input {
+      flex: 1;
+      border: none;
+      background: none;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--gray-800);
+      outline: none;
+      font-family: var(--font-body);
+    }
+    .itinerary-day-body { padding: var(--space-3) var(--space-4); }
+    .itinerary-day-body textarea {
+      width: 100%;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-md);
+      padding: var(--space-2) var(--space-3);
+      font-size: 0.85rem;
+      font-family: var(--font-body);
+      color: var(--gray-700);
+      min-height: 64px;
+      resize: vertical;
+    }
+    .itinerary-day-body textarea:focus {
+      outline: none;
+      border-color: var(--primary-light);
+    }
+
+    /* Inclusion / exclusion lists */
+    .incl-list { display: flex; flex-direction: column; gap: var(--space-2); }
+    .incl-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: var(--space-2) var(--space-3);
+      background: var(--gray-50);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-md);
+      font-size: 0.85rem;
+    }
+    .incl-item i.fa-check-circle { color: var(--success); }
+    .incl-item i.fa-times-circle { color: var(--error); }
+    .incl-item span { flex: 1; }
+    .incl-item button {
+      border: none;
+      background: none;
+      color: var(--gray-400);
+      cursor: pointer;
+      font-size: 0.85rem;
+      padding: 2px;
+    }
+    .incl-item button:hover { color: var(--error); }
+
+    .incl-add {
+      display: flex;
+      gap: var(--space-2);
+      margin-top: var(--space-2);
+    }
+    .incl-add input {
+      flex: 1;
+      padding: var(--space-2) var(--space-3);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-md);
+      font-size: 0.85rem;
+      font-family: var(--font-body);
+    }
+    .incl-add input:focus { outline: none; border-color: var(--primary-light); }
+
+    /* Addon builder in modal */
+    .modal-addon-list { display: flex; flex-direction: column; gap: var(--space-3); }
+
+    .modal-addon-item {
+      display: grid;
+      grid-template-columns: 1fr 1fr 120px 100px auto;
+      gap: var(--space-3);
+      align-items: center;
+      padding: var(--space-3) var(--space-4);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-md);
+      background: var(--gray-50);
+    }
+    .modal-addon-item input,
+    .modal-addon-item select {
+      padding: var(--space-2) var(--space-3);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-md);
+      font-size: 0.82rem;
+      font-family: var(--font-body);
+      background: var(--white);
+    }
+    .modal-addon-item input:focus,
+    .modal-addon-item select:focus { outline: none; border-color: var(--primary-light); }
+
+    /* Image upload area */
+    .img-upload-area {
+      border: 2px dashed var(--gray-300);
+      border-radius: var(--radius-lg);
+      padding: var(--space-8);
+      text-align: center;
+      cursor: pointer;
+      transition: border-color var(--transition-fast), background var(--transition-fast);
+    }
+    .img-upload-area:hover {
+      border-color: var(--primary-light);
+      background: rgba(3,105,161,0.03);
+    }
+    .img-upload-area i { font-size: 2rem; color: var(--gray-300); margin-bottom: var(--space-3); display: block; }
+    .img-upload-area p { font-size: 0.85rem; color: var(--gray-500); margin-bottom: var(--space-1); }
+    .img-upload-area small { font-size: 0.75rem; color: var(--gray-400); }
+    .img-upload-area input { display: none; }
+
+    .img-preview-row {
+      display: flex;
+      gap: var(--space-3);
+      flex-wrap: wrap;
+      margin-top: var(--space-3);
+    }
+    .img-preview-thumb {
+      width: 80px;
+      height: 60px;
+      border-radius: var(--radius-md);
+      background: var(--gray-200);
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--gray-200);
+    }
+    .img-preview-thumb img { width: 100%; height: 100%; object-fit: cover; }
+    .img-preview-thumb .rm-img {
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      width: 18px;
+      height: 18px;
+      border-radius: var(--radius-full);
+      background: rgba(0,0,0,0.6);
+      color: var(--white);
+      border: none;
+      cursor: pointer;
+      font-size: 0.6rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Status toggle row */
+    .status-toggle-row {
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+      padding: var(--space-4);
+      background: var(--gray-50);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-md);
+    }
+    .status-toggle-row label {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--gray-700);
+      flex: 1;
+    }
+    .status-toggle-row small {
+      font-size: 0.78rem;
+      color: var(--gray-400);
+      display: block;
+      font-weight: 400;
+    }
+
+    /* Pagination */
+    .admin-pagination {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--space-4) var(--space-5);
+      border-top: 1px solid var(--gray-100);
+      flex-wrap: wrap;
+      gap: var(--space-3);
+    }
+    .admin-pagination .pag-info { font-size: 0.82rem; color: var(--gray-500); }
+    .pag-btns { display: flex; gap: var(--space-1); }
+    .pag-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--gray-200);
+      background: var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.82rem;
+      cursor: pointer;
+      color: var(--gray-600);
+      font-family: var(--font-body);
+      transition: all var(--transition-fast);
+    }
+    .pag-btn:hover { background: var(--gray-50); border-color: var(--primary-light); color: var(--primary); }
+    .pag-btn.active { background: var(--primary); color: var(--white); border-color: var(--primary); }
+    .pag-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    /* Btn helpers */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: var(--space-2) var(--space-5);
+      border-radius: var(--radius-md);
+      font-family: var(--font-body);
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all var(--transition-fast);
+      text-decoration: none;
+    }
+    .btn-primary { background: var(--primary); color: var(--white); }
+    .btn-primary:hover { background: var(--primary-light); color: var(--white); }
+    .btn-secondary { background: var(--secondary); color: var(--white); }
+    .btn-secondary:hover { background: var(--secondary-dark); color: var(--white); }
+    .btn-outline {
+      background: var(--white);
+      color: var(--gray-700);
+      border: 1px solid var(--gray-300);
+    }
+    .btn-outline:hover { background: var(--gray-50); border-color: var(--gray-400); color: var(--gray-800); }
+    .btn-ghost { background: none; color: var(--gray-500); border: none; }
+    .btn-ghost:hover { color: var(--gray-800); }
+    .btn-sm { padding: var(--space-1) var(--space-3); font-size: 0.82rem; }
+    .btn-danger { background: var(--error); color: var(--white); }
+    .btn-danger:hover { background: #b91c1c; color: var(--white); }
+
+    /* Confirm modal */
+    .confirm-modal { max-width: 420px; }
+    .confirm-modal .modal-body { text-align: center; padding: var(--space-8) var(--space-6); }
+    .confirm-modal .confirm-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: var(--radius-full);
+      background: #fef2f2;
+      color: var(--error);
+      font-size: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto var(--space-4);
+    }
+    .confirm-modal h3 { font-size: 1rem; font-weight: 700; color: var(--gray-900); margin-bottom: var(--space-2); }
+    .confirm-modal p { font-size: 0.88rem; color: var(--gray-500); }
+
+    /* Responsive overrides */
+    @media (max-width: 900px) {
+      .form-grid-2, .form-grid-3 { grid-template-columns: 1fr; }
+      .modal-addon-item {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto auto auto;
+      }
+      .modal-addon-item .addon-del-btn { grid-column: 2; }
+    }
+
+    @media (max-width: 768px) {
+      .pkg-row-main { flex-wrap: wrap; }
+      .pkg-stats { gap: var(--space-3); }
+      .pkg-row-actions { flex-wrap: wrap; }
+      .trips-page-header { flex-direction: column; align-items: flex-start; }
+      .admin-tabs { width: 100%; overflow-x: auto; }
+      .addon-grid { grid-template-columns: 1fr; }
+      .modal-addon-item {
+        grid-template-columns: 1fr;
+        grid-template-rows: repeat(5, auto);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .pkg-thumb { display: none; }
+      .pag-btn { width: 30px; height: 30px; font-size: 0.75rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="admin-wrapper">
+
+  <!-- ===== SIDEBAR ===== -->
+  <aside class="admin-sidebar" id="adminSidebar">
+    <div class="admin-sidebar-header">
+      <div class="logo-icon"><i class="fas fa-mountain-sun"></i></div>
+      <div>
+        <span class="logo-text" style="color: var(--white);">WanderVista</span>
+        <small>Admin Panel</small>
+      </div>
+    </div>
+
+    <nav class="admin-nav">
+      <div class="admin-nav-section">
+        <div class="admin-nav-section-title">Main</div>
+        <a href="dashboard.html" class="admin-nav-link"><i class="fas fa-gauge-high"></i> Dashboard</a>
+        <a href="bookings.html" class="admin-nav-link"><i class="fas fa-calendar-check"></i> Bookings <span class="nav-badge">12</span></a>
+        <a href="trips.html" class="admin-nav-link active"><i class="fas fa-route"></i> Trips &amp; Packages</a>
+        <a href="customers.html" class="admin-nav-link"><i class="fas fa-users"></i> Customers</a>
+      </div>
+      <div class="admin-nav-section">
+        <div class="admin-nav-section-title">Finance</div>
+        <a href="payments.html" class="admin-nav-link"><i class="fas fa-indian-rupee-sign"></i> Payments</a>
+        <a href="#" class="admin-nav-link"><i class="fas fa-file-invoice"></i> Invoices</a>
+        <a href="#" class="admin-nav-link"><i class="fas fa-chart-pie"></i> Reports</a>
+      </div>
+      <div class="admin-nav-section">
+        <div class="admin-nav-section-title">Communication</div>
+        <a href="integrations.html" class="admin-nav-link"><i class="fas fa-plug"></i> Integrations</a>
+        <a href="integrations.html" class="admin-nav-link"><i class="fas fa-bell"></i> Notifications <span class="nav-badge">5</span></a>
+        <a href="#" class="admin-nav-link"><i class="fas fa-envelope"></i> Messages</a>
+      </div>
+      <div class="admin-nav-section">
+        <div class="admin-nav-section-title">Settings</div>
+        <a href="#" class="admin-nav-link"><i class="fas fa-gear"></i> Settings</a>
+        <a href="#" class="admin-nav-link"><i class="fas fa-user-shield"></i> Team &amp; Roles</a>
+        <a href="../index.html" class="admin-nav-link"><i class="fas fa-globe"></i> View Website</a>
+      </div>
+    </nav>
+
+    <div class="admin-sidebar-footer">
+      <div class="admin-user">
+        <div class="admin-user-avatar">AM</div>
+        <div class="admin-user-info">
+          <strong>Arjun Mehta</strong>
+          <small>Super Admin</small>
+        </div>
+        <button style="color: var(--gray-500); background: none; border: none; cursor: pointer;"><i class="fas fa-right-from-bracket"></i></button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ===== MAIN CONTENT ===== -->
+  <div class="admin-main">
+
+    <!-- Top Bar -->
+    <div class="admin-topbar">
+      <div class="admin-topbar-left">
+        <button class="mobile-menu-btn" onclick="document.getElementById('adminSidebar').classList.toggle('open')"><i class="fas fa-bars"></i></button>
+        <div>
+          <h1>Trips &amp; Packages</h1>
+          <span class="breadcrumb">Admin / <a href="trips.html">Trips &amp; Packages</a></span>
+        </div>
+      </div>
+      <div class="admin-topbar-right">
+        <div class="admin-search">
+          <i class="fas fa-search"></i>
+          <input type="text" placeholder="Search packages...">
+        </div>
+        <button class="admin-topbar-btn"><i class="fas fa-bell"></i><span class="notif-dot"></span></button>
+        <button class="admin-topbar-btn"><i class="fas fa-expand"></i></button>
+      </div>
+    </div>
+
+    <!-- Content -->
+    <div class="admin-content">
+
+      <!-- Page Header -->
+      <div class="trips-page-header">
+        <div>
+          <p style="font-size:0.85rem; color:var(--gray-500);">Manage all your travel packages, itineraries, and add-ons from one place.</p>
+        </div>
+        <button class="btn btn-secondary" onclick="openModal('createModal')">
+          <i class="fas fa-plus"></i> Create New Package
+        </button>
+      </div>
+
+      <!-- Tabs -->
+      <div class="admin-tabs" id="pkgTabs">
+        <button class="admin-tab active" data-tab="all" onclick="switchTab(this)">All Packages <span style="color:var(--gray-400); font-weight:400;">(24)</span></button>
+        <button class="admin-tab" data-tab="active" onclick="switchTab(this)">Active <span style="color:var(--gray-400); font-weight:400;">(18)</span></button>
+        <button class="admin-tab" data-tab="draft" onclick="switchTab(this)">Draft <span style="color:var(--gray-400); font-weight:400;">(4)</span></button>
+        <button class="admin-tab" data-tab="archived" onclick="switchTab(this)">Archived <span style="color:var(--gray-400); font-weight:400;">(2)</span></button>
+      </div>
+
+      <!-- Filter Bar -->
+      <div class="admin-filter-bar">
+        <select id="filterCategory">
+          <option value="">All Categories</option>
+          <option>Road Trip</option>
+          <option>Family</option>
+          <option>Honeymoon</option>
+          <option>Adventure</option>
+          <option>Heritage</option>
+        </select>
+        <select id="filterDestination">
+          <option value="">All Destinations</option>
+          <option>Ladakh</option>
+          <option>Kerala</option>
+          <option>Rajasthan</option>
+          <option>Bali</option>
+          <option>Goa</option>
+          <option>Himachal Pradesh</option>
+          <option>Spiti Valley</option>
+        </select>
+        <select id="filterStatus">
+          <option value="">All Status</option>
+          <option>Active</option>
+          <option>Draft</option>
+          <option>Archived</option>
+        </select>
+        <input type="text" id="filterSearch" placeholder="Search packages..." oninput="filterPackages()" style="flex:1; min-width:180px;">
+        <span class="filter-count" id="filterCount">Showing 6 of 24 packages</span>
+      </div>
+
+      <!-- Package List -->
+      <div class="admin-card" style="overflow:visible;">
+        <div class="pkg-list" id="packageList">
+
+          <!-- ── Package 1 ── -->
+          <div class="pkg-row" data-category="Road Trip" data-destination="Spiti Valley" data-status="Active" data-name="Spiti Valley Road Trip">
+            <div class="pkg-row-main">
+              <div class="pkg-thumb">
+                <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=160&h=120&fit=crop" alt="Spiti Valley">
+              </div>
+              <div class="pkg-info">
+                <h4>Spiti Valley Road Trip</h4>
+                <div class="pkg-meta">
+                  <span><i class="fas fa-map-marker-alt"></i> Spiti Valley, HP</span>
+                  <span><i class="fas fa-moon"></i> 10N / 11D</span>
+                  <span><i class="fas fa-tag"></i> Road Trip</span>
+                </div>
+              </div>
+              <div class="pkg-stats">
+                <div class="pkg-stat">
+                  <div class="pkg-stat-val">₹32,999</div>
+                  <div class="pkg-stat-label">Base Price</div>
+                </div>
+                <div class="pkg-stat">
+                  <div class="pkg-stat-val">68</div>
+                  <div class="pkg-stat-label">Bookings</div>
+                </div>
+                <div class="pkg-stat">
+                  <div class="pkg-rating"><i class="fas fa-star"></i> 4.9</div>
+                  <div class="pkg-stat-label">Rating</div>
+                </div>
+                <div class="pkg-stat">
+                  <span class="status status-active"><i class="fas fa-circle" style="font-size:0.5rem;"></i> Active</span>
+                </div>
+              </div>
+              <div class="pkg-row-actions">
+                <button class="btn-addon-toggle" onclick="toggleAddonPanel(this, 'addons-1')">
+                  <i class="fas fa-puzzle-piece"></i> Add-ons <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="action-btns">
+                  <button class="action-btn" title="Edit" onclick="openModal('createModal')"><i class="fas fa-pen"></i></button>
+                  <button class="action-btn" title="Duplicate"><i class="fas fa-copy"></i></button>
+                  <button class="action-btn" title="Archive"><i class="fas fa-archive"></i></button>
+                  <button class="action-btn danger" title="Delete" onclick="openModal('confirmModal')"><i class="fas fa-trash"></i></button>
+                </div>
+              </div>
+            </div>
+            <div class="pkg-addon-panel" id="addons-1">
+              <div class="pkg-addon-panel-header">
+                <h5><i class="fas fa-puzzle-piece" style="color:var(--secondary);margin-right:6px;"></i> Add-ons for Spiti Valley Road Trip</h5>
+                <button class="btn btn-sm btn-outline" onclick="openModal('createModal')"><i class="fas fa-plus"></i> Add New</button>
+              </div>
+              <div class="addon-grid">
+                <div class="addon-item-compact">
+                  <div class="ai-info">
+                    <div class="ai-name">Camping Tent (Premium)</div>
+                    <div class="ai-price">+₹2,500 / person</div>
+                  </div>
+                  <span class="addon-cat-badge">Stay</span>
+                  <label class="toggle-switch" title="Enable add-on">
+                    <input type="checkbox" checked>
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+                <div class="addon-item-compact">
+                  <div class="ai-info">
+                    <div class="ai-name">Bike Rental (Royal Enfield)</div>
+                    <div class="ai-price">+₹5,000 / day</div>
+                  </div>
+                  <span class="addon-cat-badge">Transport</span>
+                  <label class="toggle-switch" title="Enable add-on">
+                    <input type="checkbox" checked>
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+                <div class="addon-item-compact">
+                  <div class="ai-info">
+                    <div class="ai-name">Photography Package</div>
+                    <div class="ai-price">+₹8,000 / trip</div>
+                  </div>
+                  <span class="addon-cat-badge">Experience</span>
+                  <label class="toggle-switch" title="Enable add-on">
+                    <input type="checkbox">
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+                <div class="addon-item-compact">
+                  <div class="ai-info">
+                    <div class="ai-name">Travel Insurance</div>
+                    <div class="ai-price">+₹1,200 / person</div>
+                  </div>
+                  <span class="addon-cat-badge">Insurance</span>
+                  <label class="toggle-switch" title="Enable add-on">
+                    <input type="checkbox" checked>
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ── Package 2 ── -->
+          <div class="pkg-row" data-category="Honeymoon" data-destination="Bali" data-status="Active" data-name="Bali Honeymoon Package">
+            <div class="pkg-row-main">
+              <div class="pkg-thumb">
+                <img src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=160&h=120&fit=crop" alt="Bali">
+              </div>
+              <div class="pkg-info">
+                <h4>Bali Honeymoon Package</h4>
+                <div class="pkg-meta">
+                  <span><i class="fas fa-map-marker-alt"></i> Bali, Indonesia</span>
+                  <span><i class="fas fa-moon"></i> 6N / 7D</span>
+                  <span><i class="fas fa-tag"></i> Honeymoon</span>
+                </div>
+              </div>
+              <div class="pkg-stats">
+                <div class="pkg-stat">
+                  <div class="pkg-stat-val">₹48,999</div>
+                  <div class="pkg-stat-label">Base Price</div>
+                </div>
+                <div class="pkg-stat">
+                  <div class="pkg-stat-val">52</div>
+                  <div class="pkg-stat-label">Bookings</div>
+                </div>
+                <div class="pkg-stat">
+                  <div class="pkg-rating"><i class="fas fa-star"></i> 4.8</div>
+                  <div class="pkg-stat-label">Rating</div>
+                </div>
+                <div class="pkg-stat">
+                  <span class="status status-active"><i class="fas fa-circle" style="font-size:0.5rem;"></i> Active</span>
+                </div>
+              </div>
+              <div class="pkg-row-actions">
+                <button class="btn-addon-toggle" onclick="toggleAddonPanel(this, 'addons-2')">
+                  <i class="fas fa-puzzle-piece"></i> Add-ons <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="action-btns">
+                  <button class="action-btn" title="Edit" onclick="openModal('createModal')"><i class="fas fa-pen"></i></button>
+                  <button class="action-btn" title="Duplicate"><i class="fas fa-copy"></i></button>
+                  <button class="action-btn" title="Archive"><i class="fas fa-archive"></i></button>
+                  <button class="action-btn danger" title="Delete" onclick="openModal('confirmModal')"><i class="fas fa-trash"></i></button>
+                </div>
+              </div>
+            </div>
+            <div class="pkg-addon-panel" id="addons-2">
+              <div class="pkg-addon-panel-header">
+                <h5><i class="fas fa-puzzle-piece" style="color:var(--secondary);margin-right:6px;"></i> Add-ons for Bali Honeymoon Package</h5>
+                <button class="btn btn-sm btn-outline" onclick="openModal('createModal')"><i class="fas fa-plus"></i> Add New</button>
+              </div>
+              <div class="addon-grid">
+                <div class="addon-item-compact">
+                  <div class="ai-info">
+                    <div class="ai-name">Private Pool Villa Upgrade</div>
+                    <div class="ai-price">+₹12,000 / night</div>
+                  </div>
+                  <span class="addon-cat-badge">Stay</span>
+                  <label class="toggle-switch">
+                    <input type="checkbox" checked>
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+                <div class="addon-item-compact">
+                  <div class="ai-info">
+                    <div class="ai-name">Couples Spa Session</div>
+                    <div class="ai-price">+₹6,500 / session</div>
+                  </div>
+                  <span class="addon-cat-badge">Wellness</span>
+                  <label class="toggle-switch">
+                    <input type="checkbox" checked>
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+                <div class="addon-item-compact">
+                  <div class="ai-info">
+                    <div class="ai-name">Sunset Dinner Cruise</div>
+                    <div class="ai-price">+₹4,000 / couple</div>
+                  </div>
+                  <span class="addon-cat-badge">Dining</span>
+                  <label class="toggle-switch">
+                    <input type="checkbox">
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ── Package 3 ── -->
+          <div class="pkg-row" data-category="Family" data-destination="Kerala" data-status="Active" data-name="Kerala Family Retreat">
+            <div class="pkg-row-main">
+              <div class="pkg-thumb">
+                <img src="https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?w=160&h=120&fit=crop" alt="Kerala">
+              </div>
+              <div class="pkg-info">
+                <h4>Kerala Family Retreat</h4>
+                <div class="pkg-meta">
+                  <span><i class="fas fa-map-marker-alt"></i> Kerala</span>
+                  <span><i class="fas fa-moon"></i> 5N / 6D</span>
+                  <span><i class="fas fa-tag"></i> Family</span>
+                </div>
+              </div>
+              <div class="pkg-stats">
+                <div class="pkg-stat">
+                  <div class="pkg-stat-val">₹24,999</div>
+                  <div class="pkg-stat-label">Base Price</div>
+                </div>
+                <div class="pkg-stat">
+                  <div class="pkg-stat-val">45</div>
+                  <div class="pkg-stat-label">Bookings</div>
+                </div>
+                <div class="pkg-stat">
+                  <div class="pkg-rating"><i class="fas fa-star"></i> 4.7</div>
+                  <div class="pkg-stat-label">Rating</div>
+                </div>
+                <div class="pkg-stat">
+                  <span class="status status-active"><i class="fas fa-circle" style="font-size:0.5rem;"></i> Active</span>
+                </div>
+              </div>
+              <div class="pkg-row-actions">
+                <button class="btn-addon-toggle" onclick="toggleAddonPanel(this, 'addons-3')">
+                  <i class="fas fa-puzzle-piece"></i> Add-ons <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="action-btns">
+                  <button class="action-btn" title="Edit" onclick="openModal('createModal')"><i class="fas fa-pen"></i></button>
+                  <button class="action-btn" title="Duplicate"><i class="fas fa-copy"></i></button>
+                  <button class="action-btn" title="Archive"><i class="fas fa-archive"></i></button>
+                  <button class="action-btn danger" title="Delete" onclick="openModal('confirmModal')"><i class="fas fa-trash"></i></button>
+                </div>
+              </div>
+            </div>
+            <div class="pkg-addon-panel" id="addons-3">
+              <div class="pkg-addon-panel-header">
+                <h5><i class="fas fa-puzzle-piece" style="color:var(--secondary);margin-right:6px;"></i> Add-ons for Kerala Family Retreat</h5>
+                <button class="btn btn-sm btn-outline" onclick="openModal('createModal')"><i class="fas fa-plus"></i> Add New</button>
+              </div>
+              <div class="addon-grid">
+                <div class="addon-item-compact">
+                  <div class="ai-info">
+                    <div class="ai-name">Houseboat Night Stay</div>
+                    <div class="ai-price">+₹8,000 / night</div>
+                  </div>
+                  <span class="addon-cat-badge">Stay</span>
+                  <label class="toggle-switch">
+                    <input type="checkbox" checked>
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+                <div class="addon-item-compact">
+                  <div class="ai-info">
+                    <div class="ai-name">Elephant Sanctuary Visit</div>
+                    <div class="ai-price">+₹2,000 / person</div>
+                  </div>
+                  <span class="addon-cat-badge">Experience</span>
+                  <label class="toggle-switch">
+                    <input type="checkbox" checked>
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+                <div class="addon-item-compact">
+                  <div class="ai-info">
+                    <div class="ai-name">Ayurveda Massage</div>
+                    <div class="ai-price">+₹3,500 / person</div>
+                  </div>
+                  <span class="addon-cat-badge">Wellness</span>
+                  <label class="toggle-switch">
+                    <input type="checkbox">
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ── Package 4 ── -->
+          <div class="pkg-row" data-category="Heritage" data-destination="Rajasthan" data-status="Draft" data-name="Rajasthan Heritage Tour">
+            <div class="pkg-row-main">
+              <div class="pkg-thumb">
+                <img src="https://images.unsplash.com/photo-1477587458883-47145ed94245?w=160&h=120&fit=crop" alt="Rajasthan">
+              </div>
+              <div class="pkg-info">
+                <h4>Rajasthan Heritage Tour</h4>
+                <div class="pkg-meta">
+                  <span><i class="fas fa-map-marker-alt"></i> Rajasthan</span>
+                  <span><i class="fas fa-moon"></i> 7N / 8D</span>
+                  <span><i class="fas fa-tag"></i> Heritage</span>
+                </div>
+              </div>
+              <div class="pkg-stats">
+                <div class="pkg-stat">
+                  <div class="pkg-stat-val">₹29,999</div>
+                  <div class="pkg-stat-label">Base Price</div>
+                </div>
+                <div class="pkg-stat">
+                  <div class="pkg-stat-val">35</div>
+                  <div class="pkg-stat-label">Bookings</div>
+                </div>
+                <div class="pkg-stat">
+                  <div class="pkg-rating"><i class="fas fa-star"></i> 4.6</div>
+                  <div class="pkg-stat-label">Rating</div>
+                </div>
+                <div class="pkg-stat">
+                  <span class="status status-draft"><i class="fas fa-circle" style="font-size:0.5rem;"></i> Draft</span>
+                </div>
+              </div>
+              <div class="pkg-row-actions">
+                <button class="btn-addon-toggle" onclick="toggleAddonPanel(this, 'addons-4')">
+                  <i class="fas fa-puzzle-piece"></i> Add-ons <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="action-btns">
+                  <button class="action-btn" title="Edit" onclick="openModal('createModal')"><i class="fas fa-pen"></i></button>
+                  <button class="action-btn" title="Duplicate"><i class="fas fa-copy"></i></button>
+                  <button class="action-btn" title="Archive"><i class="fas fa-archive"></i></button>
+                  <button class="action-btn danger" title="Delete" onclick="openModal('confirmModal')"><i class="fas fa-trash"></i></button>
+                </div>
+              </div>
+            </div>
+            <div class="pkg-addon-panel" id="addons-4">
+              <div class="pkg-addon-panel-header">
+                <h5><i class="fas fa-puzzle-piece" style="color:var(--secondary);margin-right:6px;"></i> Add-ons for Rajasthan Heritage Tour</h5>
+                <button class="btn btn-sm btn-outline" onclick="openModal('createModal')"><i class="fas fa-plus"></i> Add New</button>
+              </div>
+              <div class="addon-grid">
+                <div class="addon-item-compact">
+                  <div class="ai-info">
+                    <div class="ai-name">Palace Hotel Upgrade</div>
+                    <div class="ai-price">+₹15,000 / night</div>
+                  </div>
+                  <span class="addon-cat-badge">Stay</span>
+                  <label class="toggle-switch">
+                    <input type="checkbox" checked>
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+                <div class="addon-item-compact">
+                  <div class="ai-info">
+                    <div class="ai-name">Camel Safari</div>
+                    <div class="ai-price">+₹2,500 / person</div>
+                  </div>
+                  <span class="addon-cat-badge">Experience</span>
+                  <label class="toggle-switch">
+                    <input type="checkbox">
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ── Package 5 ── -->
+          <div class="pkg-row" data-category="Adventure" data-destination="Ladakh" data-status="Active" data-name="Ladakh Bike Expedition">
+            <div class="pkg-row-main">
+              <div class="pkg-thumb">
+                <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=160&h=120&fit=crop" alt="Ladakh">
+              </div>
+              <div class="pkg-info">
+                <h4>Ladakh Bike Expedition</h4>
+                <div class="pkg-meta">
+                  <span><i class="fas fa-map-marker-alt"></i> Ladakh, J&amp;K</span>
+                  <span><i class="fas fa-moon"></i> 12N / 13D</span>
+                  <span><i class="fas fa-tag"></i> Adventure</span>
+                </div>
+              </div>
+              <div class="pkg-stats">
+                <div class="pkg-stat">
+                  <div class="pkg-stat-val">₹34,999</div>
+                  <div class="pkg-stat-label">Base Price</div>
+                </div>
+                <div class="pkg-stat">
+                  <div class="pkg-stat-val">41</div>
+                  <div class="pkg-stat-label">Bookings</div>
+                </div>
+                <div class="pkg-stat">
+                  <div class="pkg-rating"><i class="fas fa-star"></i> 4.9</div>
+                  <div class="pkg-stat-label">Rating</div>
+                </div>
+                <div class="pkg-stat">
+                  <span class="status status-active"><i class="fas fa-circle" style="font-size:0.5rem;"></i> Active</span>
+                </div>
+              </div>
+              <div class="pkg-row-actions">
+                <button class="btn-addon-toggle" onclick="toggleAddonPanel(this, 'addons-5')">
+                  <i class="fas fa-puzzle-piece"></i> Add-ons <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="action-btns">
+                  <button class="action-btn" title="Edit" onclick="openModal('createModal')"><i class="fas fa-pen"></i></button>
+                  <button class="action-btn" title="Duplicate"><i class="fas fa-copy"></i></button>
+                  <button class="action-btn" title="Archive"><i class="fas fa-archive"></i></button>
+                  <button class="action-btn danger" title="Delete" onclick="openModal('confirmModal')"><i class="fas fa-trash"></i></button>
+                </div>
+              </div>
+            </div>
+            <div class="pkg-addon-panel" id="addons-5">
+              <div class="pkg-addon-panel-header">
+                <h5><i class="fas fa-puzzle-piece" style="color:var(--secondary);margin-right:6px;"></i> Add-ons for Ladakh Bike Expedition</h5>
+                <button class="btn btn-sm btn-outline" onclick="openModal('createModal')"><i class="fas fa-plus"></i> Add New</button>
+              </div>
+              <div class="addon-grid">
+                <div class="addon-item-compact">
+                  <div class="ai-info">
+                    <div class="ai-name">Gear Kit (Jacket + Helmet)</div>
+                    <div class="ai-price">+₹3,000 / person</div>
+                  </div>
+                  <span class="addon-cat-badge">Equipment</span>
+                  <label class="toggle-switch">
+                    <input type="checkbox" checked>
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+                <div class="addon-item-compact">
+                  <div class="ai-info">
+                    <div class="ai-name">Emergency Medical Kit</div>
+                    <div class="ai-price">+₹800 / person</div>
+                  </div>
+                  <span class="addon-cat-badge">Safety</span>
+                  <label class="toggle-switch">
+                    <input type="checkbox" checked>
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+                <div class="addon-item-compact">
+                  <div class="ai-info">
+                    <div class="ai-name">Satellite Phone Rental</div>
+                    <div class="ai-price">+₹2,000 / trip</div>
+                  </div>
+                  <span class="addon-cat-badge">Safety</span>
+                  <label class="toggle-switch">
+                    <input type="checkbox">
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ── Package 6 ── -->
+          <div class="pkg-row" data-category="Honeymoon" data-destination="Goa" data-status="Archived" data-name="Goa Beach Getaway">
+            <div class="pkg-row-main">
+              <div class="pkg-thumb">
+                <img src="https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=160&h=120&fit=crop" alt="Goa">
+              </div>
+              <div class="pkg-info">
+                <h4>Goa Beach Getaway</h4>
+                <div class="pkg-meta">
+                  <span><i class="fas fa-map-marker-alt"></i> Goa</span>
+                  <span><i class="fas fa-moon"></i> 3N / 4D</span>
+                  <span><i class="fas fa-tag"></i> Honeymoon</span>
+                </div>
+              </div>
+              <div class="pkg-stats">
+                <div class="pkg-stat">
+                  <div class="pkg-stat-val">₹18,500</div>
+                  <div class="pkg-stat-label">Base Price</div>
+                </div>
+                <div class="pkg-stat">
+                  <div class="pkg-stat-val">29</div>
+                  <div class="pkg-stat-label">Bookings</div>
+                </div>
+                <div class="pkg-stat">
+                  <div class="pkg-rating"><i class="fas fa-star"></i> 4.5</div>
+                  <div class="pkg-stat-label">Rating</div>
+                </div>
+                <div class="pkg-stat">
+                  <span class="status status-archived"><i class="fas fa-circle" style="font-size:0.5rem;"></i> Archived</span>
+                </div>
+              </div>
+              <div class="pkg-row-actions">
+                <button class="btn-addon-toggle" onclick="toggleAddonPanel(this, 'addons-6')">
+                  <i class="fas fa-puzzle-piece"></i> Add-ons <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="action-btns">
+                  <button class="action-btn" title="Edit" onclick="openModal('createModal')"><i class="fas fa-pen"></i></button>
+                  <button class="action-btn" title="Duplicate"><i class="fas fa-copy"></i></button>
+                  <button class="action-btn" title="Restore"><i class="fas fa-rotate-left"></i></button>
+                  <button class="action-btn danger" title="Delete" onclick="openModal('confirmModal')"><i class="fas fa-trash"></i></button>
+                </div>
+              </div>
+            </div>
+            <div class="pkg-addon-panel" id="addons-6">
+              <div class="pkg-addon-panel-header">
+                <h5><i class="fas fa-puzzle-piece" style="color:var(--secondary);margin-right:6px;"></i> Add-ons for Goa Beach Getaway</h5>
+                <button class="btn btn-sm btn-outline" onclick="openModal('createModal')"><i class="fas fa-plus"></i> Add New</button>
+              </div>
+              <div class="addon-grid">
+                <div class="addon-item-compact">
+                  <div class="ai-info">
+                    <div class="ai-name">Water Sports Bundle</div>
+                    <div class="ai-price">+₹4,500 / person</div>
+                  </div>
+                  <span class="addon-cat-badge">Activity</span>
+                  <label class="toggle-switch">
+                    <input type="checkbox" checked>
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+                <div class="addon-item-compact">
+                  <div class="ai-info">
+                    <div class="ai-name">Airport Transfer</div>
+                    <div class="ai-price">+₹1,200 / trip</div>
+                  </div>
+                  <span class="addon-cat-badge">Transport</span>
+                  <label class="toggle-switch">
+                    <input type="checkbox">
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /.pkg-list -->
+
+        <!-- Pagination -->
+        <div class="admin-pagination">
+          <span class="pag-info">Showing 1–6 of 24 packages</span>
+          <div class="pag-btns">
+            <button class="pag-btn" disabled><i class="fas fa-chevron-left"></i></button>
+            <button class="pag-btn active">1</button>
+            <button class="pag-btn">2</button>
+            <button class="pag-btn">3</button>
+            <button class="pag-btn">4</button>
+            <button class="pag-btn"><i class="fas fa-chevron-right"></i></button>
+          </div>
+        </div>
+
+      </div><!-- /.admin-card -->
+    </div><!-- /.admin-content -->
+  </div><!-- /.admin-main -->
+</div><!-- /.admin-wrapper -->
+
+
+<!-- ============================================================
+     MODAL: Create / Edit Package
+     ============================================================ -->
+<div class="modal-overlay" id="createModal" onclick="overlayClose(event, 'createModal')">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <h2><i class="fas fa-route" style="color:var(--secondary);margin-right:8px;"></i> Create New Package</h2>
+      <button class="modal-close" onclick="closeModal('createModal')"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body">
+
+      <!-- Basic Info -->
+      <div class="modal-section">
+        <div class="modal-section-title"><i class="fas fa-info-circle"></i> Basic Information</div>
+        <div class="form-grid-2" style="margin-bottom:var(--space-4);">
+          <div class="form-group">
+            <label>Package Name *</label>
+            <input type="text" placeholder="e.g. Spiti Valley Road Trip">
+          </div>
+          <div class="form-group">
+            <label>Destination *</label>
+            <input type="text" placeholder="e.g. Spiti Valley, Himachal Pradesh">
+          </div>
+          <div class="form-group">
+            <label>Category *</label>
+            <select>
+              <option value="">Select category</option>
+              <option>Road Trip</option>
+              <option>Family</option>
+              <option>Honeymoon</option>
+              <option>Adventure</option>
+              <option>Heritage</option>
+              <option>Wildlife</option>
+              <option>Solo</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Base Price (₹) *</label>
+            <input type="number" placeholder="e.g. 32999">
+          </div>
+        </div>
+        <div class="form-grid-3" style="margin-bottom:var(--space-4);">
+          <div class="form-group">
+            <label>Duration (Nights)</label>
+            <input type="number" placeholder="10" min="1">
+          </div>
+          <div class="form-group">
+            <label>Duration (Days)</label>
+            <input type="number" placeholder="11" min="1">
+          </div>
+          <div class="form-group">
+            <label>Max Group Size</label>
+            <input type="number" placeholder="20" min="1">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea placeholder="Write a compelling description for this package..."></textarea>
+        </div>
+        <div class="form-group" style="margin-top:var(--space-4);">
+          <label>Highlights (comma-separated)</label>
+          <input type="text" placeholder="e.g. Chandratal Lake, Kunzum Pass, Kaza Monastery">
+        </div>
+      </div>
+
+      <!-- Itinerary Builder -->
+      <div class="modal-section">
+        <div class="modal-section-title"><i class="fas fa-map-marked-alt"></i> Itinerary Builder</div>
+        <div class="itinerary-days" id="itineraryDays">
+          <div class="itinerary-day">
+            <div class="itinerary-day-header">
+              <div class="day-num">1</div>
+              <input type="text" placeholder="Day title — e.g. Arrival in Manali">
+              <button class="action-btn danger" onclick="removeDay(this)" title="Remove"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="itinerary-day-body">
+              <textarea placeholder="Describe the day's activities, stops, meals..."></textarea>
+            </div>
+          </div>
+          <div class="itinerary-day">
+            <div class="itinerary-day-header">
+              <div class="day-num">2</div>
+              <input type="text" placeholder="Day title — e.g. Manali to Kaza via Rohtang">
+              <button class="action-btn danger" onclick="removeDay(this)" title="Remove"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="itinerary-day-body">
+              <textarea placeholder="Describe the day's activities, stops, meals..."></textarea>
+            </div>
+          </div>
+        </div>
+        <button class="btn btn-outline btn-sm" style="margin-top:var(--space-3);" onclick="addDay()">
+          <i class="fas fa-plus"></i> Add Day
+        </button>
+      </div>
+
+      <!-- Inclusions & Exclusions -->
+      <div class="modal-section">
+        <div class="modal-section-title"><i class="fas fa-list-check"></i> Inclusions &amp; Exclusions</div>
+        <div class="form-grid-2">
+          <div>
+            <p style="font-size:0.82rem;font-weight:600;color:var(--success);margin-bottom:var(--space-2);"><i class="fas fa-check-circle"></i> Inclusions</p>
+            <div class="incl-list" id="inclList">
+              <div class="incl-item"><i class="fas fa-check-circle"></i><span>Accommodation (twin sharing)</span><button onclick="removeIncl(this)"><i class="fas fa-times"></i></button></div>
+              <div class="incl-item"><i class="fas fa-check-circle"></i><span>Breakfast & Dinner</span><button onclick="removeIncl(this)"><i class="fas fa-times"></i></button></div>
+              <div class="incl-item"><i class="fas fa-check-circle"></i><span>Pickup & Drop (Manali)</span><button onclick="removeIncl(this)"><i class="fas fa-times"></i></button></div>
+            </div>
+            <div class="incl-add">
+              <input type="text" id="newIncl" placeholder="Add inclusion...">
+              <button class="btn btn-sm btn-outline" onclick="addIncl()"><i class="fas fa-plus"></i></button>
+            </div>
+          </div>
+          <div>
+            <p style="font-size:0.82rem;font-weight:600;color:var(--error);margin-bottom:var(--space-2);"><i class="fas fa-times-circle"></i> Exclusions</p>
+            <div class="incl-list" id="exclList">
+              <div class="incl-item"><i class="fas fa-times-circle"></i><span>Airfare</span><button onclick="removeIncl(this)"><i class="fas fa-times"></i></button></div>
+              <div class="incl-item"><i class="fas fa-times-circle"></i><span>Personal expenses</span><button onclick="removeIncl(this)"><i class="fas fa-times"></i></button></div>
+              <div class="incl-item"><i class="fas fa-times-circle"></i><span>Travel insurance</span><button onclick="removeIncl(this)"><i class="fas fa-times"></i></button></div>
+            </div>
+            <div class="incl-add">
+              <input type="text" id="newExcl" placeholder="Add exclusion...">
+              <button class="btn btn-sm btn-outline" onclick="addExcl()"><i class="fas fa-plus"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Add-on Builder -->
+      <div class="modal-section">
+        <div class="modal-section-title"><i class="fas fa-puzzle-piece"></i> Add-on Builder</div>
+        <div style="display:grid;grid-template-columns:1.5fr 1fr 110px 100px 36px;gap:var(--space-2);padding:0 0 var(--space-2);font-size:0.72rem;font-weight:600;color:var(--gray-400);text-transform:uppercase;letter-spacing:.5px;" class="addon-header-row">
+          <span>Name</span><span>Category</span><span>Price (₹)</span><span>Per</span><span></span>
+        </div>
+        <div class="modal-addon-list" id="addonBuilderList">
+          <div class="modal-addon-item">
+            <input type="text" placeholder="Add-on name (e.g. Camping Tent)">
+            <select>
+              <option>Stay</option><option>Transport</option><option>Experience</option>
+              <option>Wellness</option><option>Dining</option><option>Equipment</option>
+              <option>Safety</option><option>Insurance</option><option>Activity</option>
+            </select>
+            <input type="number" placeholder="2500">
+            <select><option>person</option><option>trip</option><option>night</option><option>couple</option><option>day</option></select>
+            <button class="action-btn danger addon-del-btn" onclick="removeAddon(this)" title="Remove"><i class="fas fa-times"></i></button>
+          </div>
+          <div class="modal-addon-item">
+            <input type="text" placeholder="Add-on name (e.g. Travel Insurance)">
+            <select>
+              <option>Stay</option><option>Transport</option><option>Experience</option>
+              <option>Wellness</option><option>Dining</option><option>Equipment</option>
+              <option>Safety</option><option selected>Insurance</option><option>Activity</option>
+            </select>
+            <input type="number" placeholder="1200">
+            <select><option>person</option><option>trip</option><option>night</option><option>couple</option><option>day</option></select>
+            <button class="action-btn danger addon-del-btn" onclick="removeAddon(this)" title="Remove"><i class="fas fa-times"></i></button>
+          </div>
+        </div>
+        <button class="btn btn-outline btn-sm" style="margin-top:var(--space-3);" onclick="addAddon()">
+          <i class="fas fa-plus"></i> Add Add-on
+        </button>
+      </div>
+
+      <!-- Image Upload -->
+      <div class="modal-section">
+        <div class="modal-section-title"><i class="fas fa-images"></i> Package Images</div>
+        <label class="img-upload-area" for="imgUploadInput">
+          <i class="fas fa-cloud-arrow-up"></i>
+          <p>Drag &amp; drop images here, or click to browse</p>
+          <small>JPG, PNG, WebP up to 5MB each. First image will be the cover.</small>
+          <input type="file" id="imgUploadInput" multiple accept="image/*" onchange="previewImages(event)">
+        </label>
+        <div class="img-preview-row" id="imgPreviewRow"></div>
+      </div>
+
+      <!-- Status -->
+      <div class="modal-section">
+        <div class="modal-section-title"><i class="fas fa-toggle-on"></i> Package Status</div>
+        <div class="status-toggle-row">
+          <div>
+            <label>Publish as Active</label>
+            <small>Toggle off to save as Draft</small>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" checked id="statusToggle" onchange="updateStatusLabel(this)">
+            <span class="toggle-slider"></span>
+          </label>
+          <span id="statusLabel" class="status status-active"><i class="fas fa-circle" style="font-size:0.5rem;"></i> Active</span>
+        </div>
+      </div>
+
+    </div><!-- /.modal-body -->
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('createModal')">Cancel</button>
+      <button class="btn btn-secondary" onclick="savePackage('draft')"><i class="fas fa-floppy-disk"></i> Save as Draft</button>
+      <button class="btn btn-primary" onclick="savePackage('publish')"><i class="fas fa-check"></i> Publish Package</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ============================================================
+     MODAL: Delete Confirm
+     ============================================================ -->
+<div class="modal-overlay" id="confirmModal" onclick="overlayClose(event, 'confirmModal')">
+  <div class="modal confirm-modal" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <h2>Delete Package</h2>
+      <button class="modal-close" onclick="closeModal('confirmModal')"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="confirm-icon"><i class="fas fa-trash"></i></div>
+      <h3>Delete this package?</h3>
+      <p>This action is irreversible. All associated bookings will remain but the package will no longer be bookable.</p>
+    </div>
+    <div class="modal-footer" style="justify-content:center;">
+      <button class="btn btn-outline" onclick="closeModal('confirmModal')">Cancel</button>
+      <button class="btn btn-danger"><i class="fas fa-trash"></i> Delete Package</button>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  /* ── Modal helpers ── */
+  function openModal(id) {
+    document.getElementById(id).classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal(id) {
+    document.getElementById(id).classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  function overlayClose(e, id) {
+    if (e.target === document.getElementById(id)) closeModal(id);
+  }
+
+  /* ── Addon panel toggle ── */
+  function toggleAddonPanel(btn, panelId) {
+    const panel = document.getElementById(panelId);
+    const chevron = btn.querySelector('.fa-chevron-down, .fa-chevron-up');
+    const isOpen = panel.classList.toggle('open');
+    if (chevron) {
+      chevron.className = isOpen ? 'fas fa-chevron-up' : 'fas fa-chevron-down';
+    }
+  }
+
+  /* ── Tab switching ── */
+  function switchTab(el) {
+    document.querySelectorAll('#pkgTabs .admin-tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    const tab = el.dataset.tab;
+    document.querySelectorAll('.pkg-row').forEach(row => {
+      if (tab === 'all') {
+        row.style.display = '';
+      } else {
+        const status = row.dataset.status.toLowerCase();
+        row.style.display = (status === tab) ? '' : 'none';
+      }
+    });
+    updateCount();
+  }
+
+  /* ── Filter packages ── */
+  function filterPackages() {
+    const cat   = document.getElementById('filterCategory').value.toLowerCase();
+    const dest  = document.getElementById('filterDestination').value.toLowerCase();
+    const stat  = document.getElementById('filterStatus').value.toLowerCase();
+    const srch  = document.getElementById('filterSearch').value.toLowerCase();
+
+    document.querySelectorAll('.pkg-row').forEach(row => {
+      const matchCat  = !cat  || row.dataset.category.toLowerCase() === cat;
+      const matchDest = !dest || row.dataset.destination.toLowerCase().includes(dest);
+      const matchStat = !stat || row.dataset.status.toLowerCase() === stat;
+      const matchSrch = !srch || row.dataset.name.toLowerCase().includes(srch);
+      row.style.display = (matchCat && matchDest && matchStat && matchSrch) ? '' : 'none';
+    });
+    updateCount();
+  }
+
+  ['filterCategory','filterDestination','filterStatus'].forEach(id =>
+    document.getElementById(id).addEventListener('change', filterPackages)
+  );
+
+  function updateCount() {
+    const visible = [...document.querySelectorAll('.pkg-row')].filter(r => r.style.display !== 'none').length;
+    document.getElementById('filterCount').textContent = `Showing ${visible} of 24 packages`;
+  }
+
+  /* ── Itinerary builder ── */
+  function addDay() {
+    const container = document.getElementById('itineraryDays');
+    const num = container.children.length + 1;
+    const div = document.createElement('div');
+    div.className = 'itinerary-day';
+    div.innerHTML = `
+      <div class="itinerary-day-header">
+        <div class="day-num">${num}</div>
+        <input type="text" placeholder="Day title">
+        <button class="action-btn danger" onclick="removeDay(this)" title="Remove"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="itinerary-day-body">
+        <textarea placeholder="Describe the day's activities..."></textarea>
+      </div>`;
+    container.appendChild(div);
+    renumberDays();
+  }
+
+  function removeDay(btn) {
+    btn.closest('.itinerary-day').remove();
+    renumberDays();
+  }
+
+  function renumberDays() {
+    document.querySelectorAll('#itineraryDays .day-num').forEach((el, i) => el.textContent = i + 1);
+  }
+
+  /* ── Inclusions / Exclusions ── */
+  function addIncl() {
+    const input = document.getElementById('newIncl');
+    if (!input.value.trim()) return;
+    const li = document.createElement('div');
+    li.className = 'incl-item';
+    li.innerHTML = `<i class="fas fa-check-circle"></i><span>${input.value.trim()}</span><button onclick="removeIncl(this)"><i class="fas fa-times"></i></button>`;
+    document.getElementById('inclList').appendChild(li);
+    input.value = '';
+  }
+
+  function addExcl() {
+    const input = document.getElementById('newExcl');
+    if (!input.value.trim()) return;
+    const li = document.createElement('div');
+    li.className = 'incl-item';
+    li.innerHTML = `<i class="fas fa-times-circle"></i><span>${input.value.trim()}</span><button onclick="removeIncl(this)"><i class="fas fa-times"></i></button>`;
+    document.getElementById('exclList').appendChild(li);
+    input.value = '';
+  }
+
+  function removeIncl(btn) { btn.closest('.incl-item').remove(); }
+
+  /* ── Addon builder ── */
+  function addAddon() {
+    const list = document.getElementById('addonBuilderList');
+    const div = document.createElement('div');
+    div.className = 'modal-addon-item';
+    div.innerHTML = `
+      <input type="text" placeholder="Add-on name">
+      <select>
+        <option>Stay</option><option>Transport</option><option>Experience</option>
+        <option>Wellness</option><option>Dining</option><option>Equipment</option>
+        <option>Safety</option><option>Insurance</option><option>Activity</option>
+      </select>
+      <input type="number" placeholder="Price">
+      <select><option>person</option><option>trip</option><option>night</option><option>couple</option><option>day</option></select>
+      <button class="action-btn danger addon-del-btn" onclick="removeAddon(this)" title="Remove"><i class="fas fa-times"></i></button>`;
+    list.appendChild(div);
+  }
+
+  function removeAddon(btn) { btn.closest('.modal-addon-item').remove(); }
+
+  /* ── Image preview ── */
+  function previewImages(e) {
+    const row = document.getElementById('imgPreviewRow');
+    Array.from(e.target.files).forEach(file => {
+      const reader = new FileReader();
+      reader.onload = ev => {
+        const thumb = document.createElement('div');
+        thumb.className = 'img-preview-thumb';
+        thumb.innerHTML = `<img src="${ev.target.result}" alt="preview"><button class="rm-img" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>`;
+        row.appendChild(thumb);
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  /* ── Status toggle label ── */
+  function updateStatusLabel(checkbox) {
+    const label = document.getElementById('statusLabel');
+    if (checkbox.checked) {
+      label.className = 'status status-active';
+      label.innerHTML = '<i class="fas fa-circle" style="font-size:0.5rem;"></i> Active';
+    } else {
+      label.className = 'status status-draft';
+      label.innerHTML = '<i class="fas fa-circle" style="font-size:0.5rem;"></i> Draft';
+    }
+  }
+
+  /* ── Save package (UI feedback only — no hardcoded data) ── */
+  function savePackage(mode) {
+    const name = document.querySelector('#createModal input[type=text]').value.trim();
+    if (!name) {
+      alert('Package name is required.');
+      return;
+    }
+    closeModal('createModal');
+    // In production this would POST to the API and refresh the list
+    console.log(`Package "${name}" queued for ${mode === 'draft' ? 'draft save' : 'publish'}`);
+  }
+
+  /* ── Enter on incl/excl inputs ── */
+  document.getElementById('newIncl').addEventListener('keydown', e => { if (e.key === 'Enter') addIncl(); });
+  document.getElementById('newExcl').addEventListener('keydown', e => { if (e.key === 'Enter') addExcl(); });
+
+  /* ── Pagination buttons (UI state only) ── */
+  document.querySelectorAll('.pag-btn:not([disabled])').forEach(btn => {
+    btn.addEventListener('click', function() {
+      if (this.querySelector('i')) return; // prev/next arrows - skip active class
+      document.querySelectorAll('.pag-btn').forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>
