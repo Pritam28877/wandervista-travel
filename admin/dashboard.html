@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - WanderVista</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../css/admin.css">
+</head>
+<body>
+  <div class="admin-wrapper">
+
+    <!-- ===== SIDEBAR ===== -->
+    <aside class="admin-sidebar" id="adminSidebar">
+      <div class="admin-sidebar-header">
+        <div class="logo-icon"><i class="fas fa-mountain-sun"></i></div>
+        <div>
+          <span class="logo-text" style="color: var(--white);">WanderVista</span>
+          <small>Admin Panel</small>
+        </div>
+      </div>
+
+      <nav class="admin-nav">
+        <div class="admin-nav-section">
+          <div class="admin-nav-section-title">Main</div>
+          <a href="dashboard.html" class="admin-nav-link active"><i class="fas fa-gauge-high"></i> Dashboard</a>
+          <a href="bookings.html" class="admin-nav-link"><i class="fas fa-calendar-check"></i> Bookings <span class="nav-badge">12</span></a>
+          <a href="trips.html" class="admin-nav-link"><i class="fas fa-route"></i> Trips & Packages</a>
+          <a href="customers.html" class="admin-nav-link"><i class="fas fa-users"></i> Customers</a>
+        </div>
+        <div class="admin-nav-section">
+          <div class="admin-nav-section-title">Finance</div>
+          <a href="payments.html" class="admin-nav-link"><i class="fas fa-indian-rupee-sign"></i> Payments</a>
+          <a href="#" class="admin-nav-link"><i class="fas fa-file-invoice"></i> Invoices</a>
+          <a href="#" class="admin-nav-link"><i class="fas fa-chart-pie"></i> Reports</a>
+        </div>
+        <div class="admin-nav-section">
+          <div class="admin-nav-section-title">Communication</div>
+          <a href="integrations.html" class="admin-nav-link"><i class="fas fa-plug"></i> Integrations</a>
+          <a href="integrations.html" class="admin-nav-link"><i class="fas fa-bell"></i> Notifications <span class="nav-badge">5</span></a>
+          <a href="#" class="admin-nav-link"><i class="fas fa-envelope"></i> Messages</a>
+        </div>
+        <div class="admin-nav-section">
+          <div class="admin-nav-section-title">Settings</div>
+          <a href="#" class="admin-nav-link"><i class="fas fa-gear"></i> Settings</a>
+          <a href="#" class="admin-nav-link"><i class="fas fa-user-shield"></i> Team & Roles</a>
+          <a href="../index.html" class="admin-nav-link"><i class="fas fa-globe"></i> View Website</a>
+        </div>
+      </nav>
+
+      <div class="admin-sidebar-footer">
+        <div class="admin-user">
+          <div class="admin-user-avatar">AM</div>
+          <div class="admin-user-info">
+            <strong>Arjun Mehta</strong>
+            <small>Super Admin</small>
+          </div>
+          <button style="color: var(--gray-500); background: none; border: none; cursor: pointer;"><i class="fas fa-right-from-bracket"></i></button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <div class="admin-main">
+      <!-- Top Bar -->
+      <div class="admin-topbar">
+        <div class="admin-topbar-left">
+          <button class="mobile-menu-btn" onclick="document.getElementById('adminSidebar').classList.toggle('open')"><i class="fas fa-bars"></i></button>
+          <div>
+            <h1>Dashboard</h1>
+            <span class="breadcrumb">Welcome back, Arjun! Here's what's happening today.</span>
+          </div>
+        </div>
+        <div class="admin-topbar-right">
+          <div class="admin-search">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Search bookings, customers...">
+          </div>
+          <button class="admin-topbar-btn"><i class="fas fa-bell"></i><span class="notif-dot"></span></button>
+          <button class="admin-topbar-btn"><i class="fas fa-expand"></i></button>
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div class="admin-content">
+        <!-- Stat Cards -->
+        <div class="admin-stats">
+          <div class="stat-card">
+            <div class="stat-card-header">
+              <div class="stat-card-icon blue"><i class="fas fa-calendar-check"></i></div>
+              <div class="stat-card-trend up"><i class="fas fa-arrow-up"></i> 18%</div>
+            </div>
+            <div class="stat-card-value">248</div>
+            <div class="stat-card-label">Total Bookings (This Month)</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-card-header">
+              <div class="stat-card-icon green"><i class="fas fa-indian-rupee-sign"></i></div>
+              <div class="stat-card-trend up"><i class="fas fa-arrow-up"></i> 24%</div>
+            </div>
+            <div class="stat-card-value">₹48.5L</div>
+            <div class="stat-card-label">Revenue (This Month)</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-card-header">
+              <div class="stat-card-icon orange"><i class="fas fa-users"></i></div>
+              <div class="stat-card-trend up"><i class="fas fa-arrow-up"></i> 12%</div>
+            </div>
+            <div class="stat-card-value">1,847</div>
+            <div class="stat-card-label">Active Customers</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-card-header">
+              <div class="stat-card-icon purple"><i class="fas fa-star"></i></div>
+              <div class="stat-card-trend up"><i class="fas fa-arrow-up"></i> 0.2</div>
+            </div>
+            <div class="stat-card-value">4.8</div>
+            <div class="stat-card-label">Average Rating</div>
+          </div>
+        </div>
+
+        <!-- Dashboard Grid -->
+        <div class="dashboard-grid">
+          <!-- Revenue Chart -->
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <h3><i class="fas fa-chart-line" style="color: var(--primary); margin-right: var(--space-2);"></i> Revenue Overview</h3>
+              <div class="admin-tabs">
+                <button class="admin-tab active">Monthly</button>
+                <button class="admin-tab">Weekly</button>
+                <button class="admin-tab">Daily</button>
+              </div>
+            </div>
+            <div class="admin-card-body">
+              <div class="revenue-bars">
+                <div class="revenue-bar-group"><div class="revenue-bar-value">₹22L</div><div class="revenue-bar" style="height: 55%; background: var(--primary);"></div><div class="revenue-bar-label">Jan</div></div>
+                <div class="revenue-bar-group"><div class="revenue-bar-value">₹28L</div><div class="revenue-bar" style="height: 70%; background: var(--primary);"></div><div class="revenue-bar-label">Feb</div></div>
+                <div class="revenue-bar-group"><div class="revenue-bar-value">₹35L</div><div class="revenue-bar" style="height: 80%; background: var(--primary);"></div><div class="revenue-bar-label">Mar</div></div>
+                <div class="revenue-bar-group"><div class="revenue-bar-value">₹42L</div><div class="revenue-bar" style="height: 90%; background: var(--secondary);"></div><div class="revenue-bar-label">Apr</div></div>
+                <div class="revenue-bar-group"><div class="revenue-bar-value">₹48L</div><div class="revenue-bar" style="height: 100%; background: var(--secondary);"></div><div class="revenue-bar-label">May</div></div>
+                <div class="revenue-bar-group"><div class="revenue-bar-value">₹38L</div><div class="revenue-bar" style="height: 82%; background: var(--primary-light);"></div><div class="revenue-bar-label">Jun*</div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Recent Activity -->
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <h3><i class="fas fa-clock-rotate-left" style="color: var(--secondary); margin-right: var(--space-2);"></i> Recent Activity</h3>
+              <a href="#" style="font-size: 0.8rem;">View All</a>
+            </div>
+            <div class="admin-card-body" style="padding: 0;">
+              <div class="activity-timeline" style="padding: var(--space-5) var(--space-6);">
+                <div class="activity-item booking">
+                  <p><strong>Rahul Sharma</strong> booked Spiti Valley Road Trip</p>
+                  <span class="activity-time">2 minutes ago</span>
+                </div>
+                <div class="activity-item payment">
+                  <p><strong>₹48,999</strong> payment received from Priya Mehta</p>
+                  <span class="activity-time">15 minutes ago</span>
+                </div>
+                <div class="activity-item booking">
+                  <p><strong>Vikram K.</strong> booked Ladakh Bike Expedition</p>
+                  <span class="activity-time">1 hour ago</span>
+                </div>
+                <div class="activity-item cancel">
+                  <p><strong>Neha G.</strong> requested cancellation for Kerala trip</p>
+                  <span class="activity-time">2 hours ago</span>
+                </div>
+                <div class="activity-item payment">
+                  <p><strong>₹1,30,000</strong> payment from Ankit Kapoor</p>
+                  <span class="activity-time">3 hours ago</span>
+                </div>
+                <div class="activity-item booking">
+                  <p><strong>Shruti G.</strong> booked Women's Special Rajasthan</p>
+                  <span class="activity-time">5 hours ago</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Recent Bookings Table -->
+          <div class="admin-card dashboard-grid-full">
+            <div class="admin-card-header">
+              <h3><i class="fas fa-table-list" style="color: var(--info); margin-right: var(--space-2);"></i> Recent Bookings</h3>
+              <a href="bookings.html" class="btn btn-sm btn-outline">View All Bookings</a>
+            </div>
+            <div class="admin-card-body" style="padding: 0;">
+              <div class="admin-table-wrapper">
+                <table class="admin-table">
+                  <thead>
+                    <tr>
+                      <th>Booking ID</th>
+                      <th>Customer</th>
+                      <th>Package</th>
+                      <th>Travel Date</th>
+                      <th>Amount</th>
+                      <th>Status</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>WV-08742</strong></td>
+                      <td><div class="customer-cell"><div class="customer-avatar">RS</div><div class="customer-info"><strong>Rahul Sharma</strong><small>rahul@email.com</small></div></div></td>
+                      <td>Spiti Valley Road Trip</td>
+                      <td>21 Jun 2026</td>
+                      <td><strong>₹1,30,200</strong></td>
+                      <td><span class="status status-confirmed"><i class="fas fa-check-circle"></i> Confirmed</span></td>
+                      <td><div class="action-btns"><button class="action-btn" title="View"><i class="fas fa-eye"></i></button><button class="action-btn" title="Edit"><i class="fas fa-pen"></i></button></div></td>
+                    </tr>
+                    <tr>
+                      <td><strong>WV-08741</strong></td>
+                      <td><div class="customer-cell"><div class="customer-avatar" style="background: var(--accent);">PM</div><div class="customer-info"><strong>Priya Mehta</strong><small>priya@email.com</small></div></div></td>
+                      <td>Bali Honeymoon Package</td>
+                      <td>15 Jul 2026</td>
+                      <td><strong>₹97,998</strong></td>
+                      <td><span class="status status-pending"><i class="fas fa-clock"></i> Pending Payment</span></td>
+                      <td><div class="action-btns"><button class="action-btn" title="View"><i class="fas fa-eye"></i></button><button class="action-btn" title="Edit"><i class="fas fa-pen"></i></button></div></td>
+                    </tr>
+                    <tr>
+                      <td><strong>WV-08740</strong></td>
+                      <td><div class="customer-cell"><div class="customer-avatar" style="background: var(--secondary);">VK</div><div class="customer-info"><strong>Vikram Khanna</strong><small>vikram@email.com</small></div></div></td>
+                      <td>Ladakh Bike Expedition</td>
+                      <td>05 Jul 2026</td>
+                      <td><strong>₹34,999</strong></td>
+                      <td><span class="status status-confirmed"><i class="fas fa-check-circle"></i> Confirmed</span></td>
+                      <td><div class="action-btns"><button class="action-btn" title="View"><i class="fas fa-eye"></i></button><button class="action-btn" title="Edit"><i class="fas fa-pen"></i></button></div></td>
+                    </tr>
+                    <tr>
+                      <td><strong>WV-08739</strong></td>
+                      <td><div class="customer-cell"><div class="customer-avatar" style="background: var(--info);">NG</div><div class="customer-info"><strong>Neha Gupta</strong><small>neha@email.com</small></div></div></td>
+                      <td>Kerala Backwaters Retreat</td>
+                      <td>28 Jun 2026</td>
+                      <td><strong>₹65,000</strong></td>
+                      <td><span class="status status-cancelled"><i class="fas fa-times-circle"></i> Cancellation Req.</span></td>
+                      <td><div class="action-btns"><button class="action-btn" title="View"><i class="fas fa-eye"></i></button><button class="action-btn danger" title="Process"><i class="fas fa-exclamation-triangle"></i></button></div></td>
+                    </tr>
+                    <tr>
+                      <td><strong>WV-08738</strong></td>
+                      <td><div class="customer-cell"><div class="customer-avatar" style="background: #8b5cf6;">SG</div><div class="customer-info"><strong>Shruti Gupta</strong><small>shruti@email.com</small></div></div></td>
+                      <td>Women's Special Rajasthan</td>
+                      <td>10 Jul 2026</td>
+                      <td><strong>₹38,500</strong></td>
+                      <td><span class="status status-confirmed"><i class="fas fa-check-circle"></i> Confirmed</span></td>
+                      <td><div class="action-btns"><button class="action-btn" title="View"><i class="fas fa-eye"></i></button><button class="action-btn" title="Edit"><i class="fas fa-pen"></i></button></div></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Top Packages -->
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <h3><i class="fas fa-trophy" style="color: var(--warning); margin-right: var(--space-2);"></i> Top Packages</h3>
+            </div>
+            <div class="admin-card-body">
+              <div style="display: flex; flex-direction: column; gap: var(--space-4);">
+                <div style="display: flex; align-items: center; gap: var(--space-3);">
+                  <span style="font-size: 1.2rem; font-weight: 700; color: var(--warning); width: 24px;">#1</span>
+                  <div style="flex:1;"><strong style="font-size: 0.88rem;">Spiti Valley Road Trip</strong><br><small style="color: var(--gray-400);">68 bookings this month</small></div>
+                  <span style="font-weight: 600; color: var(--primary);">₹12.4L</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: var(--space-3);">
+                  <span style="font-size: 1.2rem; font-weight: 700; color: var(--gray-400); width: 24px;">#2</span>
+                  <div style="flex:1;"><strong style="font-size: 0.88rem;">Ladakh Bike Expedition</strong><br><small style="color: var(--gray-400);">52 bookings</small></div>
+                  <span style="font-weight: 600; color: var(--primary);">₹8.7L</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: var(--space-3);">
+                  <span style="font-size: 1.2rem; font-weight: 700; color: var(--gray-400); width: 24px;">#3</span>
+                  <div style="flex:1;"><strong style="font-size: 0.88rem;">Kerala Family Retreat</strong><br><small style="color: var(--gray-400);">45 bookings</small></div>
+                  <span style="font-weight: 600; color: var(--primary);">₹7.2L</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: var(--space-3);">
+                  <span style="font-size: 1.2rem; font-weight: 700; color: var(--gray-400); width: 24px;">#4</span>
+                  <div style="flex:1;"><strong style="font-size: 0.88rem;">Bali Honeymoon</strong><br><small style="color: var(--gray-400);">38 bookings</small></div>
+                  <span style="font-weight: 600; color: var(--primary);">₹6.8L</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: var(--space-3);">
+                  <span style="font-size: 1.2rem; font-weight: 700; color: var(--gray-400); width: 24px;">#5</span>
+                  <div style="flex:1;"><strong style="font-size: 0.88rem;">Rajasthan Heritage Tour</strong><br><small style="color: var(--gray-400);">35 bookings</small></div>
+                  <span style="font-weight: 600; color: var(--primary);">₹5.9L</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Actions -->
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <h3><i class="fas fa-bolt" style="color: var(--secondary); margin-right: var(--space-2);"></i> Quick Actions</h3>
+            </div>
+            <div class="admin-card-body">
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3);">
+                <a href="trips.html" class="btn btn-sm btn-outline" style="justify-content: flex-start;"><i class="fas fa-plus"></i> New Package</a>
+                <a href="bookings.html" class="btn btn-sm btn-outline" style="justify-content: flex-start;"><i class="fas fa-calendar-plus"></i> Manual Booking</a>
+                <a href="customers.html" class="btn btn-sm btn-outline" style="justify-content: flex-start;"><i class="fas fa-user-plus"></i> Add Customer</a>
+                <a href="integrations.html" class="btn btn-sm btn-outline" style="justify-content: flex-start;"><i class="fas fa-paper-plane"></i> Send Blast</a>
+                <a href="#" class="btn btn-sm btn-outline" style="justify-content: flex-start;"><i class="fas fa-file-export"></i> Export Data</a>
+                <a href="#" class="btn btn-sm btn-outline" style="justify-content: flex-start;"><i class="fas fa-chart-bar"></i> View Reports</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
