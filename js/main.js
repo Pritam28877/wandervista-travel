@@ -36,18 +36,31 @@ function initLatestUpdatesTicker() {
   }, 4000);
 }
 
-/* --- Image broken-source fallback: routes any 404 to Picsum seed
-       so the page never shows a broken-image icon. --- */
+/* --- Image broken-source fallback. Catches both error events AND
+       images that "loaded" but rendered 0x0 (Unsplash sometimes returns
+       a 200 page that's not a real image when the ID is gone). --- */
 function initImageFallback() {
-  const handler = (img) => {
-    if (img.dataset.fb === '1') return;
-    img.dataset.fb = '1';
+  const fallback = (img) => {
+    if (img.dataset.fb === '2') return;                       // already at final fallback
+    const step = (img.dataset.fb || '0');
     const seed = encodeURIComponent((img.alt || 'travel').toLowerCase().replace(/\s+/g, '-')) || 'travel';
-    img.src = `https://picsum.photos/seed/${seed}/600/800`;
+    if (step === '0') {
+      img.dataset.fb = '1';
+      img.src = `https://picsum.photos/seed/${seed}/600/800`;
+    } else {
+      img.dataset.fb = '2';
+      img.src = `https://placehold.co/600x800/0a2540/ffc94d?text=${seed}`;
+    }
   };
+
+  const check = (img) => {
+    if (img.complete && img.naturalWidth === 0) fallback(img);
+  };
+
   document.querySelectorAll('img').forEach(img => {
-    if (img.complete && img.naturalWidth === 0) handler(img);
-    img.addEventListener('error', () => handler(img), { once: true });
+    img.addEventListener('error', () => fallback(img));
+    img.addEventListener('load',  () => check(img));
+    check(img);
   });
 }
 
@@ -536,9 +549,11 @@ function initMonthChips() {
   });
 }
 
-/* --- Horizontal scrollers (community / shorts / cat / frames) --- */
+/* --- Horizontal scrollers (community / shorts / cat / frames):
+       arrow buttons + mouse drag-to-scroll + wheel-to-horizontal. --- */
 function initHorizontalScrollers() {
   const bind = (scroller, trackSel, prevSel, nextSel) => {
+    if (!scroller) return;
     const track = scroller.querySelector(trackSel);
     const prev  = scroller.querySelector(prevSel);
     const next  = scroller.querySelector(nextSel);
@@ -546,8 +561,37 @@ function initHorizontalScrollers() {
 
     const step = () => Math.max(track.clientWidth * 0.8, 280);
 
-    prev && prev.addEventListener('click', () => track.scrollBy({ left: -step(), behavior: 'smooth' }));
-    next && next.addEventListener('click', () => track.scrollBy({ left:  step(), behavior: 'smooth' }));
+    if (prev) prev.addEventListener('click', (e) => {
+      e.preventDefault();
+      track.scrollBy({ left: -step(), behavior: 'smooth' });
+    });
+    if (next) next.addEventListener('click', (e) => {
+      e.preventDefault();
+      track.scrollBy({ left:  step(), behavior: 'smooth' });
+    });
+
+    // Drag-to-scroll on mouse / touchpad
+    let isDown = false, startX = 0, startScroll = 0, moved = false;
+    track.addEventListener('mousedown', (e) => {
+      isDown = true; moved = false;
+      startX = e.pageX - track.offsetLeft;
+      startScroll = track.scrollLeft;
+      track.classList.add('is-dragging');
+    });
+    track.addEventListener('mouseleave', () => { isDown = false; track.classList.remove('is-dragging'); });
+    track.addEventListener('mouseup',    () => { isDown = false; track.classList.remove('is-dragging'); });
+    track.addEventListener('mousemove', (e) => {
+      if (!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - track.offsetLeft;
+      const walk = (x - startX);
+      if (Math.abs(walk) > 6) moved = true;
+      track.scrollLeft = startScroll - walk;
+    });
+    // Swallow click after a drag so child links don't fire
+    track.addEventListener('click', (e) => {
+      if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; }
+    }, true);
   };
 
   document.querySelectorAll('.community-scroller').forEach(s => bind(s, '.community-track', '.community-arrow--prev', '.community-arrow--next'));

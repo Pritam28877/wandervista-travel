@@ -3465,6 +3465,16 @@ h5 { font-size: 1.1rem; font-weight: 600; }
 
 .community-track::-webkit-scrollbar { display: none; }
 
+.community-track,
+.shorts-track,
+.cat-track,
+.frames-track { cursor: grab; user-select: none; }
+
+.community-track.is-dragging,
+.shorts-track.is-dragging,
+.cat-track.is-dragging,
+.frames-track.is-dragging { cursor: grabbing; scroll-behavior: auto; }
+
 .trip-card {
   position: relative;
   scroll-snap-align: start;
@@ -3635,6 +3645,15 @@ h5 { font-size: 1.1rem; font-weight: 600; }
   height: 100%;
   object-fit: cover;
   display: block;
+}
+
+.short-card iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  pointer-events: none; /* let parent scroll-snap own gestures */
 }
 
 .short-card::after {
