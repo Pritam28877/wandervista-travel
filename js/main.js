@@ -16,7 +16,40 @@ document.addEventListener('DOMContentLoaded', () => {
   initLiveFeed();
   initAnimateOnScroll();
   initSearchBox();
+  initMonthChips();
+  initHorizontalScrollers();
+  initImageFallback();
+  initLatestUpdatesTicker();
 });
+
+/* --- Latest Updates rotating ticker --- */
+function initLatestUpdatesTicker() {
+  const rotator = document.getElementById('feedRotator');
+  if (!rotator) return;
+  const msgs = rotator.querySelectorAll('.feed-msg');
+  if (msgs.length < 2) return;
+  let i = 0;
+  setInterval(() => {
+    msgs[i].classList.remove('is-active');
+    i = (i + 1) % msgs.length;
+    msgs[i].classList.add('is-active');
+  }, 4000);
+}
+
+/* --- Image broken-source fallback: routes any 404 to Picsum seed
+       so the page never shows a broken-image icon. --- */
+function initImageFallback() {
+  const handler = (img) => {
+    if (img.dataset.fb === '1') return;
+    img.dataset.fb = '1';
+    const seed = encodeURIComponent((img.alt || 'travel').toLowerCase().replace(/\s+/g, '-')) || 'travel';
+    img.src = `https://picsum.photos/seed/${seed}/600/800`;
+  };
+  document.querySelectorAll('img').forEach(img => {
+    if (img.complete && img.naturalWidth === 0) handler(img);
+    img.addEventListener('error', () => handler(img), { once: true });
+  });
+}
 
 /* --- Header Scroll Effect --- */
 function initHeader() {
@@ -389,17 +422,83 @@ document.head.insertAdjacentHTML('beforeend', `
   </style>
 `);
 
-/* --- Search Box Interaction --- */
-function initSearchBox() {
-  const searchForm = document.querySelector('.search-box');
-  if (!searchForm) return;
+/* --- Search Box + live keyword suggestions --- */
+const DESTINATIONS = [
+  { name: 'Bali, Indonesia',     tag: 'International', emoji: '🏝️' },
+  { name: 'Maldives',            tag: 'International', emoji: '🏖️' },
+  { name: 'Thailand',            tag: 'International', emoji: '🛕' },
+  { name: 'Vietnam',             tag: 'International', emoji: '⛵' },
+  { name: 'Singapore',           tag: 'International', emoji: '🌆' },
+  { name: 'Japan',               tag: 'International', emoji: '🗾' },
+  { name: 'Europe Tour',         tag: 'International', emoji: '🗼' },
+  { name: 'Dubai',               tag: 'International', emoji: '🕌' },
+  { name: 'Bhutan',              tag: 'International', emoji: '🏔️' },
+  { name: 'Leh Ladakh',          tag: 'India',         emoji: '🏍️' },
+  { name: 'Spiti Valley',        tag: 'India',         emoji: '🏔️' },
+  { name: 'Kashmir',             tag: 'India',         emoji: '❄️' },
+  { name: 'Kerala',              tag: 'India',         emoji: '🛶' },
+  { name: 'Rajasthan',           tag: 'India',         emoji: '🐪' },
+  { name: 'Himachal Pradesh',    tag: 'India',         emoji: '⛰️' },
+  { name: 'Meghalaya',           tag: 'India',         emoji: '🌧️' },
+  { name: 'Goa',                 tag: 'Weekend',       emoji: '🏖️' },
+  { name: 'Andaman & Nicobar',   tag: 'India',         emoji: '🐠' },
+  { name: 'Coorg',               tag: 'Weekend',       emoji: '☕' },
+  { name: 'Pondicherry',         tag: 'Weekend',       emoji: '🌊' },
+  { name: 'Rishikesh',           tag: 'Weekend',       emoji: '🧘' }
+];
 
-  searchForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const destination = searchForm.querySelector('input[name="destination"]');
-    if (destination && destination.value.trim()) {
-      window.location.href = `packages.html?search=${encodeURIComponent(destination.value.trim())}`;
+function initSearchBox() {
+  const form    = document.querySelector('.search-pill');
+  const input   = document.getElementById('heroSearchInput');
+  const suggest = document.getElementById('heroSearchSuggest');
+  if (!form || !input || !suggest) return;
+
+  const go = (q) => {
+    if (!q) return;
+    window.location.href = `packages.html?search=${encodeURIComponent(q.trim())}`;
+  };
+
+  const render = (q) => {
+    const ql = q.trim().toLowerCase();
+    const list = ql
+      ? DESTINATIONS.filter(d => d.name.toLowerCase().includes(ql) || d.tag.toLowerCase().includes(ql)).slice(0, 6)
+      : DESTINATIONS.slice(0, 6);
+
+    if (!list.length) {
+      suggest.innerHTML = `<li class="search-suggest__empty">No matches — try “Bali” or “Ladakh”</li>`;
+    } else {
+      suggest.innerHTML = list.map(d => `
+        <li role="option" data-q="${d.name}">
+          <span class="search-suggest__emoji">${d.emoji}</span>
+          <span class="search-suggest__name">${d.name}</span>
+          <span class="search-suggest__tag">${d.tag}</span>
+        </li>`).join('');
     }
+    suggest.hidden = false;
+  };
+
+  input.addEventListener('focus', () => render(input.value));
+  input.addEventListener('input', () => render(input.value));
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') suggest.hidden = true;
+  });
+
+  suggest.addEventListener('mousedown', (e) => {
+    const li = e.target.closest('li[data-q]');
+    if (!li) return;
+    e.preventDefault();
+    input.value = li.dataset.q;
+    suggest.hidden = true;
+    go(li.dataset.q);
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!form.contains(e.target)) suggest.hidden = true;
+  });
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    go(input.value);
   });
 }
 
@@ -422,3 +521,37 @@ function initTestimonialsScroll() {
 
 // Initialize testimonials scroll after DOM is ready
 document.addEventListener('DOMContentLoaded', initTestimonialsScroll);
+
+/* --- Month chip selection (Upcoming Community Trips) --- */
+function initMonthChips() {
+  const chips = document.querySelectorAll('.month-chip');
+  if (!chips.length) return;
+
+  chips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      chips.forEach(c => c.classList.remove('is-active'));
+      chip.classList.add('is-active');
+      chip.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+    });
+  });
+}
+
+/* --- Horizontal scrollers (community / shorts / cat / frames) --- */
+function initHorizontalScrollers() {
+  const bind = (scroller, trackSel, prevSel, nextSel) => {
+    const track = scroller.querySelector(trackSel);
+    const prev  = scroller.querySelector(prevSel);
+    const next  = scroller.querySelector(nextSel);
+    if (!track) return;
+
+    const step = () => Math.max(track.clientWidth * 0.8, 280);
+
+    prev && prev.addEventListener('click', () => track.scrollBy({ left: -step(), behavior: 'smooth' }));
+    next && next.addEventListener('click', () => track.scrollBy({ left:  step(), behavior: 'smooth' }));
+  };
+
+  document.querySelectorAll('.community-scroller').forEach(s => bind(s, '.community-track', '.community-arrow--prev', '.community-arrow--next'));
+  document.querySelectorAll('.shorts-scroller').forEach(s    => bind(s, '.shorts-track',    '.shorts-arrow--prev',    '.shorts-arrow--next'));
+  document.querySelectorAll('.cat-scroller').forEach(s       => bind(s, '.cat-track',       '.cat-arrow--prev',       '.cat-arrow--next'));
+  document.querySelectorAll('.frames-scroller').forEach(s    => bind(s, '.frames-track',    '.frames-arrow--prev',    '.frames-arrow--next'));
+}
