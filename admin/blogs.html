@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog Posts - WanderVista Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../css/admin.css">
+</head>
+<body>
+  <div class="admin-wrapper">
+
+    <!-- ===== SIDEBAR ===== -->
+    <aside class="admin-sidebar" id="adminSidebar">
+      <div class="admin-sidebar-header">
+        <div class="logo-icon"><i class="fas fa-mountain-sun"></i></div>
+        <div>
+          <span class="logo-text" style="color: var(--white);">WanderVista</span>
+          <small>Admin Panel</small>
+        </div>
+      </div>
+
+      <nav class="admin-nav">
+        <div class="admin-nav-section">
+          <div class="admin-nav-section-title">Main</div>
+          <a href="dashboard.html" class="admin-nav-link"><i class="fas fa-gauge-high"></i> Dashboard</a>
+          <a href="bookings.html" class="admin-nav-link"><i class="fas fa-calendar-check"></i> Bookings <span class="nav-badge">12</span></a>
+          <a href="trips.html" class="admin-nav-link"><i class="fas fa-route"></i> Trips &amp; Packages</a>
+          <a href="customers.html" class="admin-nav-link"><i class="fas fa-users"></i> Customers</a>
+        </div>
+        <div class="admin-nav-section">
+          <div class="admin-nav-section-title">Content</div>
+          <a href="blogs.html" class="admin-nav-link active"><i class="fas fa-newspaper"></i> Blog Posts <span class="nav-badge">36</span></a>
+          <a href="#" class="admin-nav-link"><i class="fas fa-tags"></i> Categories</a>
+          <a href="#" class="admin-nav-link"><i class="fas fa-images"></i> Media Library</a>
+        </div>
+        <div class="admin-nav-section">
+          <div class="admin-nav-section-title">Finance</div>
+          <a href="payments.html" class="admin-nav-link"><i class="fas fa-indian-rupee-sign"></i> Payments</a>
+          <a href="#" class="admin-nav-link"><i class="fas fa-file-invoice"></i> Invoices</a>
+        </div>
+        <div class="admin-nav-section">
+          <div class="admin-nav-section-title">Communication</div>
+          <a href="integrations.html" class="admin-nav-link"><i class="fas fa-plug"></i> Integrations</a>
+          <a href="integrations.html" class="admin-nav-link"><i class="fas fa-bell"></i> Notifications <span class="nav-badge">5</span></a>
+        </div>
+        <div class="admin-nav-section">
+          <div class="admin-nav-section-title">Settings</div>
+          <a href="#" class="admin-nav-link"><i class="fas fa-gear"></i> Settings</a>
+          <a href="../index.html" class="admin-nav-link"><i class="fas fa-globe"></i> View Website</a>
+        </div>
+      </nav>
+
+      <div class="admin-sidebar-footer">
+        <div class="admin-user">
+          <div class="admin-user-avatar">AM</div>
+          <div class="admin-user-info">
+            <strong>Arjun Mehta</strong>
+            <small>Super Admin</small>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ===== MAIN ===== -->
+    <div class="admin-main">
+
+      <div class="admin-topbar">
+        <div class="admin-topbar-left">
+          <button class="mobile-menu-btn" onclick="document.getElementById('adminSidebar').classList.toggle('open')"><i class="fas fa-bars"></i></button>
+          <div>
+            <h1>Blog Posts</h1>
+            <span class="breadcrumb">Write, edit and publish your travel stories</span>
+          </div>
+        </div>
+        <div class="admin-topbar-right">
+          <div class="admin-search">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Search posts by title, author, tag...">
+          </div>
+          <a href="blog-editor.html" class="btn btn-primary"><i class="fas fa-plus"></i> New Post</a>
+        </div>
+      </div>
+
+      <div class="admin-content">
+
+        <!-- Mini stats -->
+        <div class="admin-stats">
+          <div class="stat-card">
+            <div class="stat-card-header">
+              <div class="stat-card-icon blue"><i class="fas fa-newspaper"></i></div>
+            </div>
+            <div class="stat-card-value">36</div>
+            <div class="stat-card-label">Published Posts</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-header">
+              <div class="stat-card-icon orange"><i class="fas fa-pencil"></i></div>
+            </div>
+            <div class="stat-card-value">7</div>
+            <div class="stat-card-label">Drafts</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-header">
+              <div class="stat-card-icon green"><i class="fas fa-eye"></i></div>
+              <div class="stat-card-trend up"><i class="fas fa-arrow-up"></i> 18%</div>
+            </div>
+            <div class="stat-card-value">128K</div>
+            <div class="stat-card-label">Total Views (30 days)</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-header">
+              <div class="stat-card-icon blue"><i class="fas fa-comment"></i></div>
+            </div>
+            <div class="stat-card-value">412</div>
+            <div class="stat-card-label">Comments</div>
+          </div>
+        </div>
+
+        <!-- Filter bar -->
+        <div class="admin-card" style="margin-top: var(--space-6);">
+          <div class="admin-card-header" style="gap: var(--space-3); flex-wrap: wrap;">
+            <h3>All Posts</h3>
+            <div class="blog-admin-filters">
+              <div class="filter-tabs">
+                <button class="filter-tab is-active" data-status="all">All <span>43</span></button>
+                <button class="filter-tab" data-status="published">Published <span>36</span></button>
+                <button class="filter-tab" data-status="draft">Drafts <span>7</span></button>
+                <button class="filter-tab" data-status="scheduled">Scheduled <span>2</span></button>
+              </div>
+              <select class="filter-select" aria-label="Category">
+                <option>All Categories</option>
+                <option>India Trips</option>
+                <option>International</option>
+                <option>Adventure</option>
+                <option>Honeymoon</option>
+                <option>Budget</option>
+                <option>Food</option>
+                <option>Tips</option>
+              </select>
+              <select class="filter-select" aria-label="Author">
+                <option>All Authors</option>
+                <option>Arjun Mehta</option>
+                <option>Priya Mehta</option>
+                <option>Rahul Sharma</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="admin-card-body" style="padding: 0;">
+            <div class="admin-table-wrapper">
+              <table class="admin-table blog-admin-table">
+                <thead>
+                  <tr>
+                    <th style="width: 36px;"><input type="checkbox" aria-label="Select all"></th>
+                    <th>Post</th>
+                    <th>Category</th>
+                    <th>Author</th>
+                    <th>Status</th>
+                    <th>Views</th>
+                    <th>Published</th>
+                    <th style="text-align: right;">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><input type="checkbox" aria-label="Select row"></td>
+                    <td>
+                      <div class="post-row">
+                        <img src="https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?w=120&q=80" alt="">
+                        <div>
+                          <strong>Ladakh in 2026: The Complete Guide for First-Time Riders</strong>
+                          <small>Editor's Pick · Featured</small>
+                        </div>
+                      </div>
+                    </td>
+                    <td><span class="cat-pill cat-adventure">Adventure</span></td>
+                    <td>Arjun Mehta</td>
+                    <td><span class="status-pill st-published"><i class="fas fa-circle"></i> Published</span></td>
+                    <td>12,408</td>
+                    <td>18 May 2026</td>
+                    <td class="row-actions">
+                      <a href="../blog-detail.html" title="View"><i class="fas fa-eye"></i></a>
+                      <a href="blog-editor.html" title="Edit"><i class="fas fa-pen"></i></a>
+                      <button title="Delete" class="danger"><i class="fas fa-trash"></i></button>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td><input type="checkbox" aria-label="Select row"></td>
+                    <td>
+                      <div class="post-row">
+                        <img src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=120&q=80" alt="">
+                        <div>
+                          <strong>10 Hidden Beaches in Bali Most Tourists Miss</strong>
+                          <small>Bali · 5 min read</small>
+                        </div>
+                      </div>
+                    </td>
+                    <td><span class="cat-pill cat-honeymoon">Honeymoon</span></td>
+                    <td>Priya Mehta</td>
+                    <td><span class="status-pill st-published"><i class="fas fa-circle"></i> Published</span></td>
+                    <td>8,210</td>
+                    <td>12 May 2026</td>
+                    <td class="row-actions">
+                      <a href="../blog-detail.html" title="View"><i class="fas fa-eye"></i></a>
+                      <a href="blog-editor.html" title="Edit"><i class="fas fa-pen"></i></a>
+                      <button title="Delete" class="danger"><i class="fas fa-trash"></i></button>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td><input type="checkbox" aria-label="Select row"></td>
+                    <td>
+                      <div class="post-row">
+                        <img src="https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?w=120&q=80" alt="">
+                        <div>
+                          <strong>Kerala with Kids: A 7-Day Itinerary That Actually Works</strong>
+                          <small>Kerala · Family</small>
+                        </div>
+                      </div>
+                    </td>
+                    <td><span class="cat-pill cat-india">India Trips</span></td>
+                    <td>Rahul Sharma</td>
+                    <td><span class="status-pill st-published"><i class="fas fa-circle"></i> Published</span></td>
+                    <td>6,742</td>
+                    <td>06 May 2026</td>
+                    <td class="row-actions">
+                      <a href="../blog-detail.html" title="View"><i class="fas fa-eye"></i></a>
+                      <a href="blog-editor.html" title="Edit"><i class="fas fa-pen"></i></a>
+                      <button title="Delete" class="danger"><i class="fas fa-trash"></i></button>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td><input type="checkbox" aria-label="Select row"></td>
+                    <td>
+                      <div class="post-row">
+                        <img src="https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?w=120&q=80" alt="">
+                        <div>
+                          <strong>Vietnam Under ₹35K: Yes, It's Actually Possible in 2026</strong>
+                          <small>Budget guide</small>
+                        </div>
+                      </div>
+                    </td>
+                    <td><span class="cat-pill cat-budget">Budget</span></td>
+                    <td>Shruti Gupta</td>
+                    <td><span class="status-pill st-published"><i class="fas fa-circle"></i> Published</span></td>
+                    <td>5,103</td>
+                    <td>02 May 2026</td>
+                    <td class="row-actions">
+                      <a href="../blog-detail.html" title="View"><i class="fas fa-eye"></i></a>
+                      <a href="blog-editor.html" title="Edit"><i class="fas fa-pen"></i></a>
+                      <button title="Delete" class="danger"><i class="fas fa-trash"></i></button>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td><input type="checkbox" aria-label="Select row"></td>
+                    <td>
+                      <div class="post-row">
+                        <img src="https://images.unsplash.com/photo-1551522435-a13afa10f103?w=120&q=80" alt="">
+                        <div>
+                          <strong>Paragliding at Bir Billing: What Nobody Tells You</strong>
+                          <small>Adventure · Himachal</small>
+                        </div>
+                      </div>
+                    </td>
+                    <td><span class="cat-pill cat-adventure">Adventure</span></td>
+                    <td>Vikram Khanna</td>
+                    <td><span class="status-pill st-draft"><i class="fas fa-circle"></i> Draft</span></td>
+                    <td>—</td>
+                    <td>—</td>
+                    <td class="row-actions">
+                      <a href="blog-editor.html" title="Edit"><i class="fas fa-pen"></i></a>
+                      <button title="Delete" class="danger"><i class="fas fa-trash"></i></button>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td><input type="checkbox" aria-label="Select row"></td>
+                    <td>
+                      <div class="post-row">
+                        <img src="https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=120&q=80" alt="">
+                        <div>
+                          <strong>Schengen Visa for Indians: 2026 Checklist (Updated)</strong>
+                          <small>International · How-to</small>
+                        </div>
+                      </div>
+                    </td>
+                    <td><span class="cat-pill cat-international">International</span></td>
+                    <td>Ankit Kapoor</td>
+                    <td><span class="status-pill st-scheduled"><i class="fas fa-circle"></i> Scheduled</span></td>
+                    <td>—</td>
+                    <td>25 May 2026</td>
+                    <td class="row-actions">
+                      <a href="blog-editor.html" title="Edit"><i class="fas fa-pen"></i></a>
+                      <button title="Delete" class="danger"><i class="fas fa-trash"></i></button>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td><input type="checkbox" aria-label="Select row"></td>
+                    <td>
+                      <div class="post-row">
+                        <img src="https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=120&q=80" alt="">
+                        <div>
+                          <strong>5 Weekend Getaways from Delhi You Haven't Done Yet</strong>
+                          <small>Weekend · Quick reads</small>
+                        </div>
+                      </div>
+                    </td>
+                    <td><span class="cat-pill cat-weekend">Weekend</span></td>
+                    <td>Neha Singh</td>
+                    <td><span class="status-pill st-published"><i class="fas fa-circle"></i> Published</span></td>
+                    <td>3,891</td>
+                    <td>18 Apr 2026</td>
+                    <td class="row-actions">
+                      <a href="../blog-detail.html" title="View"><i class="fas fa-eye"></i></a>
+                      <a href="blog-editor.html" title="Edit"><i class="fas fa-pen"></i></a>
+                      <button title="Delete" class="danger"><i class="fas fa-trash"></i></button>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td><input type="checkbox" aria-label="Select row"></td>
+                    <td>
+                      <div class="post-row">
+                        <img src="https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?w=120&q=80" alt="">
+                        <div>
+                          <strong>A Bangkok Street-Food Crawl for First-Timers</strong>
+                          <small>Food · Thailand</small>
+                        </div>
+                      </div>
+                    </td>
+                    <td><span class="cat-pill cat-food">Food</span></td>
+                    <td>Ananya Iyer</td>
+                    <td><span class="status-pill st-published"><i class="fas fa-circle"></i> Published</span></td>
+                    <td>4,560</td>
+                    <td>12 Apr 2026</td>
+                    <td class="row-actions">
+                      <a href="../blog-detail.html" title="View"><i class="fas fa-eye"></i></a>
+                      <a href="blog-editor.html" title="Edit"><i class="fas fa-pen"></i></a>
+                      <button title="Delete" class="danger"><i class="fas fa-trash"></i></button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="admin-card-footer" style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="color: var(--gray-500); font-size: 0.85rem;">Showing 8 of 43 posts</span>
+            <nav class="pagination">
+              <button class="page-btn" disabled><i class="fas fa-chevron-left"></i></button>
+              <button class="page-btn is-active">1</button>
+              <button class="page-btn">2</button>
+              <button class="page-btn">3</button>
+              <button class="page-btn">4</button>
+              <button class="page-btn">5</button>
+              <button class="page-btn"><i class="fas fa-chevron-right"></i></button>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.querySelectorAll('.filter-tab').forEach(t => t.addEventListener('click', () => {
+      document.querySelectorAll('.filter-tab').forEach(x => x.classList.remove('is-active'));
+      t.classList.add('is-active');
+    }));
+  </script>
+</body>
+</html>

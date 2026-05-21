@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Post - WanderVista Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../css/admin.css">
+</head>
+<body>
+  <div class="admin-wrapper">
+
+    <aside class="admin-sidebar" id="adminSidebar">
+      <div class="admin-sidebar-header">
+        <div class="logo-icon"><i class="fas fa-mountain-sun"></i></div>
+        <div>
+          <span class="logo-text" style="color: var(--white);">WanderVista</span>
+          <small>Admin Panel</small>
+        </div>
+      </div>
+      <nav class="admin-nav">
+        <div class="admin-nav-section">
+          <div class="admin-nav-section-title">Main</div>
+          <a href="dashboard.html" class="admin-nav-link"><i class="fas fa-gauge-high"></i> Dashboard</a>
+          <a href="bookings.html" class="admin-nav-link"><i class="fas fa-calendar-check"></i> Bookings</a>
+          <a href="trips.html" class="admin-nav-link"><i class="fas fa-route"></i> Trips &amp; Packages</a>
+          <a href="customers.html" class="admin-nav-link"><i class="fas fa-users"></i> Customers</a>
+        </div>
+        <div class="admin-nav-section">
+          <div class="admin-nav-section-title">Content</div>
+          <a href="blogs.html" class="admin-nav-link active"><i class="fas fa-newspaper"></i> Blog Posts</a>
+          <a href="#" class="admin-nav-link"><i class="fas fa-tags"></i> Categories</a>
+          <a href="#" class="admin-nav-link"><i class="fas fa-images"></i> Media Library</a>
+        </div>
+        <div class="admin-nav-section">
+          <div class="admin-nav-section-title">Settings</div>
+          <a href="#" class="admin-nav-link"><i class="fas fa-gear"></i> Settings</a>
+          <a href="../index.html" class="admin-nav-link"><i class="fas fa-globe"></i> View Website</a>
+        </div>
+      </nav>
+      <div class="admin-sidebar-footer">
+        <div class="admin-user">
+          <div class="admin-user-avatar">AM</div>
+          <div class="admin-user-info">
+            <strong>Arjun Mehta</strong>
+            <small>Super Admin</small>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <div class="admin-main">
+
+      <div class="admin-topbar">
+        <div class="admin-topbar-left">
+          <button class="mobile-menu-btn" onclick="document.getElementById('adminSidebar').classList.toggle('open')"><i class="fas fa-bars"></i></button>
+          <div>
+            <h1>Edit Post</h1>
+            <span class="breadcrumb"><a href="blogs.html">Blog Posts</a> &nbsp;/&nbsp; Ladakh in 2026: The Complete Guide</span>
+          </div>
+        </div>
+        <div class="admin-topbar-right">
+          <span class="autosave-state"><i class="fas fa-cloud-arrow-up"></i> Autosaved 12s ago</span>
+          <a href="../blog-detail.html" class="btn btn-outline"><i class="fas fa-eye"></i> Preview</a>
+          <button class="btn btn-secondary">Save Draft</button>
+          <button class="btn btn-primary"><i class="fas fa-paper-plane"></i> Publish</button>
+        </div>
+      </div>
+
+      <div class="admin-content">
+        <div class="editor-grid">
+
+          <!-- ===== MAIN EDITOR ===== -->
+          <div class="editor-main">
+
+            <div class="admin-card">
+              <div class="admin-card-body">
+                <div class="form-group">
+                  <label class="form-label">Post Title</label>
+                  <input type="text" class="form-input editor-title" placeholder="Catchy headline..." value="Ladakh in 2026: The Complete Guide for First-Time Riders">
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Slug
+                    <small class="form-hint">URL-friendly version of the title</small>
+                  </label>
+                  <div class="slug-input">
+                    <span class="slug-prefix">wandervista.com/blogs/</span>
+                    <input type="text" value="ladakh-2026-complete-guide-first-time-riders">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Excerpt
+                    <small class="form-hint">Short summary shown in listings &amp; meta tags (~160 chars)</small>
+                  </label>
+                  <textarea class="form-input" rows="3" placeholder="One or two sentences that pull readers in...">From altitude acclimatisation to permits, from Pangong to Nubra — the only itinerary you'll need for a safe and unforgettable Leh-Manali highway run.</textarea>
+                </div>
+              </div>
+            </div>
+
+            <!-- Featured image -->
+            <div class="admin-card">
+              <div class="admin-card-header">
+                <h3>Featured Image</h3>
+                <button class="btn btn-outline btn-sm"><i class="fas fa-image"></i> Change</button>
+              </div>
+              <div class="admin-card-body">
+                <div class="upload-preview">
+                  <img src="https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?w=900&q=80" alt="">
+                  <div class="upload-preview__overlay">
+                    <button class="btn btn-white btn-sm"><i class="fas fa-arrow-up-from-bracket"></i> Replace</button>
+                    <button class="btn btn-outline btn-sm" style="color:#fff; border-color:#fff;"><i class="fas fa-trash"></i> Remove</button>
+                  </div>
+                </div>
+                <div class="form-group" style="margin-top: var(--space-4);">
+                  <label class="form-label">Alt text
+                    <small class="form-hint">Describe the image for screen readers and SEO</small>
+                  </label>
+                  <input type="text" class="form-input" value="Bike riding through the Ladakh highway with snow-capped mountains in the background">
+                </div>
+              </div>
+            </div>
+
+            <!-- Content editor -->
+            <div class="admin-card">
+              <div class="admin-card-header">
+                <h3>Content</h3>
+                <div class="editor-toolbar">
+                  <button title="Bold"><i class="fas fa-bold"></i></button>
+                  <button title="Italic"><i class="fas fa-italic"></i></button>
+                  <button title="Underline"><i class="fas fa-underline"></i></button>
+                  <span class="tool-sep"></span>
+                  <button title="H2"><strong>H2</strong></button>
+                  <button title="H3"><strong>H3</strong></button>
+                  <button title="Quote"><i class="fas fa-quote-left"></i></button>
+                  <span class="tool-sep"></span>
+                  <button title="Bulleted list"><i class="fas fa-list-ul"></i></button>
+                  <button title="Numbered list"><i class="fas fa-list-ol"></i></button>
+                  <span class="tool-sep"></span>
+                  <button title="Link"><i class="fas fa-link"></i></button>
+                  <button title="Image"><i class="fas fa-image"></i></button>
+                  <button title="Embed"><i class="fas fa-code"></i></button>
+                  <span class="tool-sep"></span>
+                  <button title="Undo"><i class="fas fa-rotate-left"></i></button>
+                  <button title="Redo"><i class="fas fa-rotate-right"></i></button>
+                </div>
+              </div>
+              <div class="admin-card-body" style="padding: 0;">
+                <textarea class="editor-content" placeholder="Start writing your story...">## When to go
+
+The road season runs roughly mid-May to mid-October. If you want both Manali–Leh *and* Srinagar–Leh open, aim for late June to early September.
+
+- **May:** Pangong is iced over. Some passes still closed.
+- **June–Aug:** Peak season. Everything open, everything booked.
+- **September:** Quiet, cool, gorgeous light.
+- **October onwards:** Highway closures begin.
+
+## Acclimatise. Properly.
+
+Leh sits at 3,500m. Spend at least 48 hours doing nothing strenuous — walk the market, eat thukpa, drink water. Skip alcohol completely for the first three days.
+
+> Half the bad Ladakh stories I've heard start with someone landing at Leh and driving to Khardung La the next morning.
+> — Dr. Rinchen Dolma, Sonam Norboo Hospital, Leh
+
+## A safe 9-day itinerary
+
+This is the most-tested itinerary I run for first-timers...</textarea>
+              </div>
+              <div class="admin-card-footer" style="display: flex; justify-content: space-between; color: var(--gray-500); font-size: 0.85rem;">
+                <span>1,247 words · ~7 min read</span>
+                <span>Last edited just now</span>
+              </div>
+            </div>
+
+            <!-- SEO -->
+            <div class="admin-card">
+              <div class="admin-card-header">
+                <h3>SEO</h3>
+                <span class="seo-score"><i class="fas fa-check-circle"></i> Good</span>
+              </div>
+              <div class="admin-card-body">
+                <div class="form-row">
+                  <div class="form-group">
+                    <label class="form-label">Meta title</label>
+                    <input type="text" class="form-input" value="Ladakh in 2026: Complete Guide for First-Time Riders | WanderVista">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Meta description</label>
+                  <textarea class="form-input" rows="2" maxlength="160">Plan a safe and unforgettable Ladakh bike trip in 2026 — itinerary, permits, costs, bike choice and altitude tips.</textarea>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Focus keyword</label>
+                  <input type="text" class="form-input" value="Ladakh bike trip 2026">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ===== SIDEBAR ===== -->
+          <aside class="editor-side">
+
+            <div class="admin-card">
+              <div class="admin-card-header"><h3>Publish</h3></div>
+              <div class="admin-card-body">
+                <div class="publish-row">
+                  <span><i class="fas fa-circle st-published"></i> Status</span>
+                  <select class="form-input">
+                    <option>Published</option>
+                    <option>Draft</option>
+                    <option>Scheduled</option>
+                    <option>Private</option>
+                  </select>
+                </div>
+                <div class="publish-row">
+                  <span><i class="fas fa-eye"></i> Visibility</span>
+                  <select class="form-input">
+                    <option>Public</option>
+                    <option>Members only</option>
+                    <option>Password protected</option>
+                  </select>
+                </div>
+                <div class="publish-row">
+                  <span><i class="fas fa-calendar"></i> Publish date</span>
+                  <input type="datetime-local" class="form-input" value="2026-05-18T09:00">
+                </div>
+
+                <div class="publish-actions">
+                  <button class="btn btn-secondary" style="flex: 1;">Save Draft</button>
+                  <button class="btn btn-primary"  style="flex: 1;"><i class="fas fa-paper-plane"></i> Publish</button>
+                </div>
+
+                <button class="link-danger" style="margin-top: var(--space-4);"><i class="fas fa-trash"></i> Move to trash</button>
+              </div>
+            </div>
+
+            <div class="admin-card">
+              <div class="admin-card-header"><h3>Category</h3></div>
+              <div class="admin-card-body">
+                <label class="cat-radio"><input type="radio" name="cat" checked> <span class="cat-pill cat-adventure">Adventure</span></label>
+                <label class="cat-radio"><input type="radio" name="cat"> <span class="cat-pill cat-india">India Trips</span></label>
+                <label class="cat-radio"><input type="radio" name="cat"> <span class="cat-pill cat-international">International</span></label>
+                <label class="cat-radio"><input type="radio" name="cat"> <span class="cat-pill cat-honeymoon">Honeymoon</span></label>
+                <label class="cat-radio"><input type="radio" name="cat"> <span class="cat-pill cat-budget">Budget</span></label>
+                <label class="cat-radio"><input type="radio" name="cat"> <span class="cat-pill cat-weekend">Weekend</span></label>
+                <label class="cat-radio"><input type="radio" name="cat"> <span class="cat-pill cat-food">Food</span></label>
+                <button class="link-action"><i class="fas fa-plus"></i> Add new category</button>
+              </div>
+            </div>
+
+            <div class="admin-card">
+              <div class="admin-card-header"><h3>Tags</h3></div>
+              <div class="admin-card-body">
+                <div class="tag-input">
+                  <span class="tag-chip">Ladakh <button>×</button></span>
+                  <span class="tag-chip">Bike Trip <button>×</button></span>
+                  <span class="tag-chip">Himalayas <button>×</button></span>
+                  <span class="tag-chip">Adventure <button>×</button></span>
+                  <input type="text" placeholder="Add a tag...">
+                </div>
+                <small class="form-hint">Press <kbd>Enter</kbd> after each tag</small>
+              </div>
+            </div>
+
+            <div class="admin-card">
+              <div class="admin-card-header"><h3>Author</h3></div>
+              <div class="admin-card-body">
+                <div class="author-picker">
+                  <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=80&q=80" alt="">
+                  <div>
+                    <strong>Arjun Mehta</strong>
+                    <small>Senior Editor</small>
+                  </div>
+                  <button class="link-action">Change</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="admin-card">
+              <div class="admin-card-header"><h3>Stats</h3></div>
+              <div class="admin-card-body editor-stats">
+                <div><strong>12,408</strong><small>Views</small></div>
+                <div><strong>4.7</strong><small>Avg time (min)</small></div>
+                <div><strong>312</strong><small>Comments</small></div>
+                <div><strong>89</strong><small>Shares</small></div>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Auto-grow content textarea
+    const ta = document.querySelector('.editor-content');
+    if (ta) {
+      const grow = () => { ta.style.height = 'auto'; ta.style.height = (ta.scrollHeight + 4) + 'px'; };
+      ta.addEventListener('input', grow); grow();
+    }
+
+    // Tag input
+    const tagInput = document.querySelector('.tag-input input');
+    if (tagInput) {
+      tagInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && tagInput.value.trim()) {
+          e.preventDefault();
+          const v = tagInput.value.trim();
+          const chip = document.createElement('span');
+          chip.className = 'tag-chip';
+          chip.innerHTML = `${v} <button>×</button>`;
+          tagInput.parentNode.insertBefore(chip, tagInput);
+          tagInput.value = '';
+        }
+      });
+      document.querySelector('.tag-input').addEventListener('click', (e) => {
+        if (e.target.tagName === 'BUTTON') e.target.closest('.tag-chip').remove();
+      });
+    }
+  </script>
+</body>
+</html>

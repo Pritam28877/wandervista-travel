@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Travel Blogs &amp; Guides — WanderVista</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="page-blogs">
+
+  <!-- ===== HEADER ===== -->
+  <header class="header header--solid" id="header">
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <div class="logo-icon"><i class="fas fa-mountain-sun"></i></div>
+        <span class="logo-text">WanderVista</span>
+      </a>
+
+      <nav class="nav">
+        <ul class="nav-menu" id="navMenu">
+          <li><a href="packages.html" class="nav-link">Destinations</a></li>
+          <li><a href="packages.html" class="nav-link">Packages</a></li>
+          <li><a href="index.html#community" class="nav-link">Upcoming Trips</a></li>
+          <li><a href="blogs.html" class="nav-link active">Blogs</a></li>
+          <li><a href="contact.html" class="nav-link">Contact</a></li>
+        </ul>
+
+        <div class="header-actions">
+          <a href="tel:18001234567" class="header-phone"><i class="fas fa-phone"></i> 1800-123-4567</a>
+          <a href="booking.html" class="btn-booknow">Book Now</a>
+        </div>
+
+        <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">
+          <span></span><span></span><span></span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ===== BLOG HERO ===== -->
+  <section class="blog-hero">
+    <div class="container">
+      <span class="blog-hero__eyebrow">Stories &amp; Guides</span>
+      <h1 class="blog-hero__title">The WanderVista Journal</h1>
+      <p class="blog-hero__sub">Itineraries, hidden gems and travel tips from people who've actually been there.</p>
+
+      <form class="search-pill blog-hero__search" autocomplete="off">
+        <i class="fas fa-search search-pill__icon"></i>
+        <input type="text" placeholder="Search articles — try “Ladakh”, “Honeymoon”, “Visa”..." aria-label="Search articles">
+        <button type="submit" class="search-pill__btn">Search</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- ===== CATEGORY TABS ===== -->
+  <section class="blog-cats-section">
+    <div class="container">
+      <div class="blog-cats" id="blogCats" role="tablist">
+        <button class="blog-cat is-active" data-cat="all">All Stories</button>
+        <button class="blog-cat" data-cat="india">India Trips</button>
+        <button class="blog-cat" data-cat="international">International</button>
+        <button class="blog-cat" data-cat="adventure">Adventure</button>
+        <button class="blog-cat" data-cat="honeymoon">Honeymoon</button>
+        <button class="blog-cat" data-cat="weekend">Weekend Getaways</button>
+        <button class="blog-cat" data-cat="budget">Budget Travel</button>
+        <button class="blog-cat" data-cat="food">Food &amp; Culture</button>
+        <button class="blog-cat" data-cat="tips">Tips &amp; How-tos</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FEATURED ===== -->
+  <section class="section featured-blog-section">
+    <div class="container">
+      <a href="blog-detail.html" class="featured-blog" data-cat="adventure">
+        <div class="featured-blog__media">
+          <img src="https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?w=1200&q=80" alt="Ladakh complete guide">
+          <span class="featured-blog__pill">Editor's Pick</span>
+        </div>
+        <div class="featured-blog__body">
+          <span class="featured-blog__cat">Adventure</span>
+          <h2 class="featured-blog__title">Ladakh in 2026: The Complete Guide for First-Time Riders</h2>
+          <p class="featured-blog__excerpt">From altitude acclimatisation to permits, from Pangong to Nubra — the only itinerary you'll need for a safe and unforgettable Leh-Manali highway run. Real costs, real timings, and the mistakes most first-timers make.</p>
+          <div class="featured-blog__meta">
+            <span class="meta-author">
+              <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=80&q=80" alt="Author">
+              <span><strong>Arjun Mehta</strong> · Senior Editor</span>
+            </span>
+            <span class="meta-dot">·</span>
+            <span><i class="far fa-calendar"></i> 18 May 2026</span>
+            <span class="meta-dot">·</span>
+            <span><i class="far fa-clock"></i> 7 min read</span>
+          </div>
+          <span class="featured-blog__more">Read full article <i class="fas fa-arrow-right"></i></span>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- ===== BLOG GRID ===== -->
+  <section class="section blog-list-section">
+    <div class="container">
+      <div class="blog-list-head">
+        <h3>Latest Articles</h3>
+        <div class="blog-sort">
+          <label>Sort</label>
+          <select aria-label="Sort articles">
+            <option>Newest first</option>
+            <option>Most read</option>
+            <option>Oldest first</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="blog-list" id="blogList">
+
+        <a href="blog-detail.html" class="post-card" data-cat="honeymoon">
+          <div class="post-card__media">
+            <img src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=600&q=80" alt="Bali beaches">
+            <span class="post-card__cat">Honeymoon</span>
+          </div>
+          <div class="post-card__body">
+            <span class="post-card__meta"><i class="far fa-calendar"></i> 12 May 2026 · 5 min read</span>
+            <h4 class="post-card__title">10 Hidden Beaches in Bali Most Tourists Miss</h4>
+            <p class="post-card__excerpt">Skip the Kuta crowd. These six coves on Bali's east coast are where locals actually swim.</p>
+            <span class="post-card__author">By Priya Mehta</span>
+          </div>
+        </a>
+
+        <a href="blog-detail.html" class="post-card" data-cat="india">
+          <div class="post-card__media">
+            <img src="https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?w=600&q=80" alt="Kerala">
+            <span class="post-card__cat">India</span>
+          </div>
+          <div class="post-card__body">
+            <span class="post-card__meta"><i class="far fa-calendar"></i> 06 May 2026 · 6 min read</span>
+            <h4 class="post-card__title">Kerala with Kids: A 7-Day Itinerary That Actually Works</h4>
+            <p class="post-card__excerpt">Houseboats, tea estates, and a beach day — pacing that won't fry a 6-year-old.</p>
+            <span class="post-card__author">By Rahul Sharma</span>
+          </div>
+        </a>
+
+        <a href="blog-detail.html" class="post-card" data-cat="budget">
+          <div class="post-card__media">
+            <img src="https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?w=600&q=80" alt="Vietnam">
+            <span class="post-card__cat">Budget</span>
+          </div>
+          <div class="post-card__body">
+            <span class="post-card__meta"><i class="far fa-calendar"></i> 02 May 2026 · 4 min read</span>
+            <h4 class="post-card__title">Vietnam Under ₹35K: Yes, It's Actually Possible in 2026</h4>
+            <p class="post-card__excerpt">A frank breakdown of flights, hostels and street-food meals across Hanoi, Hoi An and Da Nang.</p>
+            <span class="post-card__author">By Shruti Gupta</span>
+          </div>
+        </a>
+
+        <a href="blog-detail.html" class="post-card" data-cat="adventure">
+          <div class="post-card__media">
+            <img src="https://images.unsplash.com/photo-1551522435-a13afa10f103?w=600&q=80" alt="Bir Billing paragliding">
+            <span class="post-card__cat">Adventure</span>
+          </div>
+          <div class="post-card__body">
+            <span class="post-card__meta"><i class="far fa-calendar"></i> 28 Apr 2026 · 8 min read</span>
+            <h4 class="post-card__title">Paragliding at Bir Billing: What Nobody Tells You</h4>
+            <p class="post-card__excerpt">Weather, weight limits and what to actually pack — straight from a tandem pilot with 1,200 flights.</p>
+            <span class="post-card__author">By Vikram Khanna</span>
+          </div>
+        </a>
+
+        <a href="blog-detail.html" class="post-card" data-cat="international">
+          <div class="post-card__media">
+            <img src="https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=600&q=80" alt="Europe">
+            <span class="post-card__cat">International</span>
+          </div>
+          <div class="post-card__body">
+            <span class="post-card__meta"><i class="far fa-calendar"></i> 22 Apr 2026 · 9 min read</span>
+            <h4 class="post-card__title">Schengen Visa for Indians: 2026 Checklist (Updated)</h4>
+            <p class="post-card__excerpt">Embassy timelines, the new financial proof rule, and the appointments hack everyone misses.</p>
+            <span class="post-card__author">By Ankit Kapoor</span>
+          </div>
+        </a>
+
+        <a href="blog-detail.html" class="post-card" data-cat="weekend">
+          <div class="post-card__media">
+            <img src="https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=600&q=80" alt="Rajasthan weekend">
+            <span class="post-card__cat">Weekend</span>
+          </div>
+          <div class="post-card__body">
+            <span class="post-card__meta"><i class="far fa-calendar"></i> 18 Apr 2026 · 5 min read</span>
+            <h4 class="post-card__title">5 Weekend Getaways from Delhi You Haven't Done Yet</h4>
+            <p class="post-card__excerpt">Skip Mussoorie. These under-the-radar spots are 4–6 hrs out and still feel like a real escape.</p>
+            <span class="post-card__author">By Neha Singh</span>
+          </div>
+        </a>
+
+        <a href="blog-detail.html" class="post-card" data-cat="food">
+          <div class="post-card__media">
+            <img src="https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?w=600&q=80" alt="Thai food">
+            <span class="post-card__cat">Food</span>
+          </div>
+          <div class="post-card__body">
+            <span class="post-card__meta"><i class="far fa-calendar"></i> 12 Apr 2026 · 6 min read</span>
+            <h4 class="post-card__title">A Bangkok Street-Food Crawl for First-Timers</h4>
+            <p class="post-card__excerpt">12 stalls across Yaowarat and Bang Rak — what to order, what to skip, and how much it actually costs.</p>
+            <span class="post-card__author">By Ananya Iyer</span>
+          </div>
+        </a>
+
+        <a href="blog-detail.html" class="post-card" data-cat="tips">
+          <div class="post-card__media">
+            <img src="https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=600&q=80" alt="Travel tips">
+            <span class="post-card__cat">Tips</span>
+          </div>
+          <div class="post-card__body">
+            <span class="post-card__meta"><i class="far fa-calendar"></i> 08 Apr 2026 · 4 min read</span>
+            <h4 class="post-card__title">Travel Insurance: When to Buy, What to Actually Read</h4>
+            <p class="post-card__excerpt">The four clauses that matter — and the marketing fluff you can safely ignore.</p>
+            <span class="post-card__author">By Arjun Mehta</span>
+          </div>
+        </a>
+
+        <a href="blog-detail.html" class="post-card" data-cat="india">
+          <div class="post-card__media">
+            <img src="https://images.unsplash.com/photo-1506665531195-3566af2b4dfa?w=600&q=80" alt="Spiti">
+            <span class="post-card__cat">India</span>
+          </div>
+          <div class="post-card__body">
+            <span class="post-card__meta"><i class="far fa-calendar"></i> 02 Apr 2026 · 7 min read</span>
+            <h4 class="post-card__title">Spiti Without a Bike: Yes, the Public Bus Works</h4>
+            <p class="post-card__excerpt">The Manali–Kaza–Reckong Peo HRTC route, day-by-day, with timings that have held up for 3 seasons.</p>
+            <span class="post-card__author">By Rahul Sharma</span>
+          </div>
+        </a>
+      </div>
+
+      <!-- Pagination -->
+      <nav class="pagination" aria-label="Pagination">
+        <button class="page-btn" disabled><i class="fas fa-chevron-left"></i></button>
+        <button class="page-btn is-active">1</button>
+        <button class="page-btn">2</button>
+        <button class="page-btn">3</button>
+        <span class="page-ellipsis">…</span>
+        <button class="page-btn">12</button>
+        <button class="page-btn"><i class="fas fa-chevron-right"></i></button>
+      </nav>
+    </div>
+  </section>
+
+  <!-- ===== NEWSLETTER ===== -->
+  <section class="newsletter section">
+    <div class="container">
+      <div class="newsletter-inner">
+        <div>
+          <h3>Get a story in your inbox every Sunday</h3>
+          <p>One travel piece, hand-picked. No spam, unsubscribe anytime.</p>
+        </div>
+        <form class="newsletter-form">
+          <input type="email" placeholder="Enter your email address" required>
+          <button type="submit" class="btn btn-primary">Subscribe</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <span class="logo-text">WanderVista</span>
+          <p>We craft unforgettable travel experiences across India and the world.</p>
+          <div class="footer-social">
+            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+            <a href="#" aria-label="Twitter"><i class="fab fa-x-twitter"></i></a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Explore</h4>
+          <a href="packages.html">Packages</a>
+          <a href="index.html#community">Upcoming Trips</a>
+          <a href="blogs.html">Blogs</a>
+          <a href="about.html">About Us</a>
+        </div>
+        <div class="footer-col">
+          <h4>Support</h4>
+          <a href="contact.html">Contact</a>
+          <a href="#">FAQ</a>
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms</a>
+        </div>
+        <div class="footer-col">
+          <h4>Reach Us</h4>
+          <div class="footer-contact-item">
+            <i class="fas fa-phone"></i>
+            <div><strong>1800-123-4567</strong></div>
+          </div>
+          <div class="footer-contact-item">
+            <i class="fas fa-envelope"></i>
+            <div>hello@wandervista.com</div>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2024 – 2026 WanderVista Travel Pvt Ltd.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script>
+    // Category filter
+    document.querySelectorAll('.blog-cat').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.blog-cat').forEach(b => b.classList.remove('is-active'));
+        btn.classList.add('is-active');
+        const cat = btn.dataset.cat;
+        document.querySelectorAll('#blogList .post-card').forEach(card => {
+          card.style.display = (cat === 'all' || card.dataset.cat === cat) ? '' : 'none';
+        });
+      });
+    });
+  </script>
+</body>
+</html>
