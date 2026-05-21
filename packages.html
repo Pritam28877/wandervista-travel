@@ -10,85 +10,85 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="css/styles.css">
 </head>
-<body>
+<body class="page-inner page-packages">
 
   <!-- ===== HEADER ===== -->
-  <header class="header scrolled" id="header">
+  <header class="header header--solid" id="header">
     <div class="header-inner">
       <a href="index.html" class="logo">
         <div class="logo-icon"><i class="fas fa-mountain-sun"></i></div>
-        <span class="logo-text" style="color: var(--gray-800);">WanderVista</span>
+        <span class="logo-text">WanderVista</span>
       </a>
       <nav class="nav">
         <ul class="nav-menu" id="navMenu">
           <li class="nav-item">
-            <a href="packages.html" class="nav-link" style="color: var(--gray-800);">Destinations <span class="arrow"><i class="fas fa-chevron-down"></i></span></a>
+            <a href="packages.html" class="nav-link active">Destinations <span class="arrow"><i class="fas fa-chevron-down"></i></span></a>
             <div class="mega-menu">
               <div class="mega-menu-grid">
                 <div class="mega-menu-col">
-                  <h4>North India</h4>
-                  <a href="packages.html">Himachal Pradesh</a>
-                  <a href="packages.html">Ladakh & Leh</a>
-                  <a href="packages.html">Kashmir</a>
-                  <a href="packages.html">Uttarakhand</a>
-                  <a href="packages.html">Rajasthan</a>
-                </div>
-                <div class="mega-menu-col">
-                  <h4>South India</h4>
-                  <a href="packages.html">Kerala</a>
-                  <a href="packages.html">Karnataka</a>
-                  <a href="packages.html">Tamil Nadu</a>
-                  <a href="packages.html">Andaman & Nicobar</a>
-                  <a href="packages.html">Goa</a>
+                  <h4>India Trips</h4>
+                  <a href="packages.html?region=india">Himachal Pradesh</a>
+                  <a href="packages.html?region=india">Ladakh &amp; Leh</a>
+                  <a href="packages.html?region=india">Kashmir</a>
+                  <a href="packages.html?region=india">Kerala</a>
+                  <a href="packages.html?region=india">Rajasthan</a>
                 </div>
                 <div class="mega-menu-col">
                   <h4>International</h4>
-                  <a href="packages.html">Bali, Indonesia</a>
-                  <a href="packages.html">Thailand</a>
-                  <a href="packages.html">Vietnam</a>
-                  <a href="packages.html">Europe Tours</a>
-                  <a href="packages.html">Maldives</a>
+                  <a href="packages.html?region=international">Bali, Indonesia</a>
+                  <a href="packages.html?region=international">Thailand</a>
+                  <a href="packages.html?region=international">Vietnam</a>
+                  <a href="packages.html?region=international">Europe Tours</a>
+                  <a href="packages.html?region=international">Maldives</a>
+                </div>
+                <div class="mega-menu-col">
+                  <h4>Weekend Getaways</h4>
+                  <a href="packages.html?type=weekend">Goa</a>
+                  <a href="packages.html?type=weekend">Coorg</a>
+                  <a href="packages.html?type=weekend">Pondicherry</a>
+                  <a href="packages.html?type=weekend">Lonavala</a>
+                  <a href="packages.html?type=weekend">Rishikesh</a>
                 </div>
               </div>
             </div>
           </li>
           <li class="nav-item">
-            <a href="packages.html" class="nav-link" style="color: var(--gray-800);">Packages <span class="arrow"><i class="fas fa-chevron-down"></i></span></a>
+            <a href="packages.html" class="nav-link">Packages <span class="arrow"><i class="fas fa-chevron-down"></i></span></a>
             <div class="mega-menu">
               <div class="mega-menu-grid">
                 <div class="mega-menu-col">
                   <h4>By Type</h4>
-                  <a href="packages.html">Family Holidays</a>
-                  <a href="packages.html">Honeymoon Specials</a>
-                  <a href="packages.html">Adventure Tours</a>
-                  <a href="packages.html">Road Trips</a>
+                  <a href="packages.html?type=family">Family Holidays</a>
+                  <a href="packages.html?type=honeymoon">Honeymoon Specials</a>
+                  <a href="packages.html?type=adventure">Adventure Tours</a>
+                  <a href="packages.html?type=roadtrip">Road Trips</a>
                 </div>
                 <div class="mega-menu-col">
                   <h4>By Budget</h4>
-                  <a href="packages.html">Under ₹25,000</a>
-                  <a href="packages.html">₹25K - ₹50K</a>
-                  <a href="packages.html">₹50K - ₹1 Lakh</a>
-                  <a href="packages.html">Luxury</a>
+                  <a href="packages.html?budget=under25k">Under ₹25,000</a>
+                  <a href="packages.html?budget=25-50k">₹25K - ₹50K</a>
+                  <a href="packages.html?budget=50k-1l">₹50K - ₹1 Lakh</a>
+                  <a href="packages.html?budget=luxury">Luxury</a>
                 </div>
                 <div class="mega-menu-col">
                   <h4>Special</h4>
-                  <a href="packages.html">Women's Special</a>
-                  <a href="packages.html">Solo Travel</a>
-                  <a href="packages.html">Group Tours</a>
-                  <a href="packages.html">Weekend Getaways</a>
+                  <a href="packages.html?type=women">Women's Special</a>
+                  <a href="packages.html?type=solo">Solo Travel</a>
+                  <a href="packages.html?type=group">Group Tours</a>
+                  <a href="packages.html?type=weekend">Weekend Getaways</a>
                 </div>
               </div>
             </div>
           </li>
-          <li><a href="packages.html" class="nav-link" style="color: var(--gray-800);">Road Trips</a></li>
-          <li><a href="about.html" class="nav-link" style="color: var(--gray-800);">About Us</a></li>
-          <li><a href="contact.html" class="nav-link" style="color: var(--gray-800);">Contact</a></li>
+          <li><a href="index.html#community" class="nav-link">Upcoming Trips</a></li>
+          <li><a href="blogs.html" class="nav-link">Blogs</a></li>
+          <li><a href="contact.html" class="nav-link">Contact</a></li>
         </ul>
         <div class="header-actions">
-          <a href="tel:18001234567" class="header-phone" style="color: var(--gray-800);">
+          <a href="tel:18001234567" class="header-phone">
             <i class="fas fa-phone"></i> 1800-123-4567
           </a>
-          <a href="booking.html" class="btn btn-primary btn-sm">Book Now</a>
+          <a href="booking.html" class="btn-booknow">Book Now</a>
         </div>
         <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">
           <span></span><span></span><span></span>
@@ -270,7 +270,7 @@
               <option>Newest First</option>
             </select>
             <div class="view-toggle">
-              <button class="active" aria-label="Grid view"><i class="fas fa-grid-2"></i></button>
+              <button class="active" aria-label="Grid view"><i class="fas fa-th-large"></i></button>
               <button aria-label="List view"><i class="fas fa-list"></i></button>
             </div>
           </div>

@@ -64,17 +64,15 @@ function initImageFallback() {
   });
 }
 
-/* --- Header Scroll Effect --- */
+/* --- Header Scroll Effect (skips solid headers on inner pages) --- */
 function initHeader() {
   const header = document.querySelector('.header');
   if (!header) return;
+  if (header.classList.contains('header--solid')) return; // inner pages stay solid
 
   const handleScroll = () => {
-    if (window.scrollY > 50) {
-      header.classList.add('scrolled');
-    } else {
-      header.classList.remove('scrolled');
-    }
+    if (window.scrollY > 50) header.classList.add('scrolled');
+    else                     header.classList.remove('scrolled');
   };
 
   window.addEventListener('scroll', handleScroll, { passive: true });
