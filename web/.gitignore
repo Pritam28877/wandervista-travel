@@ -1,0 +1,10 @@
+node_modules/
+.next/
+out/
+.env*.local
+*.tsbuildinfo
+next-env.d.ts.bak
+data/db.json
+
+# Large media — copied from ../assets at setup (see README), not tracked
+public/*.mp4
