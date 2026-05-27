@@ -1,0 +1,5 @@
+/* Global stylesheet entry — imports the ported design system.
+   styles.css and admin.css are the exact same files used by the
+   original static site, so the UI/UX is identical. */
+@import '../styles/styles.css';
+@import '../styles/admin.css';
